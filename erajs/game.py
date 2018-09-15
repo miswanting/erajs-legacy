@@ -12,6 +12,7 @@ def init():
     print(fileList)
     engine = e.Engine()
     engine.load_data(fileList)
+    engine.connect()
 
 
 def save(filename):

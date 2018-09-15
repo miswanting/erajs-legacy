@@ -59,14 +59,16 @@ class SocketEngine(DataEngine):
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as c:
                 self._conn = c
                 try:
-                    _conn.connect((HOST, PORT))
+                    self._conn.connect((HOST, PORT))
                     print('[DONE]已连接上 Main ！')
+                    bag = {'type': 'init', 'value': {'resolution': (800, 600)}}
                     core()
                 except OSError as err:
                     if err.errno == 10061:
                         print('[WARN]前端未启动！')
                     else:
                         print(err)
+
         t = threading.Thread(name='func_connect', target=func_connect)
         t.start()
 
@@ -74,7 +76,7 @@ class SocketEngine(DataEngine):
         pass
 
     def recv(self):
-        data = _conn.recv(4096)
+        data = self._conn.recv(4096)
         print("[DEBG]接收：", data)
         if not data:
             return
@@ -136,11 +138,7 @@ class BagEngine:
                 if bag['from'] == 'm':
                     print('[DONE]与 MAIN 握手完成！')
                     print('[DEBG]开始与 RENDERER 握手…')
-                    syn = {
-                        'type': 'syn',
-                        'from': 'b',
-                        'to': 'r'
-                    }
+                    syn = {'type': 'syn', 'from': 'b', 'to': 'r'}
                     _send(syn)
                 elif bag['from'] == 'r':
                     print('[DONE]与 RENDERER 握手完成！')
@@ -156,7 +154,8 @@ class BagEngine:
                 for each in _cmd_list:
                     if bag['value'] == each[0]:
                         each[1](*each[2], **each[3])
-        t = threading.Thread(target=parse, args=(bag,))
+
+        t = threading.Thread(target=parse, args=(bag, ))
         t.start()
 
 
@@ -167,7 +166,6 @@ class SystemEngine:
         socket_engine = SocketEngine()
         socket_engine.set_hook(bag_engine.get_hook())
         socket_engine.connect()
-
 
 
 # 核心技术
@@ -187,31 +185,17 @@ def init():
 
 
 def init_done():
-    bag = {
-        'type': 'LOAD_DONE',
-        'from': 'b',
-        'to': 'r'
-    }
+    bag = {'type': 'LOAD_DONE', 'from': 'b', 'to': 'r'}
     _send(bag)
 
 
 def title(text):
-    bag = {
-        'type': 'title',
-        'from': 'b',
-        'to': 'r',
-        'value': text
-    }
+    bag = {'type': 'title', 'from': 'b', 'to': 'r', 'value': text}
     _send(bag)
 
 
 def t(text='', wait=False):
-    bag = {
-        'type': 't',
-        'from': 'b',
-        'to': 'r',
-        'value': text
-    }
+    bag = {'type': 't', 'from': 'b', 'to': 'r', 'value': text}
     _send(bag)
     if wait and not _lock_passed():
         _lock()
@@ -263,21 +247,14 @@ def progress(now, max=100, length=100):
 
 
 def input(text=''):
-    package = {
-        'type': 'input',
-        'value': text
-    }
+    package = {'type': 'input', 'value': text}
     _send(package)
     _lock('input')
     _wait_for_unlock()
 
 
 def page():
-    bag = {
-        'type': 'page',
-        'from': 'b',
-        'to': 'r'
-    }
+    bag = {'type': 'page', 'from': 'b', 'to': 'r'}
     _send(bag)
     global _cmd_list
     _cmd_list.clear()
@@ -298,21 +275,12 @@ def repeat(*arg, **kw):
 
 
 def mode(value='plain', *arg, **kw):
-    bag = {
-        'type': 'mode',
-        'from': 'b',
-        'to': 'r',
-        'value': [value, arg, kw]
-    }
+    bag = {'type': 'mode', 'from': 'b', 'to': 'r', 'value': [value, arg, kw]}
     _send(bag)
 
 
 def clear():
-    bag = {
-        'type': 'clear',
-        'from': 'b',
-        'to': 'r'
-    }
+    bag = {'type': 'clear', 'from': 'b', 'to': 'r'}
     _send(bag)
 
 
@@ -402,11 +370,7 @@ def _connect():
                 print(err)
         # 传输客户端信息
         print('[DEBG]开始与 MAIN 握手…')
-        syn = {
-            'type': 'syn',
-            'from': 'b',
-            'to': 'm'
-        }
+        syn = {'type': 'syn', 'from': 'b', 'to': 'm'}
         _send(syn)
         while True:
             data = _conn.recv(4096)
@@ -437,21 +401,12 @@ def _parse_bag(bag):
         if bag['type'] == 'ack':
             pass
         elif bag['type'] == 'syn':
-            ack = {
-                'type': 'ack',
-                'from': 'b',
-                'to': bag['from'],
-                'value': bag
-            }
+            ack = {'type': 'ack', 'from': 'b', 'to': bag['from'], 'value': bag}
             _send(ack)
             if bag['from'] == 'm':
                 print('[DONE]与 MAIN 握手完成！')
                 print('[DEBG]开始与 RENDERER 握手…')
-                syn = {
-                    'type': 'syn',
-                    'from': 'b',
-                    'to': 'r'
-                }
+                syn = {'type': 'syn', 'from': 'b', 'to': 'r'}
                 _send(syn)
             elif bag['from'] == 'r':
                 print('[DONE]与 RENDERER 握手完成！')
@@ -467,7 +422,8 @@ def _parse_bag(bag):
             for each in _cmd_list:
                 if bag['value'] == each[0]:
                     each[1](*each[2], **each[3])
-    t = threading.Thread(target=parse, args=(bag,))
+
+    t = threading.Thread(target=parse, args=(bag, ))
     t.start()
 
 
