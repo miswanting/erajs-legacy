@@ -14,6 +14,12 @@ import threading
 import configparser
 
 
+def new_hash():
+    m = hashlib.md5()
+    m.update(str(random.random()).encode("utf-8"))
+    return m.hexdigest().upper()
+
+
 class DataEngine:
     data = []
 
@@ -49,12 +55,15 @@ class SocketEngine(DataEngine):
     _gui_list = []
     isConnected = False
 
+    def parse_bag(self, bag):
+        pass
+
     def connect(self):
         def core():
             while True:
                 data = self.recv()
                 for each in data:
-                    self._hook(each)
+                    self.parse_bag(each)
 
         def func_connect():
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as c:
@@ -62,7 +71,7 @@ class SocketEngine(DataEngine):
                 try:
                     self._conn.connect((HOST, PORT))
                     self.isConnected = True
-                    print('[DONE]已连接上 Main ！')
+                    print('[DONE]服务器已连接！')
                     bag = {'type': 'init', 'value': {'resolution': (800, 600)}}
                     core()
                 except OSError as err:
@@ -94,11 +103,11 @@ class SocketEngine(DataEngine):
             if not i == len(data) - 1:
                 data[i] = data[i] + '}'
         for i, each in enumerate(data):
-            data[i] = self.load(each)
+            data[i] = json.loads(each)
         return data
 
 
-class LockEngine:
+class LockEngine(SocketEngine):
     # lock 机制：
     # _lock_status 是指示当前 lock 状态的变量；
     # 0：无锁，可锁（默认）；1：有锁，可解锁；-1：无锁，不可锁；
@@ -108,49 +117,38 @@ class LockEngine:
     _lock_status = [0, 'mouse']
 
     def wait_for_unlock(self):
-        pass
+        while not self._lock_status[0] == 1:
+            time.sleep(0.1)
 
     def is_locked(self):
-        pass
+        if self._lock_status[0] == 1:
+            return True
+        else:
+            return False
 
     def lock_passed(self):
-        pass
+        if self._lock_status[0] == -1:
+            return True
+        else:
+            return False
 
     def lock(self):
-        pass
+        self._lock_status[0] = 1
 
     def unlock(self):
-        pass
+        self._lock_status[0] = 0
 
     def unlock_forever(self):
-        pass
+        self._lock_status[0] = -1
 
 
-class BagEngine:
-    def get_hook(self):
-        return self.parse_bag
+class BagEngine(LockEngine):
+    _cmd_list = []
+    _gui_list = []
 
     def parse_bag(self, bag):
         def parse(bag):
-            if bag['type'] == 'ack':
-                pass
-            elif bag['type'] == 'syn':
-                ack = {
-                    'type': 'ack',
-                    'from': 'b',
-                    'to': bag['from'],
-                    'value': bag
-                }
-                _send(ack)
-                if bag['from'] == 'm':
-                    print('[DONE]与 MAIN 握手完成！')
-                    print('[DEBG]开始与 RENDERER 握手…')
-                    syn = {'type': 'syn', 'from': 'b', 'to': 'r'}
-                    _send(syn)
-                elif bag['from'] == 'r':
-                    print('[DONE]与 RENDERER 握手完成！')
-                    _unlock()
-            elif bag['type'] == 'MOUSE_CLICK':
+            if bag['type'] == 'MOUSE_CLICK':
                 if bag['value'] == 1:  # 左键
                     if _is_locked:
                         _unlock()
@@ -158,12 +156,72 @@ class BagEngine:
                     if _is_locked:
                         _unlock_forever()
             elif bag['type'] == 'BUTTON_CLICK':
-                for each in _cmd_list:
+                for each in self._cmd_list:
                     if bag['value'] == each[0]:
                         each[1](*each[2], **each[3])
 
         t = threading.Thread(target=parse, args=(bag, ))
         t.start()
+
+    def title(self, text):
+        bag = {
+            'type': 'title',
+            'value': text,
+            'from': 'b',
+            'to': 'r'
+        }
+        self.send(bag)
+
+    def t(self, text='', wait=False):
+        bag = {'type': 't',
+               'value': text,
+               'from': 'b',
+               'to': 'r'}
+        self.send(bag)
+        if wait and not self.lock_passed():
+            self.lock()
+            self.wait_for_unlock()
+
+    def b(self, text, func, *arg, **kw):
+        hash = new_hash()
+        self._cmd_list.append((hash, func, arg, kw))
+        bag = {
+            'type': 'b',
+            'value': {
+                'text': text,
+                'hash': hash
+            },
+            'from': 'b',
+            'to': 'r'
+        }
+        self.send(bag)
+        self.unlock()
+
+    def h(self, text, rank=1):
+        bag = {
+            'type': 'h',
+            'value': {
+                'text': text,
+                'rank': rank
+            },
+            'from': 'b',
+            'to': 'r'
+        }
+        self.send(bag)
+
+    def page(self):
+        bag = {
+            'type': 'page',
+            'from': 'b',
+            'to': 'r'
+        }
+        self.send(bag)
+        global _cmd_list
+        self._cmd_list.clear()
+
+    def goto(self, func, *arg, **kw):
+        self._gui_list.append((func, arg, kw))
+        func(*arg, **kw)
 
 
 class SystemEngine:
@@ -434,5 +492,5 @@ def _parse_bag(bag):
     t.start()
 
 
-class Engine(SocketEngine):
+class Engine(BagEngine):
     pass

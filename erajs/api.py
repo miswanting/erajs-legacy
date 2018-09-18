@@ -27,16 +27,16 @@ def title(text):
     g.title(text)
 
 
-def t(text=''):
-    pass
+def t(text='', wait=False):
+    g.t(text, wait)
 
 
-def b(text, *arg, **kw):
-    pass
+def b(text, func, *arg, **kw):
+    g.b(text, func, *arg, **kw)
 
 
 def h(text):
-    pass
+    g.h(text)
 
 
 def progress():
@@ -48,11 +48,11 @@ def input():
 
 
 def page():
-    pass
+    g.page()
 
 
-def goto():
-    pass
+def goto(func, *arg, **kw):
+    g.goto(func, *arg, **kw)
 
 
 def back():

@@ -7,7 +7,10 @@ import configparser
 
 
 def init():
+    print('[DEBG]正在标准化路径...', end='')
     fix_path()
+    print('OK')
+    print('[DEBG]正在扫描文件...', end='')
     fileList = {
         'plugin': scan_plugin(),
         'config': scan_config(),
@@ -15,6 +18,7 @@ def init():
         'dlc': scan_dlc(),
         'save': scan_save(),
     }
+    print('OK')
     return fileList
 
 
