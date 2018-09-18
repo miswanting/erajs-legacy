@@ -1,5 +1,6 @@
 # coding:utf-8
 from . import game as g
+
 # from . import engine as e
 # init = g.init
 # init_done = g.init_done
@@ -22,19 +23,19 @@ def init():
     g.init()
 
 
-def title():
+def title(text):
+    g.title(text)
+
+
+def t(text=''):
     pass
 
 
-def t():
+def b(text, *arg, **kw):
     pass
 
 
-def b():
-    pass
-
-
-def h():
+def h(text):
     pass
 
 

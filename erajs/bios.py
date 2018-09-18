@@ -8,11 +8,13 @@ import configparser
 
 def init():
     fix_path()
-    fileList = []
-    fileList.extend(scan_plugin())
-    fileList.extend(scan_game())
-    fileList.extend(scan_dlc())
-    fileList.extend(scan_save())
+    fileList = {
+        'plugin': scan_plugin(),
+        'config': scan_config(),
+        'game': scan_game(),
+        'dlc': scan_dlc(),
+        'save': scan_save(),
+    }
     return fileList
 
 
@@ -30,6 +32,10 @@ def fix_path():
 
 def scan_plugin():
     return scan('plugin')
+
+
+def scan_config():
+    return scan('config')
 
 
 def scan_game():

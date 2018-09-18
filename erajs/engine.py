@@ -47,6 +47,7 @@ class SocketEngine(DataEngine):
     _conn = None
     _cmd_list = []
     _gui_list = []
+    isConnected = False
 
     def connect(self):
         def core():
@@ -60,6 +61,7 @@ class SocketEngine(DataEngine):
                 self._conn = c
                 try:
                     self._conn.connect((HOST, PORT))
+                    self.isConnected = True
                     print('[DONE]已连接上 Main ！')
                     bag = {'type': 'init', 'value': {'resolution': (800, 600)}}
                     core()
@@ -71,9 +73,14 @@ class SocketEngine(DataEngine):
 
         t = threading.Thread(name='func_connect', target=func_connect)
         t.start()
+        while True:
+            if self.isConnected:
+                break
+            time.sleep(0.1)
 
     def send(self, bag):
-        pass
+        print("[DEBG]发送：", bag)
+        self._conn.send(json.dumps(bag, ensure_ascii=False).encode())
 
     def recv(self):
         data = self._conn.recv(4096)

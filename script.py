@@ -1,26 +1,25 @@
 # coding:utf-8
-import erajs.era as e
+import erajs.api as a
 
 
 def start_new_game():
-    e.page()
-    e.h('玩家角色创建方式')
-    e.t()
-    e.t()
-    e.b('使用默认主角', e.goto, default_person)
+    a.page()
+    a.h('玩家角色创建方式')
+    a.t()
+    a.t()
+    a.b('使用默认主角', e.goto, default_person)
 
 
 def default_person():
-    e.page()
-    e.h('默认玩家角色')
-    e.t()
-    e.t()
+    a.page()
+    a.h('默认玩家角色')
+    a.t()
+    a.t()
 
 
-e.init()
-e.init_done()
-e.title('EraLife')
-e.h('EraLife')
-e.t()
-e.t()
-e.b('新建游戏', e.goto, start_new_game)
+a.init()
+a.title('EraLife')
+a.h('EraLife')
+a.t()
+a.t()
+a.b('新建游戏', a.goto, start_new_game)
