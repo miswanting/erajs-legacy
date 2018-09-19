@@ -23,6 +23,13 @@ def new_hash():
 class DataEngine:
     data = []
 
+    def scan(self, folderName):
+        fileList = []
+        for root, dirs, files in os.walk(folderName):
+            for each in files:
+                fileList.append(root + '\\' + each)
+        return fileList
+
     def load_data(self, files):
         for each in files:
             key = '.'.join(each.split('.')[0].split('\\'))

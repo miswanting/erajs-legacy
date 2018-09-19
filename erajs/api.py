@@ -63,6 +63,14 @@ def repeat(*arg, **kw):
     g.repeat(*arg, **kw)
 
 
+def show_save_to_save():
+    g.show_save_to_save()
+
+
+def show_save_to_load():
+    g.show_save_to_load()
+
+
 def mode():
     pass
 
