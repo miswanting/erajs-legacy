@@ -30,6 +30,9 @@ class DataEngine:
                 fileList.append(root + '\\' + each)
         return fileList
 
+    def apply_save(self, saveFile):
+        pass
+
     def load_data(self, files):
         for each in files:
             key = '.'.join(each.split('.')[0].split('\\'))
