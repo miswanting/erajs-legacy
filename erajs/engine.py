@@ -117,34 +117,34 @@ class LockEngine(SocketEngine):
     _lock_status = [0, 'mouse']
 
     def wait_for_unlock(self):
-        print('wait_for_unlock')
+        # print('wait_for_unlock')
         while self.is_locked():
             time.sleep(0.1)
 
     def is_locked(self):
-        print('is_locked')
+        # print('is_locked')
         if self._lock_status[0] == 1:
             return True
         else:
             return False
 
     def lock_passed(self):
-        print('lock_passed')
+        # print('lock_passed')
         if self._lock_status[0] == -1:
             return True
         else:
             return False
 
     def lock(self):
-        print('lock')
+        # print('lock')
         self._lock_status[0] = 1
 
     def unlock(self):
-        print('unlock')
+        # print('unlock')
         self._lock_status[0] = 0
 
     def unlock_forever(self):
-        print('unlock_forever')
+        # print('unlock_forever')
         self._lock_status[0] = -1
 
 
@@ -236,17 +236,9 @@ class BagEngine(LockEngine):
         repeat()
 
     def repeat(self, *arg, **kw):
+        # TODO(miswanting): RecursionError: maximum recursion depth exceeded
         print('repeat:', self._gui_list[-1][0].__name__)
         self._gui_list[-1][0](*self._gui_list[-1][1], **self._gui_list[-1][2])
-
-
-class SystemEngine:
-    def init(self):
-        _fix_path()
-        bag_engine = BagEngine()
-        socket_engine = SocketEngine()
-        socket_engine.set_hook(bag_engine.get_hook())
-        socket_engine.connect()
 
 
 # 核心技术
