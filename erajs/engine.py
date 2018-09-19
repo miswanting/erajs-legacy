@@ -117,28 +117,34 @@ class LockEngine(SocketEngine):
     _lock_status = [0, 'mouse']
 
     def wait_for_unlock(self):
-        while not self._lock_status[0] == 1:
+        print('wait_for_unlock')
+        while self.is_locked():
             time.sleep(0.1)
 
     def is_locked(self):
+        print('is_locked')
         if self._lock_status[0] == 1:
             return True
         else:
             return False
 
     def lock_passed(self):
+        print('lock_passed')
         if self._lock_status[0] == -1:
             return True
         else:
             return False
 
     def lock(self):
+        print('lock')
         self._lock_status[0] = 1
 
     def unlock(self):
+        print('unlock')
         self._lock_status[0] = 0
 
     def unlock_forever(self):
+        print('unlock_forever')
         self._lock_status[0] = -1
 
 
@@ -150,11 +156,11 @@ class BagEngine(LockEngine):
         def parse(bag):
             if bag['type'] == 'MOUSE_CLICK':
                 if bag['value'] == 1:  # 左键
-                    if _is_locked:
-                        _unlock()
+                    if self.is_locked:
+                        self.unlock()
                 elif bag['value'] == 3:  # 右键
-                    if _is_locked:
-                        _unlock_forever()
+                    if self.is_locked:
+                        self.unlock_forever()
             elif bag['type'] == 'BUTTON_CLICK':
                 for each in self._cmd_list:
                     if bag['value'] == each[0]:
@@ -220,8 +226,18 @@ class BagEngine(LockEngine):
         self._cmd_list.clear()
 
     def goto(self, func, *arg, **kw):
+        print('goto:', func.__name__)
         self._gui_list.append((func, arg, kw))
         func(*arg, **kw)
+
+    def back(self, *arg, **kw):
+        print('back')
+        self._gui_list.pop()
+        repeat()
+
+    def repeat(self, *arg, **kw):
+        print('repeat:', self._gui_list[-1][0].__name__)
+        self._gui_list[-1][0](*self._gui_list[-1][1], **self._gui_list[-1][2])
 
 
 class SystemEngine:

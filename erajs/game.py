@@ -57,6 +57,14 @@ def goto(func, *arg, **kw):
     engine.goto(func, *arg, **kw)
 
 
+def back(*arg, **kw):
+    engine.back(*arg, **kw)
+
+
+def repeat(*arg, **kw):
+    engine.repeat(*arg, **kw)
+
+
 def save(filename):
     pass
 

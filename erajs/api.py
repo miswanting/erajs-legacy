@@ -55,12 +55,12 @@ def goto(func, *arg, **kw):
     g.goto(func, *arg, **kw)
 
 
-def back():
-    pass
+def back(*arg, **kw):
+    g.back(*arg, **kw)
 
 
-def repeat():
-    pass
+def repeat(*arg, **kw):
+    g.repeat(*arg, **kw)
 
 
 def mode():
