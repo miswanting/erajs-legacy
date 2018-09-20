@@ -21,7 +21,47 @@ def new_hash():
 
 
 class DataEngine:
-    data = []
+    data = {}
+    pool = []
+
+    def fix_path(self):
+        if getattr(sys, 'frozen', False):
+            # frozen
+            d = os.path.dirname(sys.executable)
+            gamepath = os.path.dirname(d)
+        else:
+            # unfrozen
+            d = os.path.dirname(os.path.realpath(__file__))
+            gamepath = os.path.dirname(os.path.dirname(d))
+        sys.path.append(gamepath)
+
+    def self_check(self):
+        check_folder_list = [
+            'config',
+            'erajs/plugin',
+            'erajs/prototype',
+            'game',
+            'dlc',
+            'mod',
+            'data',
+            'save'
+        ]
+        for each in check_folder_list:
+            if not os.path.isdir(each):
+                print('[WARN]Folder {} is not Exist. Creating...'.format(each))
+                os.mkdir(each)
+        check_file_list = [
+            'config/engine.ini',
+            'config/game.ini'
+        ]
+        for each in check_file_list:
+            if not os.path.isfile(each):
+                print('[WARN]File {} is not Exist. Creating...'.format(each))
+                open(each, 'w')
+
+    def load_config(self, config_path):
+        config = self.load_data(config_path)
+        self.data['config.engine'] = config['config.engine']
 
     def scan(self, folderName):
         fileList = []
@@ -30,6 +70,13 @@ class DataEngine:
                 fileList.append(root + '\\' + each)
         return fileList
 
+    def scan_plugin(self):
+        plugin_path_list = self.scan('plugin')
+        print('Found {} Plugins...'.format(
+            len(plugin_path_list)), end='')
+        self.data['plugin'] = plugin_path_list
+        return self.scan('plugin')
+
     def save_to(self, save_num):
         pass
 
@@ -37,6 +84,7 @@ class DataEngine:
         print('load_save', saveFile)
 
     def load_data(self, files):
+        data = {}
         for each in files:
             key = '.'.join(each.split('.')[0].split('\\'))
             ext = each.split('\\')[-1].split('.')[-1]
