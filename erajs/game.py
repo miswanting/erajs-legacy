@@ -1,5 +1,4 @@
 # coding:utf-8
-from . import bios as bios
 from . import engine as e
 
 # 游戏平台
@@ -44,28 +43,9 @@ def init():
     print('OK')
     print('[DEBG]Loading MODs...', end='')
     print('OK')
-    print('[DEBG]Transferring Loading Complete Signal...', end='')
+    print('[DEBG]Transferring Loading Complete Signal...')
     engine.send_loaded()
     print('OK')
-    # fileList = bios.init()
-    # print('[DEBG]正在加载插件...', end='')
-    # engine.load_data(fileList['plugin'])
-    # print('OK')
-    # print('[DEBG]正在读取配置文件...', end='')
-    # engine.load_data(fileList['config'])
-    # print('OK')
-    # print('[DEBG]正在连接服务器...')
-    # engine.connect()
-    # print('[DEBG]正在加载游戏核心...', end='')
-    # engine.load_data(fileList['game'])
-    # print('OK')
-    # print('[DEBG]正在加载可下载内容（DLC）...', end='')
-    # engine.load_data(fileList['dlc'])
-    # print('OK')
-    # print('[DEBG]正在加载存档...', end='')
-    # engine.load_data(fileList['save'])
-    # print('OK')
-    # engine.send({'type': 'loaded', 'from': 'b', 'to': 'r'})
     print('[FINE]Initialize Complete!')
 
 
