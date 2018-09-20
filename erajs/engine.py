@@ -86,26 +86,29 @@ class DataEngine:
     def load_data(self, files):
         data = {}
         for each in files:
-            key = '.'.join(each.split('.')[0].split('\\'))
+            each = each.replace('/', '\\')
+            key = '.'.join('.'.join(each.split('.')[0:-1]).split('\\'))
             ext = each.split('\\')[-1].split('.')[-1]
             # 载入文件
             if ext in ['cfg', 'ini', 'inf', 'config']:
                 config = configparser.ConfigParser()
                 config.read(each)
                 d = dict(config._sections)
+                # print(d)
                 for k in d:
                     d[k] = dict(d[k])
-                self.data[key] = d
+                data[key] = d
             elif ext == 'csv':
                 with open(each, newline='', encoding='utf-8') as f:
                     reader = csv.reader(f)
                     new_list = []
                     for row in reader:
                         new_list.append(row)
-                    self.data[key] = new_list
+                    data[key] = new_list
             elif ext == 'json':
                 with open(each, 'r', encoding='utf-8') as f:
-                    self.data[key] = json.loads(''.join(f.readlines()))
+                    data[key] = json.loads(''.join(f.readlines()))
+        return data
 
 
 class SocketEngine(DataEngine):
@@ -132,8 +135,7 @@ class SocketEngine(DataEngine):
                 try:
                     self._conn.connect((HOST, PORT))
                     self.isConnected = True
-                    print('[DONE]服务器已连接！')
-                    bag = {'type': 'init', 'value': {'resolution': (800, 600)}}
+                    print('Connected...', end='')
                     core()
                 except OSError as err:
                     if err.errno == 10061:
@@ -147,6 +149,24 @@ class SocketEngine(DataEngine):
             if self.isConnected:
                 break
             time.sleep(0.1)
+
+    def send_config(self):
+        bag = {
+            'type': 'init',
+            'value': {
+                'resolution': (800, 600)},
+            'from': 'b',
+            'to': 'm'
+        }
+        self.send(bag)
+
+    def send_loaded(self):
+        bag = {
+            'type': 'loaded',
+            'from': 'b',
+            'to': 'r'
+        }
+        self.send(bag)
 
     def send(self, bag):
         print("[DEBG]发送：", bag)
