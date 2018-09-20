@@ -30,8 +30,11 @@ class DataEngine:
                 fileList.append(root + '\\' + each)
         return fileList
 
-    def apply_save(self, saveFile):
+    def save_to(self, save_num):
         pass
+
+    def load_save(self, saveFile):
+        print('load_save', saveFile)
 
     def load_data(self, files):
         for each in files:
@@ -236,18 +239,18 @@ class BagEngine(LockEngine):
         self._cmd_list.clear()
 
     def goto(self, func, *arg, **kw):
-        print('goto:', func.__name__)
+        # print('goto:', func.__name__)
         self._gui_list.append((func, arg, kw))
         func(*arg, **kw)
 
     def back(self, *arg, **kw):
-        print('back')
+        # print('back')
         self._gui_list.pop()
         repeat()
 
     def repeat(self, *arg, **kw):
         # TODO(miswanting): RecursionError: maximum recursion depth exceeded
-        print('repeat:', self._gui_list[-1][0].__name__)
+        # print('repeat:', self._gui_list[-1][0].__name__)
         self._gui_list[-1][0](*self._gui_list[-1][1], **self._gui_list[-1][2])
 
 

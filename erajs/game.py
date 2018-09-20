@@ -66,6 +66,24 @@ def repeat(*arg, **kw):
 
 
 def show_save_to_save():
+    # 获取列表
+    save_file_list = engine.scan('save')
+    print(save_file_list)
+    # 弱加载
+    for each in save_file_list:
+        pass
+    # 计算显示
+    save_list = []
+    current_num = 1
+    while True:
+        if len(save_file_list) == 0:
+            save_list.append((current_num, '未使用'))
+            break
+    # 显示
+    for each in save_list:
+        engine.b(str(each[0])+'. '+each[1], engine.save_to, each[0])
+        engine.t()
+    # 处理
     pass
 
 
