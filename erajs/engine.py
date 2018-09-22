@@ -80,8 +80,40 @@ class DataEngine:
     def save_to(self, save_num):
         pass
 
-    def load_save(self, saveFile):
+    def load_from(self, saveFile):
         print('load_save', saveFile)
+
+    def add(self, item):
+        item['hash'] = new_hash()
+        self.pool.append(item)
+        return item['hash']
+
+    def get(self, pattern):
+        # 参考GraphQL的部分实现原理
+        def match(item, pattern):
+            found = True
+            for each_key in pattern.keys():
+                if not each_key in item.keys():
+                    found = False
+                    break
+            if found:
+                for each_key in pattern.keys():
+                    if isinstance(pattern[each_key], dict):
+                        if not match(item[each_key], pattern[each_key]):
+                            found = False
+                            break
+                    elif not pattern[each_key] == item[each_key]:
+                        found = False
+                        break
+                if found:
+                    return True
+            return False
+
+        candidate_item = []
+        for each in self.pool:
+            if match(each, pattern):
+                candidate_item.append(each)
+        return candidate_item
 
     def load_data(self, files):
         data = {}

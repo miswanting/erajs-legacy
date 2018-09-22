@@ -115,5 +115,13 @@ def load_save(filename):
     pass
 
 
+def add(item):
+    return engine.add(item)
+
+
+def get(pattern):
+    return engine.get(pattern)
+
+
 def _______________________________________________________():
     pass

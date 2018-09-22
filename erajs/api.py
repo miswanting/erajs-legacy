@@ -80,8 +80,12 @@ def clear():
 
 
 # 资源控制
-def get():
-    pass
+def add(item):
+    return g.add(item)
+
+
+def get(pattern):
+    return g.get(pattern)
 
 
 def ________________________________________________________________():
