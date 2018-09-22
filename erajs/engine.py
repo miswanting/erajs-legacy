@@ -78,7 +78,8 @@ class DataEngine:
         return self.scan('plugin')
 
     def save_to(self, save_num):
-        pass
+        with open('save/'+str(save_num)+'.save', 'w', encoding='utf-8') as f:
+            f.write(json.dumps(self.pool))
 
     def load_from(self, saveFile):
         print('load_save', saveFile)

@@ -82,6 +82,9 @@ def repeat(*arg, **kw):
 
 
 def show_save_to_save():
+    def save_to(save_num):
+        engine.save_to(save_num)
+        engine.repeat()
     # 获取列表
     save_file_list = engine.scan('save')
     print(save_file_list)
@@ -97,7 +100,7 @@ def show_save_to_save():
             break
     # 显示
     for each in save_list:
-        engine.b(str(each[0])+'. '+each[1], engine.save_to, each[0])
+        engine.b(str(each[0])+'. '+each[1], save_to, each[0])
         engine.t()
     # 处理
     pass
