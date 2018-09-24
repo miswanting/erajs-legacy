@@ -18,12 +18,13 @@ def init():
     engine.self_check()
     print('OK')
     print('[DEBG]Loading Engine Configuration...', end='')
-    engine.load_config(['config/engine.ini'])
+    engine.load_config(['config/config.ini'])
     print('OK')
     print('[DEBG]Scanning Plugins...', end='')
     engine.scan_plugin()
     print('OK')
-    print('[DEBG]Loading Plugins...', end='')
+    print('[DEBG]Loading Plugins...')
+    engine.load_plugin()
     print('OK')
     print('[DEBG]Connecting Server...', end='')
     engine.connect()
@@ -98,6 +99,11 @@ def show_save_to_save():
         if len(save_file_list) == 0:
             save_list.append((current_num, '未使用'))
             break
+        elif int(save_file_list[0].split('\\')[-1].split('.')[0]) == current_num:
+            save_list.append((current_num, str(current_num)))
+            save_file_list = save_file_list[1:]
+            current_num += 1
+
     # 显示
     for each in save_list:
         engine.b(str(each[0])+'. '+each[1], save_to, each[0])

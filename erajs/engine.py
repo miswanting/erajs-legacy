@@ -5,6 +5,7 @@ import sys
 import glob
 import time
 import json
+import runpy
 import random
 import socket
 import hashlib
@@ -51,8 +52,7 @@ class DataEngine:
                 print('[WARN]Folder {} is not Exist. Creating...'.format(each))
                 os.mkdir(each)
         check_file_list = [
-            'config/engine.ini',
-            'config/game.ini'
+            'config/config.ini'
         ]
         for each in check_file_list:
             if not os.path.isfile(each):
@@ -61,7 +61,7 @@ class DataEngine:
 
     def load_config(self, config_path):
         config = self.load_data(config_path)
-        self.data['config.engine'] = config['config.engine']
+        self.data['config'] = config['config.config']
 
     def scan(self, folderName):
         fileList = []
@@ -70,19 +70,22 @@ class DataEngine:
                 fileList.append(root + '\\' + each)
         return fileList
 
-    def scan_plugin(self):
-        plugin_path_list = self.scan('plugin')
-        print('Found {} Plugins...'.format(
-            len(plugin_path_list)), end='')
-        self.data['plugin'] = plugin_path_list
-        return self.scan('plugin')
-
-    def save_to(self, save_num):
+    def save_to(self, save_num, save_name=''):
         with open('save/'+str(save_num)+'.save', 'w', encoding='utf-8') as f:
-            f.write(json.dumps(self.pool))
+            save_object = {
+                'name': save_name,
+                'data': self.pool
+            }
+            f.write(json.dumps(save_object))
 
-    def load_from(self, saveFile):
-        print('load_save', saveFile)
+    def load_from(self, save_num):
+        # with open('save/'+str(save_num)+'.save', 'w', encoding='utf-8') as f:
+        #     save_object = {
+        #         'name' = save_name,
+        #         'data' = self.pool
+        #     }
+        #     f.write(json.dumps(save_object))
+        pass
 
     def add(self, item):
         item['hash'] = new_hash()
@@ -127,7 +130,6 @@ class DataEngine:
                 config = configparser.ConfigParser()
                 config.read(each)
                 d = dict(config._sections)
-                # print(d)
                 for k in d:
                     d[k] = dict(d[k])
                 data[key] = d
@@ -144,7 +146,42 @@ class DataEngine:
         return data
 
 
-class SocketEngine(DataEngine):
+class PluginEngine(DataEngine):
+    def scan_plugin(self):
+        # 扫描插件文件
+        plugin_path_list = self.scan('erajs/plugin')
+        print('Found {} Plugins...'.format(
+            len(plugin_path_list)), end='')
+        # self.data['plugin'] = plugin_path_list
+        # 提取插件名称
+        plugin_name_list = []
+        for each in plugin_path_list:
+            plugin_name_list.append('.'.join(each.replace(
+                '/', '\\').split('\\')[-1].split('.')[0:-1]))
+        # 比对配置信息
+        for each in plugin_name_list:
+            if not each.lower() in self.data['config']['plugin'].keys():
+                self.data['config']['plugin'][each.lower()] = 'no'
+        # 同步
+        config = configparser.ConfigParser()
+        config.read_dict(self.data['config'])
+        with open('config/config.ini', 'w') as configfile:
+            config.write(configfile)
+
+    def load_plugin(self):
+        for each in self.data['config']['plugin'].keys():
+            if self.data['config']['plugin'][each] == 'yes':
+                plugin_path_list = self.scan('erajs/plugin')
+                for every in plugin_path_list:
+                    module_name = '.'.join(every.replace(
+                        '/', '\\').split('\\')[-1].split('.')[0:-1])
+                    if module_name.lower() == each:
+                        print('Loading {}...'.format(module_name))
+                        # importlib.import_module(module_name)
+                        runpy.run_path(every)
+
+
+class SocketEngine(PluginEngine):
     HOST = 'localhost'
     PORT = 11994
     _conn = None
