@@ -1,3 +1,10 @@
+import sys
+
+
+class Plugin:
+    pass
+
+
 class EraTime:
     '''时/日/周/月/季/年
     日of周/日of月/日of年/月of年/季of年
@@ -82,8 +89,12 @@ class EraTime:
         pass
 
     def get_sys_time(self):
-        '''获取原始时间'''
+        '''获取时间原始值'''
         return self.CURRENT_DAY
+
+    def set_sys_time(self, value):
+        '''设定时间原始值'''
+        self.CURRENT_DAY = value
 
     def get_full_time(self):
         '''获取全文本时间'''
@@ -94,6 +105,12 @@ class EraTime:
         self.CURRENT_DAY += 0.5
 
 
+def register(data):
+    data['plugin']['EraTime'] = EraTime
+    data['']['EraTime'] = EraTime
+
+
+register(sys.argv[0])
 # import math
 
 # ORDER = ['日', '月', '火', '水', '木', '金', '土']

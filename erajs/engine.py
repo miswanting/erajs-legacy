@@ -37,6 +37,14 @@ class DataEngine:
         sys.path.append(gamepath)
 
     def self_check(self):
+        self.data = {
+            "config": {
+                "plugin": {}
+            },
+            "plugin": {},
+            "pool": {},
+            "api": {}
+        }
         check_folder_list = [
             'config',
             'erajs/plugin',
@@ -178,7 +186,10 @@ class PluginEngine(DataEngine):
                     if module_name.lower() == each:
                         print('Loading {}...'.format(module_name))
                         # importlib.import_module(module_name)
-                        runpy.run_path(every)
+                        # runpy.run_path(every)
+                        with open(every, 'r', encoding='utf8') as target:
+                            sys.argv = [self]
+                            exec(''.join(target.readlines()), {'a': self})
 
 
 class SocketEngine(PluginEngine):
@@ -652,4 +663,27 @@ def _parse_bag(bag):
 
 
 class Engine(BagEngine):
-    pass
+    def register_api(self):
+        func_list = [
+            self.fix_path,
+            self.self_check,
+            self.load_config,
+            self.register_api,
+            self.scan_plugin,
+            self.load_plugin,
+            self.connect,
+            self.send_loaded,
+            self.title,
+            self.t,
+            self.b,
+            self.h,
+            self.page,
+            self.goto,
+            self.back,
+            self.repeat,
+            self.add,
+            self.get
+        ]
+        for each in func_list:
+            self.data['api'][each.__name__] = each
+        print(self.data)
