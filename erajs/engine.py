@@ -188,8 +188,8 @@ class PluginEngine(DataEngine):
                         # importlib.import_module(module_name)
                         # runpy.run_path(every)
                         with open(every, 'r', encoding='utf8') as target:
-                            sys.argv = [self]
-                            exec(''.join(target.readlines()), {'a': self})
+                            sys.argv = [self.data]
+                            exec(''.join(target.readlines()))
 
 
 class SocketEngine(PluginEngine):

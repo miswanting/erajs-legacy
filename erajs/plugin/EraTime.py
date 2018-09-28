@@ -106,8 +106,32 @@ class EraTime:
 
 
 def register(data):
-    data['plugin']['EraTime'] = EraTime
-    data['']['EraTime'] = EraTime
+    global EraTime
+    data['plugin']['time'] = EraTime
+    data['entity']['time'] = EraTime()
+    if not 'time' in data['db'].keys():
+        data['db']['time'] = {
+            'CURRENT_DAY': 0
+        }
+    data['entity']['time'].load(data['db']['time'])
+    func_list = [
+        data['entity']['time'].get_time,
+        data['entity']['time'].get_day,
+        data['entity']['time'].get_week,
+        data['entity']['time'].get_month,
+        data['entity']['time'].get_season,
+        data['entity']['time'].get_year,
+        data['entity']['time'].get_day_in_week,
+        data['entity']['time'].get_day_in_month,
+        data['entity']['time'].get_day_in_year,
+        data['entity']['time'].get_month_in_year,
+        data['entity']['time'].get_season_in_year,
+        data['entity']['time'].get_sys_time,
+        data['entity']['time'].set_sys_time,
+        data['entity']['time'].get_full_time,
+        data['entity']['time'].tick
+    ]
+    data['api']['']
 
 
 register(sys.argv[0])
