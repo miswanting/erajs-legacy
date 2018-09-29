@@ -16,11 +16,14 @@ from . import game as g
 # repeat = g.repeat
 # mode = g.mode
 # clear = g.clear
-
+data = {}
 
 # 显示控制
+
+
 def init():
-    g.init()
+    global data
+    data = g.init()
 
 
 def title(text):
@@ -86,6 +89,10 @@ def add(item):
 
 def get(pattern):
     return g.get(pattern)
+
+
+def get_full_time():
+    return g.get_full_time()
 
 
 def ________________________________________________________________():

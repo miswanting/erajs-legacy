@@ -9,7 +9,6 @@ import runpy
 import random
 import socket
 import hashlib
-# import graphene
 import importlib
 import threading
 import configparser
@@ -43,7 +42,9 @@ class DataEngine:
             },
             "plugin": {},
             "pool": {},
-            "api": {}
+            "api": {},
+            "entity": {},
+            "db": {},
         }
         check_folder_list = [
             'config',

@@ -51,6 +51,7 @@ def init():
     engine.send_loaded()
     print('OK')
     print('[FINE]Initialize Complete!')
+    return engine.data
 
 
 def title(text):
@@ -133,6 +134,10 @@ def add(item):
 
 def get(pattern):
     return engine.get(pattern)
+
+
+def get_full_time():
+    return engine.data['api']['get_full_time']()
 
 
 def _______________________________________________________():

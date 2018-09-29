@@ -9,10 +9,16 @@ class EraTime:
     '''时/日/周/月/季/年
     日of周/日of月/日of年/月of年/季of年
     默认值：1年 = 4季 = 8月 = 16周 = 112日 = 224昼/夜
+    年：
+    季：太阳：温度
+    月：月亮：湿度（潮汐）
+    周：星星：月火水木金土日
+    日：地球
     '''
     WEEKDAY_ORDER = ['月', '火', '水', '木', '金', '土', '日']
     TIME_ORDER = ['昼', '夜']
     SEASON_ORDER = ['春', '夏', '秋', '冬']
+    MONTH_ORDER = ['乾', '坤', '震', '巽', '坎', '离', '艮', '兑']
     WEEKS_IN_A_MONTH = 2
     MONTHS_IN_A_SEASON = 2
     # 1...
@@ -74,15 +80,16 @@ class EraTime:
 
     def get_day_in_month(self, isText=False):
         '''第几天（月内）'''
-        pass
+        days_in_a_month = len(self.WEEKDAY_ORDER) * self.WEEKS_IN_A_MONTH
+        return int(self.CURRENT_DAY/days_in_a_month/4/self.MONTHS_IN_A_SEASON) + 1
 
     def get_day_in_year(self, isText=False):
         '''第几天（年内）'''
         pass
 
-    def get_month_in_year(self, isText=False):
+    def get_month_in_year(self):
         '''第几月（年内）'''
-        pass
+        return int(self.CURRENT_DAY/self.WEEKS_IN_A_MONTH/len(self.WEEKDAY_ORDER)) + 1
 
     def get_season_in_year(self, isText=False):
         '''第几季（年内）：春/夏/秋/冬'''
@@ -98,7 +105,18 @@ class EraTime:
 
     def get_full_time(self):
         '''获取全文本时间'''
-        pass
+        # 1年1月1日 日之周 日曜日 春昼
+        temp = '{0}年{1}月{2}日 {3}之周 {4}耀日 {5}{6}'
+        text_list = [
+            self.get_year(),
+            self.get_month_in_year(),
+            self.get_day_in_month(),
+            self.get_week(),
+            self.get_day_in_week(True),
+            self.get_season_in_year(True),
+            self.get_time(True)
+        ]
+        return temp.format(*text_list)
 
     def tick(self):
         '''时间流逝一个单位'''
@@ -113,7 +131,7 @@ def register(data):
         data['db']['time'] = {
             'CURRENT_DAY': 0
         }
-    data['entity']['time'].load(data['db']['time'])
+    # data['entity']['time'].load(data['db']['time'])
     func_list = [
         data['entity']['time'].get_time,
         data['entity']['time'].get_day,
@@ -131,7 +149,8 @@ def register(data):
         data['entity']['time'].get_full_time,
         data['entity']['time'].tick
     ]
-    data['api']['']
+    for each in func_list:
+        data['api'][each.__name__] = each
 
 
 register(sys.argv[0])
