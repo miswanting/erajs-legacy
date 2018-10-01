@@ -211,7 +211,7 @@ class SocketEngine(PluginEngine):
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as c:
                 self._conn = c
                 try:
-                    self._conn.connect((HOST, PORT))
+                    self._conn.connect((self.HOST, self.PORT))
                     self.isConnected = True
                     print('Connected...', end='')
                     core()
