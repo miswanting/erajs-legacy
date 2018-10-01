@@ -91,8 +91,13 @@ def get(pattern):
     return g.get(pattern)
 
 
+# EraTime
 def get_full_time():
     return g.get_full_time()
+
+
+def tick():
+    g.tick()
 
 
 def ________________________________________________________________():

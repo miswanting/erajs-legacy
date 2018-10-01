@@ -24,6 +24,9 @@ class EraTime:
     # 1...
     CURRENT_DAY = 0
     # 第1天 日之周 日曜日 春昼
+    days_in_a_month = len(WEEKDAY_ORDER) * WEEKS_IN_A_MONTH
+    days_in_a_season = days_in_a_month * MONTHS_IN_A_SEASON
+    days_in_a_year = days_in_a_season * len(SEASON_ORDER)
 
     def __init__(self):
         pass
@@ -53,35 +56,31 @@ class EraTime:
 
     def get_month(self, isText=False):
         '''第几月（绝对）'''
-        days_in_a_month = len(self.WEEKDAY_ORDER) * self.WEEKS_IN_A_MONTH
         if isText:
-            return str(int(self.CURRENT_DAY/days_in_a_month)+1)
-        return int(self.CURRENT_DAY/days_in_a_month) + 1
+            return str(int(self.CURRENT_DAY/self.days_in_a_month)+1)
+        return int(self.CURRENT_DAY/self.days_in_a_month) + 1
 
     def get_season(self, isText=False):
         '''第几季（绝对）'''
-        days_in_a_season = len(self.WEEKDAY_ORDER) * \
-            self.WEEKS_IN_A_MONTH * self.MONTHS_IN_A_SEASON
         if isText:
-            return str(int(self.CURRENT_DAY/days_in_a_season)+1)
-        return int(self.CURRENT_DAY/days_in_a_season) + 1
+            return str(int(self.CURRENT_DAY/self.days_in_a_season)+1)
+        return int(self.CURRENT_DAY/self.days_in_a_season) + 1
 
     def get_year(self, isText=False):
         '''第几年（绝对）'''
-        days_in_a_year = len(self.WEEKDAY_ORDER) * self.WEEKS_IN_A_MONTH * \
-            self.MONTHS_IN_A_SEASON * len(self.SEASON_ORDER)
         if isText:
-            return str(int(self.CURRENT_DAY/days_in_a_year)+1)
-        return int(self.CURRENT_DAY/days_in_a_year) + 1
+            return str(int(self.CURRENT_DAY / self.days_in_a_year)+1)
+        return int(self.CURRENT_DAY / self.days_in_a_year) + 1
 
     def get_day_in_week(self, isText=False):
         '''第几天（周内）（星期几）：日/月/火/水/木/金/土'''
-        pass
+        if isText:
+            return self.WEEKDAY_ORDER[int(self.CURRENT_DAY % len(self.WEEKDAY_ORDER))]
+        return int(self.CURRENT_DAY % len(self.WEEKDAY_ORDER)) + 1
 
     def get_day_in_month(self, isText=False):
         '''第几天（月内）'''
-        days_in_a_month = len(self.WEEKDAY_ORDER) * self.WEEKS_IN_A_MONTH
-        return int(self.CURRENT_DAY/days_in_a_month/4/self.MONTHS_IN_A_SEASON) + 1
+        return int(self.CURRENT_DAY % self.days_in_a_month) + 1
 
     def get_day_in_year(self, isText=False):
         '''第几天（年内）'''
@@ -93,7 +92,9 @@ class EraTime:
 
     def get_season_in_year(self, isText=False):
         '''第几季（年内）：春/夏/秋/冬'''
-        pass
+        if isText:
+            return self.SEASON_ORDER[int(self.CURRENT_DAY % self.days_in_a_year / self.days_in_a_season)]
+        return int(self.CURRENT_DAY % self.days_in_a_year / self.days_in_a_season) + 1
 
     def get_sys_time(self):
         '''获取时间原始值'''
@@ -120,6 +121,7 @@ class EraTime:
 
     def tick(self):
         '''时间流逝一个单位'''
+        print(self.CURRENT_DAY)
         self.CURRENT_DAY += 0.5
 
 

@@ -140,5 +140,9 @@ def get_full_time():
     return engine.data['api']['get_full_time']()
 
 
+def tick():
+    engine.data['api']['tick']()
+
+
 def _______________________________________________________():
     pass
