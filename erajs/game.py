@@ -86,6 +86,10 @@ def repeat(*arg, **kw):
     engine.repeat(*arg, **kw)
 
 
+def clear_gui():
+    engine.clear_gui()
+
+
 def show_save_to_save():
     def save_to(save_num):
         engine.save_to(save_num)
@@ -118,7 +122,7 @@ def show_save_to_save():
 def show_save_to_load(func_after_load):
     def load_from(save_num):
         engine.load_from(save_num)
-        engine._gui_list.clear()
+        engine.clear_gui()
         engine.goto(func_after_load)
     # 获取列表
     save_file_list = engine.scan('save')

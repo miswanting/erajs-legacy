@@ -385,19 +385,32 @@ class BagEngine(LockEngine):
         self._cmd_list.clear()
 
     def goto(self, func, *arg, **kw):
-        # print('goto:', func.__name__)
+        print('[DEBG]GOTO: Append [{}] to [{}]'.format(
+            func.__name__, self._show_gui_list()))
         self._gui_list.append((func, arg, kw))
         func(*arg, **kw)
 
     def back(self, *arg, **kw):
-        # print('back')
+        print('[DEBG]BACK: Pop [{}] from [{}]'.format(
+            self._gui_list[-1][0].__name__, self._show_gui_list()))
         self._gui_list.pop()
-        repeat()
+        self.repeat()
 
     def repeat(self, *arg, **kw):
-        # TODO(miswanting): RecursionError: maximum recursion depth exceeded
-        # print('repeat:', self._gui_list[-1][0].__name__)
+        print('[DEBG]REPEAT: Repeat [{}] in [{}]'.format(
+            self._gui_list[-1][0].__name__, self._show_gui_list()))
         self._gui_list[-1][0](*self._gui_list[-1][1], **self._gui_list[-1][2])
+
+    def clear_gui(self):
+        print('[DEBG]CLEAR_GUI: [{}]'.format(self._show_gui_list()))
+        self._gui_list.clear()
+
+    def _show_gui_list(self):
+        gui_list = []
+        for each in self._gui_list:
+            gui_list.append(each[0].__name__)
+        return '->'.join(gui_list)
+
 
 
 # 核心技术

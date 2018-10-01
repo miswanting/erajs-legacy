@@ -50,6 +50,10 @@ def repeat(*arg, **kw):
     g.repeat(*arg, **kw)
 
 
+def clear_gui():
+    g.clear_gui()
+
+
 def show_save_to_save():
     g.show_save_to_save()
 
