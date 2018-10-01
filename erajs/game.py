@@ -126,14 +126,12 @@ def show_save_to_load(func_after_load):
         engine.goto(func_after_load)
     # 获取列表
     save_file_list = engine.scan('save')
-    # print(save_file_list)
     # 弱加载
     for each in save_file_list:
         pass
     # 计算显示
     save_list = []
     for each in save_file_list:
-        print(each)
         save_list.append((int(each.split('\\')[-1].split('.')[0]), ''))
     # 显示
     for each in save_list:
