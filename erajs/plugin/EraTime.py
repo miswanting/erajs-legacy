@@ -107,7 +107,7 @@ class EraTime:
     def get_full_time(self):
         '''获取全文本时间'''
         # 1年1月1日 日之周 日曜日 春昼
-        temp = '{0}年{1}月{2}日 {3}之周 {4}耀日 {5}{6}'
+        temp = '第{0}年 {1}月{2}日 第{3}周 {4}耀日 {5}{6}'
         text_list = [
             self.get_year(),
             self.get_month_in_year(),
