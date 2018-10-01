@@ -133,6 +133,8 @@ def register(data):
         data['db']['time'] = {
             'CURRENT_DAY': 0
         }
+    else:
+        data['entity']['time'].CURRENT_DAY = data['db']['time']['CURRENT_DAY']
     # data['entity']['time'].load(data['db']['time'])
     func_list = [
         data['entity']['time'].get_time,

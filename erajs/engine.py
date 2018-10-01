@@ -83,18 +83,14 @@ class DataEngine:
         with open('save/'+str(save_num)+'.save', 'w', encoding='utf-8') as f:
             save_object = {
                 'name': save_name,
-                'data': self.pool
+                'data': self.data['db']
             }
             f.write(json.dumps(save_object))
 
     def load_from(self, save_num):
-        # with open('save/'+str(save_num)+'.save', 'w', encoding='utf-8') as f:
-        #     save_object = {
-        #         'name' = save_name,
-        #         'data' = self.pool
-        #     }
-        #     f.write(json.dumps(save_object))
-        pass
+        with open('save/'+str(save_num)+'.save', 'r', encoding='utf-8') as f:
+            self.data['db'] = json.loads(''.join(f.readlines()))['data']
+            print('db', self.data['db'])
 
     def add(self, item):
         item['hash'] = new_hash()
@@ -251,12 +247,12 @@ class SocketEngine(PluginEngine):
         self.send(bag)
 
     def send(self, bag):
-        print("[DEBG]发送：", bag)
+        # print("[DEBG]发送：", bag)
         self._conn.send(json.dumps(bag, ensure_ascii=False).encode())
 
     def recv(self):
         data = self._conn.recv(4096)
-        print("[DEBG]接收：", data)
+        # print("[DEBG]接收：", data)
         if not data:
             return
         data = data.decode().split('}{')
@@ -497,16 +493,21 @@ def page():
 
 
 def goto(func, *arg, **kw):
+    print('[DEBG]GOTO: Append {} in {}'.format(func.__name__, _gui_list))
     _gui_list.append((func, arg, kw))
     func(*arg, **kw)
 
 
 def back(*arg, **kw):
+    print('[DEBG]BACK: Pop {} from {}'.format(
+        _gui_list[-1][0].__name__, _gui_list))
     _gui_list.pop()
     repeat()
 
 
 def repeat(*arg, **kw):
+    print('[DEBG]REPEAT: Repeat {} in {}'.format(
+        _gui_list[-1][0].__name__, _gui_list))
     _gui_list[-1][0](*_gui_list[-1][1], **_gui_list[-1][2])
 
 
@@ -687,4 +688,4 @@ class Engine(BagEngine):
         ]
         for each in func_list:
             self.data['api'][each.__name__] = each
-        print(self.data)
+        # print(self.data)

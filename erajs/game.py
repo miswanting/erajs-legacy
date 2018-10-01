@@ -92,7 +92,7 @@ def show_save_to_save():
         engine.repeat()
     # 获取列表
     save_file_list = engine.scan('save')
-    print(save_file_list)
+    # print(save_file_list)
     # 弱加载
     for each in save_file_list:
         pass
@@ -107,7 +107,6 @@ def show_save_to_save():
             save_list.append((current_num, str(current_num)))
             save_file_list = save_file_list[1:]
             current_num += 1
-
     # 显示
     for each in save_list:
         engine.b(str(each[0])+'. '+each[1], save_to, each[0])
@@ -116,7 +115,27 @@ def show_save_to_save():
     pass
 
 
-def show_save_to_load():
+def show_save_to_load(func_after_load):
+    def load_from(save_num):
+        engine.load_from(save_num)
+        engine._gui_list.clear()
+        engine.goto(func_after_load)
+    # 获取列表
+    save_file_list = engine.scan('save')
+    # print(save_file_list)
+    # 弱加载
+    for each in save_file_list:
+        pass
+    # 计算显示
+    save_list = []
+    for each in save_file_list:
+        print(each)
+        save_list.append((int(each.split('\\')[-1].split('.')[0]), ''))
+    # 显示
+    for each in save_list:
+        engine.b(str(each[0])+'. '+each[1], load_from, each[0])
+        engine.t()
+    # 处理
     pass
 
 

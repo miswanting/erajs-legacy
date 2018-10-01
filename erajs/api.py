@@ -70,8 +70,8 @@ def show_save_to_save():
     g.show_save_to_save()
 
 
-def show_save_to_load():
-    g.show_save_to_load()
+def show_save_to_load(func_after_load):
+    g.show_save_to_load(func_after_load)
 
 
 def mode():
