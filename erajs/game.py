@@ -1,10 +1,7 @@
 # coding:utf-8
 from . import engine as e
 
-# 游戏平台
-data = {}  # 静态数据
-db = {}  # 动态数据
-pool = {}
+data = {}
 
 engine = e.Engine()
 
