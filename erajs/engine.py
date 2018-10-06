@@ -38,10 +38,11 @@ class DataEngine:
     def self_check(self):
         self.data = {
             "config": {
-                "plugin": {}
+                "plugin": {},
+                "dlc": {},
+                "mod": {},
             },
             "plugin": {},
-            "pool": {},
             "api": {},
             "entity": {},
             "db": {},
@@ -50,19 +51,20 @@ class DataEngine:
             'config',
             'erajs/plugin',
             'erajs/prototype',
-            'game',
             'dlc',
+            'game',
             'mod',
             'data',
-            'save'
+            'save',
+            'script'
+        ]
+        check_file_list = [
+            'config/config.ini'
         ]
         for each in check_folder_list:
             if not os.path.isdir(each):
                 print('[WARN]Folder {} is not Exist. Creating...'.format(each))
                 os.mkdir(each)
-        check_file_list = [
-            'config/config.ini'
-        ]
         for each in check_file_list:
             if not os.path.isfile(each):
                 print('[WARN]File {} is not Exist. Creating...'.format(each))
@@ -70,7 +72,8 @@ class DataEngine:
 
     def load_config(self, config_path):
         config = self.load_data(config_path)
-        self.data['config'] = config['config.config']
+        for each in config['config.config'].keys():
+            self.data['config'][each] = config['config.config'][each]
 
     def scan(self, folderName):
         fileList = []
@@ -80,7 +83,6 @@ class DataEngine:
         return fileList
 
     def save_to(self, save_num, save_name=''):
-        print(123, self.data['db'])
         with open('save/'+str(save_num)+'.save', 'w', encoding='utf-8') as f:
             save_object = {
                 'name': save_name,
@@ -152,18 +154,18 @@ class DataEngine:
         return data
 
 
-class PluginEngine(DataEngine):
+class LoadEngine(DataEngine):
     def scan_plugin(self):
         # 扫描插件文件
         plugin_path_list = self.scan('erajs/plugin')
-        print('Found {} Plugins...'.format(
-            len(plugin_path_list)), end='')
-        # self.data['plugin'] = plugin_path_list
         # 提取插件名称
         plugin_name_list = []
         for each in plugin_path_list:
-            plugin_name_list.append('.'.join(each.replace(
-                '/', '\\').split('\\')[-1].split('.')[0:-1]))
+            plugin_name = '.'.join(each.replace(
+                '/', '\\').split('\\')[-1].split('.')[0:-1])
+            print('[DEBG]│  ├─ Scanning [{}]...'.format(plugin_name), end='')
+            plugin_name_list.append(plugin_name)
+            print('OK')
         # 比对配置信息
         for each in plugin_name_list:
             if not each.lower() in self.data['config']['plugin'].keys():
@@ -173,8 +175,10 @@ class PluginEngine(DataEngine):
         config.read_dict(self.data['config'])
         with open('config/config.ini', 'w') as configfile:
             config.write(configfile)
+        return len(plugin_path_list)
 
     def load_plugin(self):
+        num_of_loaded_plugins = 0
         for each in self.data['config']['plugin'].keys():
             if self.data['config']['plugin'][each] == 'yes':
                 plugin_path_list = self.scan('erajs/plugin')
@@ -182,15 +186,125 @@ class PluginEngine(DataEngine):
                     module_name = '.'.join(every.replace(
                         '/', '\\').split('\\')[-1].split('.')[0:-1])
                     if module_name.lower() == each:
-                        print('Loading {}...'.format(module_name))
-                        # importlib.import_module(module_name)
-                        # runpy.run_path(every)
+                        print('[DEBG]│  ├─ Loading [{}]...'.format(
+                            module_name), end='')
                         with open(every, 'r', encoding='utf8') as target:
                             sys.argv = [self.data]
                             exec(''.join(target.readlines()))
+                        num_of_loaded_plugins += 1
+                        print('OK')
+        return num_of_loaded_plugins
+
+    def scan_script(self):
+        # 扫描插件文件
+        script_path_list = self.scan('script')
+        # 提取插件名称
+        script_name_list = []
+        for each in script_path_list:
+            script_name = '.'.join(each.replace(
+                '/', '\\').split('\\')[-1].split('.')[0:-1])
+            print('[DEBG]│  ├─ Scanning [{}]...'.format(script_name), end='')
+            script_name_list.append(script_name)
+            print('OK')
+        return len(script_path_list)
+
+    def load_script(self):
+        num_of_loaded_script = 0
+        script_path_list = self.scan('script')
+        for every in script_path_list:
+            module_name = '.'.join(every.replace(
+                '/', '\\').split('\\')[-1].split('.')[0:-1])
+            print('[DEBG]│  ├─ Loading [{}]...'.format(
+                module_name), end='')
+            with open(every, 'r', encoding='utf8') as target:
+                sys.argv = [self.data]
+                exec(''.join(target.readlines()))
+            num_of_loaded_script += 1
+            print('OK')
+        return num_of_loaded_script
+
+    def scan_dlc(self):
+        # 扫描插件文件
+        dlc_path_list = self.scan('dlc')
+        # 提取插件名称
+        dlc_name_list = []
+        for each in dlc_path_list:
+            dlc_name = '.'.join(each.replace(
+                '/', '\\').split('\\')[-1].split('.')[0:-1])
+            print('[DEBG]│  ├─ Scanning [{}]...'.format(dlc_name), end='')
+            dlc_name_list.append(dlc_name)
+            print('OK')
+        # 比对配置信息
+        for each in dlc_name_list:
+            if not each.lower() in self.data['config']['dlc'].keys():
+                self.data['config']['dlc'][each.lower()] = 'no'
+        # 同步
+        config = configparser.ConfigParser()
+        config.read_dict(self.data['config'])
+        with open('config/config.ini', 'w') as configfile:
+            config.write(configfile)
+        return len(dlc_path_list)
+
+    def load_dlc(self):
+        num_of_loaded_dlcs = 0
+        for each in self.data['config']['dlc'].keys():
+            if self.data['config']['dlc'][each] == 'yes':
+                dlc_path_list = self.scan('dlc')
+                for every in dlc_path_list:
+                    module_name = '.'.join(every.replace(
+                        '/', '\\').split('\\')[-1].split('.')[0:-1])
+                    if module_name.lower() == each:
+                        print('[DEBG]│  ├─ Loading [{}]...'.format(
+                            module_name), end='')
+                        with open(every, 'r', encoding='utf8') as target:
+                            sys.argv = [self.data]
+                            exec(''.join(target.readlines()))
+                        num_of_loaded_dlcs += 1
+                        print('OK')
+        return num_of_loaded_dlcs
+
+    def scan_mod(self):
+        # 扫描插件文件
+        mod_path_list = self.scan('mod')
+        # 提取插件名称
+        mod_name_list = []
+        for each in mod_path_list:
+            mod_name = '.'.join(each.replace(
+                '/', '\\').split('\\')[-1].split('.')[0:-1])
+            print('[DEBG]│  ├─ Scanning [{}]...'.format(mod_name), end='')
+            mod_name_list.append(mod_name)
+            print('OK')
+        # 比对配置信息
+        for each in mod_name_list:
+            if not each.lower() in self.data['config']['mod'].keys():
+                self.data['config']['mod'][each.lower()] = 'no'
+        # 同步
+        config = configparser.ConfigParser()
+        config.read_dict(self.data['config'])
+        with open('config/config.ini', 'w') as configfile:
+            config.write(configfile)
+        return len(mod_path_list)
+
+    def load_mod(self):
+        num_of_loaded_mods = 0
+        for each in self.data['config']['mod'].keys():
+            if self.data['config']['mod'][each] == 'yes':
+                mod_path_list = self.scan('mod')
+                for every in mod_path_list:
+                    module_name = '.'.join(every.replace(
+                        '/', '\\').split('\\')[-1].split('.')[0:-1])
+                    if module_name.lower() == each:
+                        print('[DEBG]│  ├─ Loading [{}]...'.format(
+                            module_name), end='')
+                        with open(every, 'r', encoding='utf8') as target:
+                            sys.argv = [self.data]
+                            exec(''.join(target.readlines()))
+                        num_of_loaded_mods += 1
+                        print('OK')
+        return num_of_loaded_mods
 
 
-class SocketEngine(PluginEngine):
+class SocketEngine(LoadEngine):
     HOST = 'localhost'
     PORT = 11994
     _conn = None
@@ -198,7 +312,7 @@ class SocketEngine(PluginEngine):
     _gui_list = []
     isConnected = False
 
-    def parse_bag(self, bag):
+    def _parse_bag(self, bag):
         pass
 
     def connect(self):
@@ -206,7 +320,7 @@ class SocketEngine(PluginEngine):
             while True:
                 data = self.recv()
                 for each in data:
-                    self.parse_bag(each)
+                    self._parse_bag(each)
 
         def func_connect():
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as c:
@@ -312,7 +426,7 @@ class BagEngine(LockEngine):
     _cmd_list = []
     _gui_list = []
 
-    def parse_bag(self, bag):
+    def _parse_bag(self, bag):
         def parse(bag):
             if bag['type'] == 'MOUSE_CLICK':
                 if bag['value'] == 1:  # 左键
@@ -403,14 +517,14 @@ class BagEngine(LockEngine):
         self._gui_list[-1][0](*self._gui_list[-1][1], **self._gui_list[-1][2])
 
     def clear_gui(self):
-        print('[DEBG]CLEAR_GUI: [{}]'.format(self._show_gui_list()))
+        print('[DEBG]CLEAR_GUI: Set [{}] to []'.format(self._show_gui_list()))
         self._gui_list.clear()
 
     def _show_gui_list(self):
         gui_list = []
         for each in self._gui_list:
             gui_list.append(each[0].__name__)
-        return '->'.join(gui_list)
+        return ' → '.join(gui_list)
 
 
 # # 核心技术
@@ -679,26 +793,38 @@ class BagEngine(LockEngine):
 
 class Engine(BagEngine):
     def register_api(self):
-        func_list = [
-            self.fix_path,
-            self.self_check,
-            self.load_config,
-            self.register_api,
-            self.scan_plugin,
-            self.load_plugin,
-            self.connect,
-            self.send_loaded,
-            self.title,
-            self.t,
-            self.b,
-            self.h,
-            self.page,
-            self.goto,
-            self.back,
-            self.repeat,
-            self.add,
-            self.get
-        ]
+        # func_list = [
+        #     self.fix_path,
+        #     self.self_check,
+        #     self.load_config,
+        #     self.register_api,
+        #     self.scan_plugin,
+        #     self.load_plugin,
+        #     self.connect,
+        #     self.send_loaded,
+        #     self.title,
+        #     self.t,
+        #     self.b,
+        #     self.h,
+        #     self.page,
+        #     self.goto,
+        #     self.back,
+        #     self.repeat,
+        #     self.add,
+        #     self.get
+        # ]
+        def ban_sys(name):
+            if not name[0] == '_':
+                return True
+            return False
+        raw_func_list = dir(self)
+        func_list = list(filter(ban_sys, raw_func_list))
+        num_of_registered_API = 0
         for each in func_list:
-            self.data['api'][each.__name__] = each
+            if '__call__' in dir(getattr(self, each)):
+                print('[DEBG]│  ├─ Registering [{}]...'.format(each), end='')
+                self.data['api'][each] = getattr(self, each)
+                num_of_registered_API += 1
+                print('OK')
         # print(self.data)
+        return num_of_registered_API
