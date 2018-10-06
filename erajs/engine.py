@@ -792,6 +792,8 @@ class BagEngine(LockEngine):
 
 
 class Engine(BagEngine):
+    version = '0.1.0'
+
     def register_api(self):
         # func_list = [
         #     self.fix_path,

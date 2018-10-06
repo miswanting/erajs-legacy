@@ -1,6 +1,7 @@
 # coding:utf-8
 from . import game as g
 
+version = '0.1.0'
 data = {}
 
 
