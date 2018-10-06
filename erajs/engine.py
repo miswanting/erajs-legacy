@@ -437,8 +437,12 @@ class BagEngine(LockEngine):
                         self.unlock_forever()
             elif bag['type'] == 'BUTTON_CLICK':
                 for each in self._cmd_list:
-                    if bag['value'] == each[0]:
+                    if bag['hash'] == each[0]:
                         each[1](*each[2], **each[3])
+            elif bag['type'] == 'RATE_CLICK':
+                for each in self._cmd_list:
+                    if bag['hash'] == each[0]:
+                        each[1](bag['value'])
 
         t = threading.Thread(target=parse, args=(bag, ))
         t.start()
@@ -489,6 +493,34 @@ class BagEngine(LockEngine):
         }
         self.send(bag)
 
+    def progress(self, now,  max=100, length='100px'):
+        bag = {
+            'type': 'progress',
+            'value': {
+                'now': now,
+                'max': max,
+                'length': length
+            },
+            'from': 'b',
+            'to': 'r'
+        }
+        self.send(bag)
+
+    def rate(self, now=0,  max=5, func=None):
+        hash = new_hash()
+        self._cmd_list.append((hash, func))
+        bag = {
+            'type': 'rate',
+            'value': {
+                'now': now,
+                'max': max,
+                'hash': hash
+            },
+            'from': 'b',
+            'to': 'r'
+        }
+        self.send(bag)
+
     def page(self):
         bag = {
             'type': 'page',
@@ -498,6 +530,15 @@ class BagEngine(LockEngine):
         self.send(bag)
         global _cmd_list
         self._cmd_list.clear()
+
+    def clear(self, last=False):
+        bag = {'type': 'clear',
+               'value': {
+                   'last': last
+               },
+               'from': 'b',
+               'to': 'r'}
+        self.send(bag)
 
     def goto(self, func, *arg, **kw):
         print('[DEBG]GOTO: Append [{}] to [{}]'.format(

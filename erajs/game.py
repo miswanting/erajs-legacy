@@ -69,6 +69,14 @@ def h(text, rank=1):
     engine.h(text, rank)
 
 
+def rate(now=0,  max=5, func=None):
+    return engine.data['api']['rate'](now, max, func)
+
+
+def progress(now, max=100, length='100px'):
+    return engine.data['api']['progress'](now, max, length)
+
+
 def page():
     engine.page()
 

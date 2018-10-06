@@ -27,8 +27,12 @@ def h(text):
     g.h(text)
 
 
-def progress():
-    pass
+def rate(now=0,  max=5, func=None):
+    return g.rate(now, max, func)
+
+
+def progress(now, max=100, length='100px'):
+    return g.progress(now, max, length)
 
 
 def input():
