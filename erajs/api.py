@@ -39,6 +39,10 @@ def radio(choice_list, default_index=0, func=None):
     return g.radio(choice_list, default_index, func)
 
 
+def divider(text=''):
+    return g.divider(text)
+
+
 def input():
     pass
 

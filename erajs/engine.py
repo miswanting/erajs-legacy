@@ -540,6 +540,15 @@ class BagEngine(LockEngine):
         }
         self.send(bag)
 
+    def divider(self, text=''):
+        bag = {
+            'type': 'divider',
+            'value': text,
+            'from': 'b',
+            'to': 'r'
+        }
+        self.send(bag)
+
     def page(self):
         bag = {
             'type': 'page',
