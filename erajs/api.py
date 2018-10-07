@@ -35,12 +35,20 @@ def progress(now, max=100, length='100px'):
     return g.progress(now, max, length)
 
 
+def radio(choice_list, default_index=0, func=None):
+    return g.radio(choice_list, default_index, func)
+
+
 def input():
     pass
 
 
 def page():
     g.page()
+
+
+def clear(last=False):
+    g.clear(last)
 
 
 def goto(func, *arg, **kw):
@@ -68,10 +76,6 @@ def show_save_to_load(func_after_load):
 
 
 def mode():
-    pass
-
-
-def clear():
     pass
 
 

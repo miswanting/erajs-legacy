@@ -443,6 +443,10 @@ class BagEngine(LockEngine):
                 for each in self._cmd_list:
                     if bag['hash'] == each[0]:
                         each[1](bag['value'])
+            elif bag['type'] == 'RADIO_CLICK':
+                for each in self._cmd_list:
+                    if bag['hash'] == each[0]:
+                        each[1](bag['value'])
 
         t = threading.Thread(target=parse, args=(bag, ))
         t.start()
@@ -514,6 +518,21 @@ class BagEngine(LockEngine):
             'value': {
                 'now': now,
                 'max': max,
+                'hash': hash
+            },
+            'from': 'b',
+            'to': 'r'
+        }
+        self.send(bag)
+
+    def radio(self, choice_list, default_index=0, func=None):
+        hash = new_hash()
+        self._cmd_list.append((hash, func))
+        bag = {
+            'type': 'radio',
+            'value': {
+                'list': choice_list,
+                'default': default_index,
                 'hash': hash
             },
             'from': 'b',

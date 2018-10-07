@@ -77,8 +77,16 @@ def progress(now, max=100, length='100px'):
     return engine.data['api']['progress'](now, max, length)
 
 
+def radio(choice_list, default_index=0, func=None):
+    return engine.data['api']['radio'](choice_list, default_index, func)
+
+
 def page():
     engine.page()
+
+
+def clear(last=False):
+    engine.clear(last)
 
 
 def goto(func, *arg, **kw):
