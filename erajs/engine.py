@@ -134,6 +134,7 @@ class DataEngine:
             key = '.'.join('.'.join(each.split('.')[0:-1]).split('\\'))
             ext = each.split('\\')[-1].split('.')[-1]
             # 载入文件
+            print('[DEBG]│  ├─ Loading [{}]...'.format(each), end='')
             if ext in ['cfg', 'ini', 'inf', 'config']:
                 config = configparser.ConfigParser()
                 config.read(each)
@@ -151,6 +152,7 @@ class DataEngine:
             elif ext == 'json':
                 with open(each, 'r', encoding='utf-8') as f:
                     data[key] = json.loads(''.join(f.readlines()))
+            print('OK')
         return data
 
 
