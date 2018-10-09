@@ -474,7 +474,6 @@ class BagEngine(LockEngine):
 
     def b(self, text, func, *arg, **kw):
         hash = new_hash()
-        self._cmd_list.append((hash, func, arg, kw))
         bag = {
             'type': 'b',
             'value': {
@@ -484,6 +483,12 @@ class BagEngine(LockEngine):
             'from': 'b',
             'to': 'r'
         }
+        bag['value']['disabled'] = False
+        if 'disabled' in kw.keys():
+            if kw['disabled']:
+                bag['value']['disabled'] = True
+            kw.pop('disabled')
+        self._cmd_list.append((hash, func, arg, kw))
         self.send(bag)
         self.unlock()
 
