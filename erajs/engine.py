@@ -492,6 +492,16 @@ class BagEngine(LockEngine):
             if kw['disabled']:
                 bag['value']['disabled'] = True
             kw.pop('disabled')
+        if 'popup' in kw.keys():
+            bag['value']['popup'] = kw['popup']
+            kw.pop('popup')
+        else:
+            bag['value']['popup'] = ''
+        if 'color' in kw.keys():
+            bag['value']['color'] = kw['color']
+            kw.pop('color')
+        else:
+            bag['value']['color'] = ''
         self._cmd_list.append((hash, func, arg, kw))
         self.send(bag)
         self.unlock()
