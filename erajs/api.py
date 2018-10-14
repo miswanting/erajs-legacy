@@ -39,12 +39,12 @@ def radio(choice_list, default_index=0, func=None):
     return g.radio(choice_list, default_index, func)
 
 
+def input(func=None):
+    return g.input(func)
+
+
 def divider(text=''):
     return g.divider(text)
-
-
-def input():
-    pass
 
 
 def page():

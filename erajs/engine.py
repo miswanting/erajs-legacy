@@ -449,6 +449,10 @@ class BagEngine(LockEngine):
                 for each in self._cmd_list:
                     if bag['hash'] == each[0]:
                         each[1](bag['value'])
+            elif bag['type'] == 'INPUT_CHANGE':
+                for each in self._cmd_list:
+                    if bag['hash'] == each[0]:
+                        each[1](bag['value'])
 
         t = threading.Thread(target=parse, args=(bag, ))
         t.start()
@@ -540,6 +544,19 @@ class BagEngine(LockEngine):
             'value': {
                 'list': choice_list,
                 'default': default_index,
+                'hash': hash
+            },
+            'from': 'b',
+            'to': 'r'
+        }
+        self.send(bag)
+
+    def input(self, func=None):
+        hash = new_hash()
+        self._cmd_list.append((hash, func))
+        bag = {
+            'type': 'input',
+            'value': {
                 'hash': hash
             },
             'from': 'b',

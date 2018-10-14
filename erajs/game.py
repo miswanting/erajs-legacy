@@ -81,6 +81,10 @@ def radio(choice_list, default_index=0, func=None):
     return engine.data['api']['radio'](choice_list, default_index, func)
 
 
+def input(func=None):
+    return engine.data['api']['input'](func)
+
+
 def divider(text=''):
     return engine.data['api']['divider'](text)
 
