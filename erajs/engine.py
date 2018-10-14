@@ -42,10 +42,10 @@ class DataEngine:
                 "dlc": {},
                 "mod": {},
             },
-            "plugin": {},
+            "class": {},
             "api": {},
             "entity": {},
-            "db": {},
+            "db": {},  # 可保存的数据
         }
         check_folder_list = [
             'config',

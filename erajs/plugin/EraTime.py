@@ -125,7 +125,7 @@ class EraTime:
 
 def register(data):
     global EraTime
-    data['plugin']['time'] = EraTime
+    data['class']['time'] = EraTime
     data['entity']['time'] = EraTime(data)
     if not 'time' in data['db'].keys():
         data['db']['time'] = {
