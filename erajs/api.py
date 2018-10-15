@@ -22,6 +22,7 @@ def title(text):
     """
     更改游戏窗口标题。\n
     """
+    global g
     g.title(text)
 
 
@@ -29,6 +30,7 @@ def page():
     """
     新建页面。\n
     """
+    global g
     g.page()
 
 
@@ -39,6 +41,7 @@ def t(text='', wait=False):
     当 wait 为 True 时，停在当前地方，直到点击鼠标左键或鼠标右键。\n
     左键跳过一句，右键跳过一段。\n
     """
+    global g
     g.t(text, wait)
 
 
@@ -49,6 +52,7 @@ def b(text, func, *arg, **kw):
     常见用法：api.b('TEST_BUTTON', api.goto, NEXT_PAGE_FUNC)\n
     注意：若向该参数显式传递参数 disabled=True 时，会生成一个被禁用的按钮\n
     """
+    global g
     g.b(text, func, *arg, **kw)
 
 
@@ -56,6 +60,7 @@ def h(text):
     """
     显示标题，其内容为 text。\n
     """
+    global g
     g.h(text)
 
 
@@ -67,6 +72,7 @@ def rate(now=0,  max=5, func=None):
         "value": 【改变后的评级数值】
     }\n
     """
+    global g
     return g.rate(now, max, func)
 
 
@@ -75,6 +81,7 @@ def progress(now, max=100, length='100px'):
     显示进度条，其长度为 length。\n
     now 表示当前值；max 表示最大值。\n
     """
+    global g
     return g.progress(now, max, length)
 
 
@@ -88,6 +95,7 @@ def radio(choice_list, default_index=0, func=None):
         "value": 【当前选中的内容】
     }\n
     """
+    global g
     return g.radio(choice_list, default_index, func)
 
 
@@ -100,6 +108,7 @@ def input(func=None):
     }\n
     Tips：可与按钮连用进行自定义文本的输入。\n
     """
+    global g
     return g.input(func)
 
 
@@ -108,6 +117,7 @@ def divider(text=''):
     显示横线。\n
     Bug：显示文字暂时有Bug。\n
     """
+    global g
     return g.divider(text)
 
 
@@ -115,6 +125,7 @@ def clear(last=False):
     """
     清除所有显示。\n
     """
+    global g
     g.clear(last)
 
 
@@ -123,6 +134,7 @@ def goto(func, *arg, **kw):
     【界面逻辑函数】\n
     进入其中的页面。\n
     """
+    global g
     g.goto(func, *arg, **kw)
 
 
@@ -131,6 +143,7 @@ def back(*arg, **kw):
     【界面逻辑函数】\n
     退回到上一个浏览的页面。\n
     """
+    global g
     g.back(*arg, **kw)
 
 
@@ -140,6 +153,7 @@ def repeat(*arg, **kw):
     重复当前的页面。\n
     Tips：刷新数据时常用\n
     """
+    global g
     g.repeat(*arg, **kw)
 
 
@@ -148,6 +162,7 @@ def clear_gui():
     【界面逻辑函数】\n
     清除所有界面逻辑关系。\n
     """
+    global g
     g.clear_gui()
 
 
@@ -155,6 +170,7 @@ def show_save_to_save():
     """
     显示当前存档（存档用）。\n
     """
+    global g
     g.show_save_to_save()
 
 
@@ -162,6 +178,7 @@ def show_save_to_load(func_after_load):
     """
     显示当前存档（读档用）。\n
     """
+    global g
     g.show_save_to_load(func_after_load)
 
 
@@ -169,15 +186,18 @@ def mode():
     """
     改变显示模式。\n
     """
+    global g
     pass
 
 
 # 资源控制
 def add(item):
+    global g
     return g.add(item)
 
 
 def get(pattern):
+    global g
     return g.get(pattern)
 
 
@@ -186,6 +206,7 @@ def get_full_time():
     """
     以文本方式返回当前时间（全部）。\n
     """
+    global g
     return g.get_full_time()
 
 
@@ -193,6 +214,7 @@ def tick():
     """
     时间流逝一个单位。\n
     """
+    global g
     g.tick()
 
 
@@ -205,4 +227,5 @@ def new_hash():
     返回一个HASH字符串。\n
     Tips：可用于索引和标记。\n
     """
+    global g
     return g.new_hash()

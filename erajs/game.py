@@ -52,7 +52,6 @@ class Game():
         engine.send_loaded()
         print('OK')
         print('[FINE]└─ Initialize Complete!')
-        return engine.data
 
     def get_data(self):
         return engine.data
@@ -168,6 +167,9 @@ class Game():
 
     def tick(self):
         engine.data['api']['tick']()
+
+    def new_hash(self):
+        return e.new_hash()
 
 
 game = Game()
