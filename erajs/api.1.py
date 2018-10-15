@@ -1,21 +1,18 @@
 # coding:utf-8
-from . import game
+from . import game as g
 
-g = None
 version = '0.1.0'
 data = {}
 
+
 # 显示控制
-
-
 def init():
     """
     初始化Era.js引擎。\n
     该语句必须在以下所有语句调用之前使用。\n
     """
-    global data, g
-    g = game.game
-    data = g.get_data()
+    global data
+    data = g.init()
 
 
 def title(text):
