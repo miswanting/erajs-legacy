@@ -259,8 +259,11 @@ class LoadEngine(DataEngine):
                         print('[DEBG]│  ├─ Loading [{}]...'.format(
                             module_name), end='')
                         with open(every, 'r', encoding='utf8') as target:
-                            sys.argv = [self.data]
-                            exec(''.join(target.readlines()))
+                            print(module_name)
+                            tmp = __import__('dlc.'+module_name)
+                            print(tmp)
+                            # sys.argv = [self.data]
+                            # exec(''.join(target.readlines()), globals())
                         num_of_loaded_dlcs += 1
                         print('OK')
         return num_of_loaded_dlcs
