@@ -1,7 +1,7 @@
 # coding:utf-8
 from . import game
 
-g = None
+g = game.game
 version = '0.1.0'
 data = {}
 
@@ -13,8 +13,7 @@ def init():
     初始化Era.js引擎。\n
     该语句必须在以下所有语句调用之前使用。\n
     """
-    global data, g
-    g = game.game
+    global data
     data = g.get_data()
 
 
