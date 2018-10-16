@@ -64,7 +64,7 @@ def h(text):
     g.h(text)
 
 
-def rate(now=0,  max=5, func=None):
+def rate(now=0,  max=5, func=None, disabled=True):
     """
     显示评级，其内容为 text。\n
     func 为 返回函数，当评级的数值改变时，func 执行，且其执行参数为：\n
@@ -73,7 +73,7 @@ def rate(now=0,  max=5, func=None):
     }\n
     """
     global g
-    return g.rate(now, max, func)
+    return g.rate(now, max, func, disabled)
 
 
 def progress(now, max=100, length='100px'):

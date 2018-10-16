@@ -68,8 +68,8 @@ class Game():
     def h(self, text, rank=1):
         engine.h(text, rank)
 
-    def rate(self, now=0,  max=5, func=None):
-        return engine.data['api']['rate'](now, max, func)
+    def rate(self, now=0,  max=5, func=None, disabled=True):
+        return engine.data['api']['rate'](now, max, func, disabled)
 
     def progress(self, now, max=100, length='100px'):
         return engine.data['api']['progress'](now, max, length)

@@ -45,7 +45,9 @@ class DataEngine:
             "class": {},
             "api": {},
             "entity": {},
-            "db": {},  # 可保存的数据
+            "db": {
+                'person': {}
+            },  # 可保存的数据
         }
         check_folder_list = [
             'config',
@@ -88,7 +90,7 @@ class DataEngine:
                 'name': save_name,
                 'data': self.data['db']
             }
-            f.write(json.dumps(save_object))
+            f.write(json.dumps(save_object, ensure_ascii=False))
 
     def load_from(self, save_num):
         with open('save/'+str(save_num)+'.save', 'r', encoding='utf-8') as f:
@@ -534,7 +536,7 @@ class BagEngine(LockEngine):
         }
         self.send(bag)
 
-    def rate(self, now=0,  max=5, func=None):
+    def rate(self, now=0,  max=5, func=None, disabled=True):
         hash = new_hash()
         self._cmd_list.append((hash, func))
         bag = {
@@ -542,7 +544,8 @@ class BagEngine(LockEngine):
             'value': {
                 'now': now,
                 'max': max,
-                'hash': hash
+                'hash': hash,
+                'disabled': disabled
             },
             'from': 'b',
             'to': 'r'
