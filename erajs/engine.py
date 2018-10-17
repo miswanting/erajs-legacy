@@ -45,9 +45,11 @@ class DataEngine:
             "class": {},
             "api": {},
             "entity": {},
-            "db": {
-                'person': {}
-            },  # 可保存的数据
+            "db": {  # 可保存的数据
+                'game': {},
+                'world': {},
+                'person': {},
+            },
         }
         check_folder_list = [
             'config',
