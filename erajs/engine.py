@@ -340,6 +340,7 @@ class SocketEngine(LoadEngine):
                 except OSError as err:
                     if err.errno == 10061:
                         print('[WARN]前端未启动！')
+                        os._exit()
                     else:
                         print(err)
 
