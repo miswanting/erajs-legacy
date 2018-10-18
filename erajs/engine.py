@@ -50,13 +50,14 @@ class DataEngine:
                 'world': {},
                 'person': {},
             },
+            "act": {}
         }
         check_folder_list = [
             'config',
             'erajs/plugin',
             'erajs/prototype',
             'dlc',
-            'game',
+            'logic',
             'mod',
             'data',
             'save',
@@ -223,7 +224,7 @@ class LoadEngine(DataEngine):
             print('[DEBG]│  ├─ Loading [{}]...'.format(
                 module_name), end='')
             with open(every, 'r', encoding='utf8') as target:
-                sys.argv = [self.data]
+                sys.argv = [self]
                 exec(''.join(target.readlines()))
             num_of_loaded_script += 1
             print('OK')
