@@ -75,7 +75,7 @@ def rate(now=0,  max=5, func=None, disabled=True):
     return g.rate(now, max, func, disabled)
 
 
-def progress(now, max=100, length='100px'):
+def progress(now, max=100, length=100):
     """
     显示进度条，其长度为 length。\n
     now 表示当前值；max 表示最大值。\n

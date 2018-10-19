@@ -524,7 +524,7 @@ class BagEngine(LockEngine):
         }
         self.send(bag)
 
-    def progress(self, now,  max=100, length='100px'):
+    def progress(self, now,  max=100, length=100):
         bag = {
             'type': 'progress',
             'value': {
