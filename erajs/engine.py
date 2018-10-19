@@ -615,10 +615,11 @@ class BagEngine(LockEngine):
         self._gui_list.append((func, arg, kw))
         func(*arg, **kw)
 
-    def back(self, *arg, **kw):
-        print('[DEBG]BACK: Pop [{}] from [{}]'.format(
-            self._gui_list[-1][0].__name__, self._show_gui_list()))
-        self._gui_list.pop()
+    def back(self, num=1, *arg, **kw):
+        for i in range(num):
+            print('[DEBG]BACK: Pop [{}] from [{}]'.format(
+                self._gui_list[-1][0].__name__, self._show_gui_list()))
+            self._gui_list.pop()
         self.repeat()
 
     def repeat(self, *arg, **kw):
