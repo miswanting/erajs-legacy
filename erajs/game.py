@@ -101,8 +101,8 @@ class Game():
     def repeat(self, *arg, **kw):
         engine.repeat(*arg, **kw)
 
-    def clear_gui(self):
-        engine.clear_gui()
+    def clear_gui(self, num=0):
+        engine.clear_gui(num)
 
     def show_save_to_save(self):
         def save_to(save_num):
@@ -281,8 +281,8 @@ def repeat(*arg, **kw):
     engine.repeat(*arg, **kw)
 
 
-def clear_gui():
-    engine.clear_gui()
+def clear_gui(num=1):
+    engine.clear_gui(num)
 
 
 def show_save_to_save():

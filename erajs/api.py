@@ -161,13 +161,13 @@ def repeat(*arg, **kw):
     g.repeat(*arg, **kw)
 
 
-def clear_gui():
+def clear_gui(num=0):
     """
     【界面逻辑函数】\n
     清除所有界面逻辑关系。\n
     """
     global g
-    g.clear_gui()
+    g.clear_gui(num)
 
 
 def show_save_to_save():

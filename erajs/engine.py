@@ -650,9 +650,16 @@ class BagEngine(LockEngine):
             self._gui_list[-1][0].__name__, self._show_gui_list()))
         self._gui_list[-1][0](*self._gui_list[-1][1], **self._gui_list[-1][2])
 
-    def clear_gui(self):
-        print('[DEBG]CLEAR_GUI: Set [{}] to []'.format(self._show_gui_list()))
-        self._gui_list.clear()
+    def clear_gui(self, num=0):
+        if num == 0:
+            print('[DEBG]CLEAR_GUI: Set [{}] to []'.format(
+                self._show_gui_list()))
+            self._gui_list.clear()
+        else:
+            for i in range(num):
+                print('[DEBG]CLEAR_LAST_GUI: Pop [{}] from [{}]'.format(
+                    self._gui_list[-1][0].__name__, self._show_gui_list()))
+                self._gui_list.pop()
 
     def _show_gui_list(self):
         gui_list = []
