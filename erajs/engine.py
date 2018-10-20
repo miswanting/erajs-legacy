@@ -9,6 +9,7 @@ import runpy
 import random
 import socket
 import hashlib
+import logging
 import importlib
 import threading
 import configparser
@@ -23,6 +24,12 @@ def new_hash():
 class DataEngine:
     data = {}
     pool = []
+
+    def __init__(self):
+        logging.basicConfig(filename='EraLife.log', level=logging.DEBUG)
+
+    def print(self, text):
+        logging.debug(text)
 
     def fix_path(self):
         if getattr(sys, 'frozen', False):
@@ -370,12 +377,12 @@ class SocketEngine(LoadEngine):
         self.send(bag)
 
     def send(self, bag):
-        # print("[DEBG]发送：", bag)
+        self.print("[DEBG]发送：{}".format(bag))
         self._conn.send(json.dumps(bag, ensure_ascii=False).encode())
 
     def recv(self):
         data = self._conn.recv(4096)
-        # print("[DEBG]接收：", data)
+        self.print("[DEBG]接收：{}".format(data))
         if not data:
             return
         data = data.decode().split('}{')
