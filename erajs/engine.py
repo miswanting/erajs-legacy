@@ -597,6 +597,22 @@ class BagEngine(LockEngine):
         }
         self.send(bag)
 
+    def chart(self, chart_type, data, width=200, height=200):
+        hash = new_hash()
+        bag = {
+            'type': 'chart',
+            'value': {
+                'type': chart_type,
+                'data': data,
+                'hash': hash,
+                'width': width,
+                'height': height
+            },
+            'from': 'b',
+            'to': 'r'
+        }
+        self.send(bag)
+
     def page(self):
         bag = {
             'type': 'page',

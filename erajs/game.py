@@ -83,6 +83,9 @@ class Game():
     def divider(self, text=''):
         return engine.data['api']['divider'](text)
 
+    def chart(self, chart_type, data, width=200, height=200):
+        return engine.data['api']['chart'](chart_type, data, width, height)
+
     def page(self):
         engine.page()
 

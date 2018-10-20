@@ -120,6 +120,11 @@ def divider(text=''):
     return g.divider(text)
 
 
+def chart(chart_type, data, width=200, height=200):
+    global g
+    return g.chart(chart_type, data, width, height)
+
+
 def clear(last=False):
     """
     清除所有显示。\n
