@@ -105,7 +105,7 @@ class DataEngine:
     def load_from(self, save_num):
         with open('save/'+str(save_num)+'.save', 'r', encoding='utf-8') as f:
             self.data['db'] = json.loads(''.join(f.readlines()))['data']
-            print('db', self.data['db'])
+            # print('db', self.data['db'])
 
     def add(self, item):
         item['hash'] = new_hash()
