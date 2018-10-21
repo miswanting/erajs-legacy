@@ -194,7 +194,16 @@ def mode():
     pass
 
 
+def exit(save=False):
+    """
+    改变显示模式。\n
+    """
+    global g
+    g.exit(save)
+
 # 资源控制
+
+
 def add(item):
     global g
     return g.add(item)

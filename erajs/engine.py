@@ -57,7 +57,8 @@ class DataEngine:
                 'world': {},
                 'person': {},
             },
-            "act": {}
+            "act": {},
+            "kojo": {}
         }
         check_folder_list = [
             'config',
@@ -660,6 +661,16 @@ class BagEngine(LockEngine):
                 print('[DEBG]CLEAR_LAST_GUI: Pop [{}] from [{}]'.format(
                     self._gui_list[-1][0].__name__, self._show_gui_list()))
                 self._gui_list.pop()
+
+    def exit(self, save=False):
+        bag = {'type': 'exit',
+               'value': {
+                   'save': save
+               },
+               'from': 'b',
+               'to': 'r'
+               }
+        self.send(bag)
 
     def _show_gui_list(self):
         gui_list = []

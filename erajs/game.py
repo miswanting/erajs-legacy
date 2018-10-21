@@ -174,6 +174,9 @@ class Game():
     def new_hash(self):
         return e.new_hash()
 
+    def exit(self, save=False):
+        return engine.exit(save)
+
 
 game = Game()
 
