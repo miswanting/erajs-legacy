@@ -1,7 +1,7 @@
 # coding:utf-8
-from . import game
+from . import mid
 
-g = game.game
+m = mid.mid
 version = '0.1.0'
 data = {}
 
@@ -14,23 +14,23 @@ def init():
     该语句必须在以下所有语句调用之前使用。\n
     """
     global data
-    data = g.get_data()
+    data = m.get_data()
 
 
 def title(text):
     """
     更改游戏窗口标题。\n
     """
-    global g
-    g.title(text)
+    global m
+    m.title(text)
 
 
 def page():
     """
     新建页面。\n
     """
-    global g
-    g.page()
+    global m
+    m.page()
 
 
 def t(text='', wait=False):
@@ -40,8 +40,8 @@ def t(text='', wait=False):
     当 wait 为 True 时，停在当前地方，直到点击鼠标左键或鼠标右键。\n
     左键跳过一句，右键跳过一段。\n
     """
-    global g
-    g.t(text, wait)
+    global m
+    m.t(text, wait)
 
 
 def b(text, func, *arg, **kw):
@@ -51,16 +51,16 @@ def b(text, func, *arg, **kw):
     常见用法：api.b('TEST_BUTTON', api.goto, NEXT_PAGE_FUNC)\n
     注意：若向该参数显式传递参数 disabled=True 时，会生成一个被禁用的按钮\n
     """
-    global g
-    g.b(text, func, *arg, **kw)
+    global m
+    m.b(text, func, *arg, **kw)
 
 
 def h(text):
     """
     显示标题，其内容为 text。\n
     """
-    global g
-    g.h(text)
+    global m
+    m.h(text)
 
 
 def rate(now=0,  max=5, func=None, disabled=True):
@@ -71,8 +71,8 @@ def rate(now=0,  max=5, func=None, disabled=True):
         "value": 【改变后的评级数值】
     }\n
     """
-    global g
-    return g.rate(now, max, func, disabled)
+    global m
+    return m.rate(now, max, func, disabled)
 
 
 def progress(now, max=100, length=100):
@@ -80,8 +80,8 @@ def progress(now, max=100, length=100):
     显示进度条，其长度为 length。\n
     now 表示当前值；max 表示最大值。\n
     """
-    global g
-    return g.progress(now, max, length)
+    global m
+    return m.progress(now, max, length)
 
 
 def radio(choice_list, default_index=0, func=None):
@@ -94,8 +94,8 @@ def radio(choice_list, default_index=0, func=None):
         "value": 【当前选中的内容】
     }\n
     """
-    global g
-    return g.radio(choice_list, default_index, func)
+    global m
+    return m.radio(choice_list, default_index, func)
 
 
 def input(func=None):
@@ -107,8 +107,8 @@ def input(func=None):
     }\n
     Tips：可与按钮连用进行自定义文本的输入。\n
     """
-    global g
-    return g.input(func)
+    global m
+    return m.input(func)
 
 
 def divider(text=''):
@@ -116,21 +116,21 @@ def divider(text=''):
     显示横线。\n
     Bug：显示文字暂时有Bug。\n
     """
-    global g
-    return g.divider(text)
+    global m
+    return m.divider(text)
 
 
 def chart(chart_type, data, width=200, height=200):
-    global g
-    return g.chart(chart_type, data, width, height)
+    global m
+    return m.chart(chart_type, data, width, height)
 
 
 def clear(last=False):
     """
     清除所有显示。\n
     """
-    global g
-    g.clear(last)
+    global m
+    m.clear(last)
 
 
 def goto(func, *arg, **kw):
@@ -138,8 +138,8 @@ def goto(func, *arg, **kw):
     【界面逻辑函数】\n
     进入其中的页面。\n
     """
-    global g
-    g.goto(func, *arg, **kw)
+    global m
+    m.goto(func, *arg, **kw)
 
 
 def back(*arg, **kw):
@@ -147,8 +147,8 @@ def back(*arg, **kw):
     【界面逻辑函数】\n
     退回到上一个浏览的页面。\n
     """
-    global g
-    g.back(*arg, **kw)
+    global m
+    m.back(*arg, **kw)
 
 
 def repeat(*arg, **kw):
@@ -157,8 +157,8 @@ def repeat(*arg, **kw):
     重复当前的页面。\n
     Tips：刷新数据时常用\n
     """
-    global g
-    g.repeat(*arg, **kw)
+    global m
+    m.repeat(*arg, **kw)
 
 
 def clear_gui(num=0):
@@ -166,31 +166,31 @@ def clear_gui(num=0):
     【界面逻辑函数】\n
     清除所有界面逻辑关系。\n
     """
-    global g
-    g.clear_gui(num)
+    global m
+    m.clear_gui(num)
 
 
 def show_save_to_save():
     """
     显示当前存档（存档用）。\n
     """
-    global g
-    g.show_save_to_save()
+    global m
+    m.show_save_to_save()
 
 
 def show_save_to_load(func_after_load):
     """
     显示当前存档（读档用）。\n
     """
-    global g
-    g.show_save_to_load(func_after_load)
+    global m
+    m.show_save_to_load(func_after_load)
 
 
 def mode():
     """
     改变显示模式。\n
     """
-    global g
+    global m
     pass
 
 
@@ -198,20 +198,20 @@ def exit(save=False):
     """
     改变显示模式。\n
     """
-    global g
-    g.exit(save)
+    global m
+    m.exit(save)
 
 # 资源控制
 
 
 def add(item):
-    global g
-    return g.add(item)
+    global m
+    return m.add(item)
 
 
 def get(pattern):
-    global g
-    return g.get(pattern)
+    global m
+    return m.get(pattern)
 
 
 # EraTime
@@ -219,16 +219,16 @@ def get_full_time():
     """
     以文本方式返回当前时间（全部）。\n
     """
-    global g
-    return g.get_full_time()
+    global m
+    return m.get_full_time()
 
 
 def tick():
     """
     时间流逝一个单位。\n
     """
-    global g
-    g.tick()
+    global m
+    m.tick()
 
 
 def ________________________________________________________________():
@@ -240,5 +240,5 @@ def new_hash():
     返回一个HASH字符串。\n
     Tips：可用于索引和标记。\n
     """
-    global g
-    return g.new_hash()
+    global m
+    return m.new_hash()

@@ -1,4 +1,4 @@
 from . import api
-from . import game
+from . import mid
 from . import engine
 name = "erajs"
