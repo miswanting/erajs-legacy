@@ -59,14 +59,14 @@ class Mid():
     def title(self, text):
         engine.title(text)
 
-    def t(self, text='', wait=False):
-        engine.t(text, wait)
+    def t(self, text='', wait=False, color='default', bcolor='default'):
+        engine.t(text, wait, color, bcolor)
 
     def b(self, text, func, *arg, **kw):
         engine.b(text, func, *arg, **kw)
 
-    def h(self, text, rank=1):
-        engine.h(text, rank)
+    def h(self, text, rank=1, color='default', bcolor='default'):
+        engine.h(text, rank, color, bcolor)
 
     def rate(self, now=0,  max=5, func=None, disabled=True):
         return engine.data['api']['rate'](now, max, func, disabled)
@@ -86,8 +86,8 @@ class Mid():
     def chart(self, chart_type, data, width=200, height=200):
         return engine.data['api']['chart'](chart_type, data, width, height)
 
-    def page(self):
-        engine.page()
+    def page(self, color='default'):
+        engine.page(color)
 
     def clear(self, last=False):
         engine.clear(last)

@@ -476,11 +476,17 @@ class BagEngine(LockEngine):
         }
         self.send(bag)
 
-    def t(self, text='', wait=False):
-        bag = {'type': 't',
-               'value': text,
-               'from': 'b',
-               'to': 'r'}
+    def t(self, text='', wait=False, color='default', bcolor='default'):
+        bag = {
+            'type': 't',
+            'value': {
+                'text': text,
+                'color': color,
+                'bcolor': bcolor
+            },
+            'from': 'b',
+            'to': 'r'
+        }
         self.send(bag)
         if wait and not self.lock_passed():
             self.lock()
@@ -516,12 +522,14 @@ class BagEngine(LockEngine):
         self.send(bag)
         self.unlock()
 
-    def h(self, text, rank=1):
+    def h(self, text, rank=1, color='default', bcolor='default'):
         bag = {
             'type': 'h',
             'value': {
                 'text': text,
-                'rank': rank
+                'rank': rank,
+                'color': color,
+                'bcolor': bcolor
             },
             'from': 'b',
             'to': 'r'
@@ -610,9 +618,12 @@ class BagEngine(LockEngine):
         }
         self.send(bag)
 
-    def page(self):
+    def page(self, color='default'):
         bag = {
             'type': 'page',
+            'value': {
+                'color': color
+            },
             'from': 'b',
             'to': 'r'
         }

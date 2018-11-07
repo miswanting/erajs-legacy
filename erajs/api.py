@@ -25,15 +25,15 @@ def title(text):
     m.title(text)
 
 
-def page():
+def page(color='default'):
     """
     新建页面。\n
     """
     global m
-    m.page()
+    m.page(color)
 
 
-def t(text='', wait=False):
+def t(text='', wait=False, color='default', bcolor='default'):
     """
     显示 text。\n
     当 text 为 "" 时，换行（所有控件间均可以使用该方法换行）；\n
@@ -41,7 +41,7 @@ def t(text='', wait=False):
     左键跳过一句，右键跳过一段。\n
     """
     global m
-    m.t(text, wait)
+    m.t(text, wait, color, bcolor)
 
 
 def b(text, func, *arg, **kw):
@@ -55,12 +55,12 @@ def b(text, func, *arg, **kw):
     m.b(text, func, *arg, **kw)
 
 
-def h(text):
+def h(text, rank=1, color='default', bcolor='default'):
     """
     显示标题，其内容为 text。\n
     """
     global m
-    m.h(text)
+    m.h(text, rank, color, bcolor)
 
 
 def rate(now=0,  max=5, func=None, disabled=True):
