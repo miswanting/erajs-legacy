@@ -8,50 +8,59 @@ engine = e.Engine()
 
 class Mid():
     def __init__(self):
-        print('[DEBG]Initializing...')
-        print('[DEBG]├─ Fixing Path...', end='')
+        engine.info('Initializing...')
+        engine.info('├─ Fixing Path...')
         engine.fix_path()
-        print('OK')
-        print('[DEBG]├─ Checking Program Integrity...', end='')
+        engine.info('├─ Checking Program Integrity...')
         engine.self_check()
-        print('OK')
-        print('[DEBG]├─ Loading Engine Configuration...', end='')
+        engine.info('├─ Loading Engine Configuration...')
         engine.load_config(['config/config.ini'])
-        print('OK')
-        print('[DEBG]├─ Registering Native API...')
-        print('[FINE]│  └─ {} Native APIs Registered!'.format(
+        engine.info('├─ Registering Native API...')
+        engine.info('│  └─ {} Native APIs Registered!'.format(
             engine.register_api()))
-        print('[DEBG]├─ Scanning Plugins...')
-        print('[FINE]│  └─ {} Plugins Scanned!'.format(engine.scan_plugin()))
-        print('[DEBG]├─ Loading Plugins...')
-        print('[FINE]│  └─ {} Plugins Loaded!'.format(engine.load_plugin()))
-        print('[DEBG]├─ Connecting Server...', end='')
+        engine.info('├─ Scanning Plugins...')
+        engine.info('│  └─ {} Plugins Scanned!'.format(engine.scan_plugin()))
+        engine.info('├─ Loading Plugins...')
+        engine.info('│  └─ {} Plugins Loaded!'.format(engine.load_plugin()))
+        engine.info('├─ Connecting Server...')
         engine.connect()
-        print('OK')
-        print('[DEBG]├─ Transfering Configuration to Server...', end='')
+        engine.info('├─ Transfering Configuration to Server...')
         engine.send_config()
-        print('OK')
-        print('[DEBG]├─ Loading Data Files...')
+        engine.info('├─ Loading Data Files...')
         data = engine.load_data(engine.scan('data'))
         for each in data.keys():
             engine.data[each] = data[each]
-        print('[FINE]│  └─ Data Files Loaded!')
-        print('[DEBG]├─ Scanning Scripts...')
-        print('[FINE]│  └─ {} Scripts Scanned!'.format(engine.scan_script()))
-        print('[DEBG]├─ Loading Scripts...')
-        print('[FINE]│  └─ {} Scripts Loaded!'.format(engine.load_script()))
-        print('[DEBG]├─ Scanning DLCs...')
-        print('[FINE]│  └─ {} DLCs Scanned!'.format(engine.scan_dlc()))
-        print('[DEBG]├─ Loading DLCs...')
-        print('[FINE]│  └─ {} DLCs Loaded!'.format(engine.load_dlc()))
-        print('[DEBG]├─ Scanning MODs...')
-        print('[FINE]│  └─ {} MODs Scanned!'.format(engine.scan_mod()))
-        print('[DEBG]├─ Loading MODs...')
-        print('[FINE]│  └─ {} MODs Loaded!'.format(engine.load_mod()))
-        print('[DEBG]├─ Transferring Loading Complete Signal...', end='')
+        engine.info('│  └─ Data Files Loaded!')
+        engine.info('├─ Scanning Scripts...')
+        engine.info('│  └─ {} Scripts Scanned!'.format(engine.scan_script()))
+        engine.info('├─ Loading Scripts...')
+        engine.info('│  └─ {} Scripts Loaded!'.format(engine.load_script()))
+        engine.info('├─ Scanning DLCs...')
+        engine.info('│  └─ {} DLCs Scanned!'.format(engine.scan_dlc()))
+        engine.info('├─ Loading DLCs...')
+        engine.info('│  └─ {} DLCs Loaded!'.format(engine.load_dlc()))
+        engine.info('├─ Scanning MODs...')
+        engine.info('│  └─ {} MODs Scanned!'.format(engine.scan_mod()))
+        engine.info('├─ Loading MODs...')
+        engine.info('│  └─ {} MODs Loaded!'.format(engine.load_mod()))
+        engine.info('├─ Transferring Loading Complete Signal...')
         engine.send_loaded()
-        print('OK')
-        print('[FINE]└─ Initialize Complete!')
+        engine.info('└─ Initialize Complete!')
+
+    def debug(self, text):
+        return engine.debug(text)
+
+    def info(self, text):
+        return engine.info(text)
+
+    def warn(self, text):
+        return engine.warn(text)
+
+    def error(self, text):
+        return engine.error(text)
+
+    def critical(self, text):
+        return engine.critical(text)
 
     def get_data(self):
         return engine.data

@@ -17,6 +17,46 @@ def init():
     data = m.get_data()
 
 
+def debug(text):
+    """
+    调试用输出。\n
+    """
+    global m
+    return m.debug(text)
+
+
+def info(text):
+    """
+    调试用输出。\n
+    """
+    global m
+    return m.info(text)
+
+
+def warn(text):
+    """
+    调试用输出。\n
+    """
+    global m
+    return m.warn(text)
+
+
+def error(text):
+    """
+    调试用输出。\n
+    """
+    global m
+    return m.error(text)
+
+
+def critical(text):
+    """
+    调试用输出。\n
+    """
+    global m
+    return m.critical(text)
+
+
 def title(text):
     """
     更改游戏窗口标题。\n

@@ -21,15 +21,47 @@ def new_hash():
     return m.hexdigest().upper()
 
 
-class DataEngine:
+class DebugEngine:
+    def __init__(self):
+        formatter = logging.Formatter('')
+        stream_handler = logging.StreamHandler(sys.stdout)
+        stream_handler.setFormatter(formatter)
+        file_handler = logging.FileHandler('Back.log', 'w', 'utf-8')
+        file_handler.setFormatter(formatter)
+        self.logger = logging.getLogger('logger')
+        self.logger.setLevel(logging.DEBUG)
+        self.logger.addHandler(stream_handler)
+        self.logger.addHandler(file_handler)
+
+    def debug(self, text):
+        temp = '[DEBG]({:.7f}){}'
+        text = temp.format(time.time(), text)
+        self.logger.debug(text)
+
+    def info(self, text):
+        temp = '[INFO]({:.7f}){}'
+        text = temp.format(time.time(), text)
+        self.logger.info(text)
+
+    def warn(self, text):
+        temp = '[WARN]({:.7f}){}'
+        text = temp.format(time.time(), text)
+        self.logger.warning(text)
+
+    def error(self, text):
+        temp = '[ERRO]({:.7f}){}'
+        text = temp.format(time.time(), text)
+        self.logger.error(text)
+
+    def critical(self, text):
+        temp = '[!!!!]({:.7f}){}'
+        text = temp.format(time.time(), text)
+        self.logger.critical(text)
+
+
+class DataEngine(DebugEngine):
     data = {}
     pool = []
-
-    def __init__(self):
-        logging.basicConfig(filename='EraLife.log', level=logging.DEBUG)
-
-    def print(self, text):
-        logging.debug(text)
 
     def fix_path(self):
         if getattr(sys, 'frozen', False):
@@ -72,11 +104,11 @@ class DataEngine:
         ]
         for each in check_folder_list:
             if not os.path.isdir(each):
-                print('[WARN]Folder {} is not Exist. Creating...'.format(each))
+                self.warn('Folder {} is not Exist. Creating...'.format(each))
                 os.mkdir(each)
         for each in check_file_list:
             if not os.path.isfile(each):
-                print('[WARN]File {} is not Exist. Creating...'.format(each))
+                self.warn('File {} is not Exist. Creating...'.format(each))
                 open(each, 'w')
 
     def load_config(self, config_path):
@@ -143,7 +175,7 @@ class DataEngine:
             key = '.'.join('.'.join(each.split('.')[0:-1]).split('\\'))
             ext = each.split('\\')[-1].split('.')[-1]
             # 载入文件
-            print('[DEBG]│  ├─ Loading [{}]...'.format(each), end='')
+            self.info('│  ├─ Loading [{}]...'.format(each))
             if ext in ['cfg', 'ini', 'inf', 'config']:
                 config = configparser.ConfigParser()
                 config.read(each)
@@ -161,7 +193,6 @@ class DataEngine:
             elif ext == 'json':
                 with open(each, 'r', encoding='utf-8') as f:
                     data[key] = json.loads(''.join(f.readlines()))
-            print('OK')
         return data
 
 
@@ -174,9 +205,8 @@ class LoadEngine(DataEngine):
         for each in plugin_path_list:
             plugin_name = '.'.join(each.replace(
                 '/', '\\').split('\\')[-1].split('.')[0:-1])
-            print('[DEBG]│  ├─ Scanning [{}]...'.format(plugin_name), end='')
+            self.info('│  ├─ Scanning [{}]...'.format(plugin_name))
             plugin_name_list.append(plugin_name)
-            print('OK')
         # 比对配置信息
         for each in plugin_name_list:
             if not each.lower() in self.data['config']['plugin'].keys():
@@ -197,13 +227,11 @@ class LoadEngine(DataEngine):
                     module_name = '.'.join(every.replace(
                         '/', '\\').split('\\')[-1].split('.')[0:-1])
                     if module_name.lower() == each:
-                        print('[DEBG]│  ├─ Loading [{}]...'.format(
-                            module_name), end='')
+                        self.info('│  ├─ Loading [{}]...'.format(module_name))
                         with open(every, 'r', encoding='utf8') as target:
                             sys.argv = [self]
                             exec(''.join(target.readlines()))
                         num_of_loaded_plugins += 1
-                        print('OK')
         return num_of_loaded_plugins
 
     def scan_script(self):
@@ -214,9 +242,8 @@ class LoadEngine(DataEngine):
         for each in script_path_list:
             script_name = '.'.join(each.replace(
                 '/', '\\').split('\\')[-1].split('.')[0:-1])
-            print('[DEBG]│  ├─ Scanning [{}]...'.format(script_name), end='')
+            self.info('│  ├─ Scanning [{}]...'.format(script_name))
             script_name_list.append(script_name)
-            print('OK')
         return len(script_path_list)
 
     def load_script(self):
@@ -225,13 +252,11 @@ class LoadEngine(DataEngine):
         for every in script_path_list:
             module_name = '.'.join(every.replace(
                 '/', '\\').split('\\')[-1].split('.')[0:-1])
-            print('[DEBG]│  ├─ Loading [{}]...'.format(
-                module_name), end='')
+            self.info('│  ├─ Loading [{}]...'.format(module_name))
             with open(every, 'r', encoding='utf8') as target:
                 sys.argv = [self]
                 exec(''.join(target.readlines()))
             num_of_loaded_script += 1
-            print('OK')
         return num_of_loaded_script
 
     def scan_dlc(self):
@@ -242,9 +267,8 @@ class LoadEngine(DataEngine):
         for each in dlc_path_list:
             dlc_name = '.'.join(each.replace(
                 '/', '\\').split('\\')[-1].split('.')[0:-1])
-            print('[DEBG]│  ├─ Scanning [{}]...'.format(dlc_name), end='')
+            self.info('│  ├─ Scanning [{}]...'.format(dlc_name))
             dlc_name_list.append(dlc_name)
-            print('OK')
         # 比对配置信息
         for each in dlc_name_list:
             if not each.lower() in self.data['config']['dlc'].keys():
@@ -265,13 +289,11 @@ class LoadEngine(DataEngine):
                     module_name = '.'.join(every.replace(
                         '/', '\\').split('\\')[-1].split('.')[0:-1])
                     if module_name.lower() == each:
-                        print('[DEBG]│  ├─ Loading [{}]...'.format(
-                            module_name), end='')
+                        self.info('│  ├─ Loading [{}]...'.format(module_name))
                         with open(every, 'r', encoding='utf8') as target:
                             sys.argv = [self]
                             exec(''.join(target.readlines()))
                         num_of_loaded_dlcs += 1
-                        print('OK')
         return num_of_loaded_dlcs
 
     def scan_mod(self):
@@ -282,9 +304,8 @@ class LoadEngine(DataEngine):
         for each in mod_path_list:
             mod_name = '.'.join(each.replace(
                 '/', '\\').split('\\')[-1].split('.')[0:-1])
-            print('[DEBG]│  ├─ Scanning [{}]...'.format(mod_name), end='')
+            self.info('│  ├─ Scanning [{}]...'.format(mod_name))
             mod_name_list.append(mod_name)
-            print('OK')
         # 比对配置信息
         for each in mod_name_list:
             if not each.lower() in self.data['config']['mod'].keys():
@@ -305,13 +326,11 @@ class LoadEngine(DataEngine):
                     module_name = '.'.join(every.replace(
                         '/', '\\').split('\\')[-1].split('.')[0:-1])
                     if module_name.lower() == each:
-                        print('[DEBG]│  ├─ Loading [{}]...'.format(
-                            module_name), end='')
+                        self.info('│  ├─ Loading [{}]...'.format(module_name))
                         with open(every, 'r', encoding='utf8') as target:
                             sys.argv = [self]
                             exec(''.join(target.readlines()))
                         num_of_loaded_mods += 1
-                        print('OK')
         return num_of_loaded_mods
 
 
@@ -339,14 +358,14 @@ class SocketEngine(LoadEngine):
                 try:
                     self._conn.connect((self.HOST, self.PORT))
                     self.isConnected = True
-                    print('Connected...', end='')
+                    self.info('│  └─ Connected!')
                     core()
                 except OSError as err:
                     if err.errno == 10061:
-                        print('[WARN]前端未启动！')
+                        self.warn('前端未启动！')
                         os._exit(1)
                     else:
-                        print(err)
+                        self.error(err)
 
         t = threading.Thread(name='func_connect', target=func_connect)
         t.start()
@@ -374,12 +393,12 @@ class SocketEngine(LoadEngine):
         self.send(bag)
 
     def send(self, bag):
-        self.print("[DEBG]发送：{}".format(bag))
+        self.debug("发送：{}".format(bag))
         self._conn.send(json.dumps(bag, ensure_ascii=False).encode())
 
     def recv(self):
         data = self._conn.recv(4096)
-        self.print("[DEBG]接收：{}".format(data))
+        self.debug("接收：{}".format(data))
         if not data:
             return
         data = data.decode().split('}{')
@@ -641,31 +660,31 @@ class BagEngine(LockEngine):
         self.send(bag)
 
     def goto(self, func, *arg, **kw):
-        print('[DEBG]GOTO: Append [{}] to [{}]'.format(
+        self.debug('GOTO: Append [{}] to [{}]'.format(
             func.__name__, self._show_gui_list()))
         self._gui_list.append((func, arg, kw))
         func(*arg, **kw)
 
     def back(self, num=1, *arg, **kw):
         for i in range(num):
-            print('[DEBG]BACK: Pop [{}] from [{}]'.format(
+            self.debug('BACK: Pop [{}] from [{}]'.format(
                 self._gui_list[-1][0].__name__, self._show_gui_list()))
             self._gui_list.pop()
         self.repeat()
 
     def repeat(self, *arg, **kw):
-        print('[DEBG]REPEAT: Repeat [{}] in [{}]'.format(
+        self.debug('REPEAT: Repeat [{}] in [{}]'.format(
             self._gui_list[-1][0].__name__, self._show_gui_list()))
         self._gui_list[-1][0](*self._gui_list[-1][1], **self._gui_list[-1][2])
 
     def clear_gui(self, num=0):
         if num == 0:
-            print('[DEBG]CLEAR_GUI: Set [{}] to []'.format(
+            self.debug('CLEAR_GUI: Set [{}] to []'.format(
                 self._show_gui_list()))
             self._gui_list.clear()
         else:
             for i in range(num):
-                print('[DEBG]CLEAR_LAST_GUI: Pop [{}] from [{}]'.format(
+                self.debug('CLEAR_LAST_GUI: Pop [{}] from [{}]'.format(
                     self._gui_list[-1][0].__name__, self._show_gui_list()))
                 self._gui_list.pop()
 
@@ -699,9 +718,8 @@ class Engine(BagEngine):
         num_of_registered_API = 0
         for each in func_list:
             if '__call__' in dir(getattr(self, each)):
-                print('[DEBG]│  ├─ Registering [{}]...'.format(each), end='')
+                self.info('│  ├─ Registering [{}]...'.format(each))
                 self.data['api'][each] = getattr(self, each)
                 num_of_registered_API += 1
-                print('OK')
         # print(self.data)
         return num_of_registered_API
