@@ -29,7 +29,7 @@ class DebugEngine:
         file_handler = logging.FileHandler('Back.log', 'w', 'utf-8')
         file_handler.setFormatter(formatter)
         self.logger = logging.getLogger('logger')
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(logging.INFO)
         self.logger.addHandler(stream_handler)
         self.logger.addHandler(file_handler)
 
