@@ -210,6 +210,15 @@ def clear_gui(num=0):
     m.clear_gui(num)
 
 
+def append_gui(func, *arg, **kw):
+    """
+    【界面逻辑函数】\n
+    向界面链的末尾增加一个界面（但不触发）。\n
+    """
+    global m
+    m.append_gui(func, *arg, **kw)
+
+
 def show_save_to_save():
     """
     显示当前存档（存档用）。\n

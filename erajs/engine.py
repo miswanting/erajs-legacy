@@ -29,7 +29,7 @@ class DebugEngine:
         file_handler = logging.FileHandler('Back.log', 'w', 'utf-8')
         file_handler.setFormatter(formatter)
         self.logger = logging.getLogger('logger')
-        self.logger.setLevel(logging.INFO)
+        self.logger.setLevel(logging.DEBUG)
         self.logger.addHandler(stream_handler)
         self.logger.addHandler(file_handler)
 
@@ -660,9 +660,7 @@ class BagEngine(LockEngine):
         self.send(bag)
 
     def goto(self, func, *arg, **kw):
-        self.debug('GOTO: Append [{}] to [{}]'.format(
-            func.__name__, self._show_gui_list()))
-        self._gui_list.append((func, arg, kw))
+        self.append_gui(func, *arg, **kw)
         func(*arg, **kw)
 
     def back(self, num=1, *arg, **kw):
@@ -687,6 +685,11 @@ class BagEngine(LockEngine):
                 self.debug('CLEAR_LAST_GUI: Pop [{}] from [{}]'.format(
                     self._gui_list[-1][0].__name__, self._show_gui_list()))
                 self._gui_list.pop()
+
+    def append_gui(self, func, *arg, **kw):
+        self.debug('GOTO: Append [{}] to [{}]'.format(
+            func.__name__, self._show_gui_list()))
+        self._gui_list.append((func, arg, kw))
 
     def exit(self, save=False):
         bag = {'type': 'exit',
