@@ -118,25 +118,31 @@ class DataEngine(DebugEngine):
         for each in config['config.config'].keys():
             self.data['config'][each] = config['config.config'][each]
 
-    def scan(self, folderName):
+    def scan(self, path_to_folder):
         fileList = []
-        for root, dirs, files in os.walk(folderName):
+        for root, dirs, files in os.walk(path_to_folder):
             for each in files:
                 fileList.append(root + '\\' + each)
         return fileList
 
     def save_to(self, save_num, save_name=''):
-        with open('save/'+str(save_num)+'.save', 'w', encoding='utf-8') as f:
-            save_object = {
-                'name': save_name,
-                'data': self.data['db']
-            }
-            f.write(json.dumps(save_object, ensure_ascii=False))
+        # with open('save/'+str(save_num)+'.save', 'w', encoding='utf-8') as f:
+        #     save_object = {
+        #         'name': save_name,
+        #         'data': self.data['db']
+        #     }
+        #     f.write(json.dumps(save_object, ensure_ascii=False))
+        self.save_file(self.data['db'],
+                       'save/{}.{}.json'.format(save_num, save_name))
 
     def load_from(self, save_num):
-        with open('save/'+str(save_num)+'.save', 'r', encoding='utf-8') as f:
-            self.data['db'] = json.loads(''.join(f.readlines()))['data']
-            # print('db', self.data['db'])
+        # with open('save/'+str(save_num)+'.save', 'r', encoding='utf-8') as f:
+        #     self.data['db'] = json.loads(''.join(f.readlines()))['data']
+        # self.data['db'] = self.load_data()
+        save_file_path_list = self.scan('save')
+        for each in save_file_path_list:
+            if each.split('\\')[-1].split('.')[0] == str(save_num):
+                self.data['db'] = self.load_file(each)['data']
 
     def add(self, item):
         item['hash'] = new_hash()
@@ -175,34 +181,40 @@ class DataEngine(DebugEngine):
         for each in files:
             each = each.replace('/', '\\')
             key = '.'.join('.'.join(each.split('.')[0:-1]).split('\\'))
-            ext = each.split('\\')[-1].split('.')[-1]
             # 载入文件
             self.info('│  ├─ Loading [{}]...'.format(each))
-            if ext in ['cfg', 'ini', 'inf', 'config']:
-                config = configparser.ConfigParser()
-                config.read(each)
-                d = dict(config._sections)
-                for k in d:
-                    d[k] = dict(d[k])
-                data[key] = d
-            elif ext == 'csv':
-                with open(each, newline='', encoding='utf-8') as f:
-                    reader = csv.reader(f)
-                    new_list = []
-                    for row in reader:
-                        new_list.append(row)
-                    data[key] = new_list
-            elif ext == 'json':
-                with open(each, 'r', encoding='utf-8') as f:
-                    data[key] = json.loads(''.join(f.readlines()))
-            elif ext == 'yaml':
-                with open(each, 'r', encoding='utf-8') as f:
-                    data[key] = yaml.load(''.join(f.readlines()))
+            data[key] = self.load_file(each)
         return data
 
-    def save_data(self, data, dot_path, ext='yaml'):
-        path_list = dot_path.split('.')
-        path_to_file = '/'.join(path_list) + '.' + ext
+    def load_file(self, path_to_file):
+        path_to_file = path_to_file.replace('/', '\\')
+        ext = path_to_file.split('\\')[-1].split('.')[-1]
+        data = None
+        if ext in ['cfg', 'ini', 'inf', 'config']:
+            config = configparser.ConfigParser()
+            config.read(path_to_file)
+            d = dict(config._sections)
+            for k in d:
+                d[k] = dict(d[k])
+            data = d
+        elif ext == 'csv':
+            with open(path_to_file, 'r', newline='', encoding='utf-8') as f:
+                reader = csv.reader(f)
+                new_list = []
+                for row in reader:
+                    new_list.append(row)
+            data = new_list
+        elif ext == 'json':
+            with open(path_to_file, 'r', encoding='utf-8') as f:
+                data = json.loads(''.join(f.readlines()))
+        elif ext == 'yaml':
+            with open(path_to_file, 'r', encoding='utf-8') as f:
+                data = yaml.load(''.join(f.readlines()))
+        return data
+
+    def save_file(self, data, path_to_file):
+        path_to_file = path_to_file.replace('/', '\\')
+        ext = path_to_file.split('\\')[-1].split('.')[-1]
         if ext in ['cfg', 'ini', 'inf', 'config']:
             config = configparser.ConfigParser()
             config.read_dict(data)
@@ -216,8 +228,8 @@ class DataEngine(DebugEngine):
             with open(path_to_file, 'w', encoding='utf-8') as f:
                 f.write(json.dumps(data, ensure_ascii=False))
         elif ext == 'yaml':
-            with open(path_to_file, 'r', encoding='utf-8') as f:
-                f.writelines(yaml.dump(data, encoding='utf-8'))
+            with open(path_to_file, 'w', encoding='utf-8') as f:
+                f.write(yaml.dump(data, allow_unicode=True))
 
 
 class LoadEngine(DataEngine):
