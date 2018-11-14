@@ -14,6 +14,8 @@ import importlib
 import threading
 import configparser
 
+import yaml
+
 
 def new_hash():
     m = hashlib.md5()
@@ -193,6 +195,9 @@ class DataEngine(DebugEngine):
             elif ext == 'json':
                 with open(each, 'r', encoding='utf-8') as f:
                     data[key] = json.loads(''.join(f.readlines()))
+            elif ext == 'yaml':
+                with open(each, 'r', encoding='utf-8') as f:
+                    data[key] = yaml.load(''.join(f.readlines()))
         return data
 
 
