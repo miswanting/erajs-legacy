@@ -200,6 +200,25 @@ class DataEngine(DebugEngine):
                     data[key] = yaml.load(''.join(f.readlines()))
         return data
 
+    def save_data(self, data, dot_path, ext='yaml'):
+        path_list = dot_path.split('.')
+        path_to_file = '/'.join(path_list) + '.' + ext
+        if ext in ['cfg', 'ini', 'inf', 'config']:
+            config = configparser.ConfigParser()
+            config.read_dict(data)
+            with open(path_to_file, 'w')as f:
+                config.write(f)
+        elif ext == 'csv':
+            with open(path_to_file, 'w', newline='', encoding='utf-8') as f:
+                reader = csv.writer(f)
+                reader.writerows(data)
+        elif ext == 'json':
+            with open(path_to_file, 'w', encoding='utf-8') as f:
+                f.write(json.dumps(data, ensure_ascii=False))
+        elif ext == 'yaml':
+            with open(path_to_file, 'r', encoding='utf-8') as f:
+                f.writelines(yaml.dump(data, encoding='utf-8'))
+
 
 class LoadEngine(DataEngine):
     def scan_plugin(self):
