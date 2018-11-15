@@ -122,7 +122,6 @@ class Mid():
             engine.repeat()
         # 获取列表
         save_file_list = engine.scan('save')
-        # print(save_file_list)
         # 弱加载
         for each in save_file_list:
             pass
