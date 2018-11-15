@@ -1,0 +1,2 @@
+include erajs/plugin/*.*
+include erajs/docs/*.*

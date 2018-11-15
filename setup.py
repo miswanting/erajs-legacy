@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="erajs",
-    version="0.1.0",
+    version="0.1.0.181115",
     author="Miswanting",
     author_email="453542772@qq.com",
     description="A game script engine for Era.js.",
@@ -13,9 +13,27 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/miswanting/erajs",
     packages=setuptools.find_packages(),
+    include_package_data=True,
+    package_data={
+        '': ['plugin/*.py']
+    },
     classifiers=(
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-        "Operating System :: OS Independent",
-    ),
+        'Development Status :: 2 - Pre-Alpha',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
+        'Natural Language :: Chinese (Simplified)',
+        'Operating System :: Microsoft :: Windows :: Windows 10',
+        'Programming Language :: JavaScript',
+        'Programming Language :: Python :: 3 :: Only',
+        'Topic :: Communications',
+        'Topic :: Database',
+        'Topic :: Games/Entertainment',
+        'Topic :: Scientific/Engineering :: Artificial Intelligence',
+        'Topic :: Scientific/Engineering :: Human Machine Interfaces',
+        'Topic :: Scientific/Engineering :: Visualization',
+        'Topic :: Software Development :: Libraries :: Application Frameworks',
+        'Topic :: Software Development :: Localization',
+        'Topic :: Software Development :: User Interfaces',
+        'Topic :: Text Processing'
+    )
 )
