@@ -92,8 +92,6 @@ class DataEngine(DebugEngine):
         }
         check_folder_list = [
             'config',
-            'erajs/plugin',
-            'erajs/prototype',
             'dlc',
             'logic',
             'mod',
@@ -235,7 +233,8 @@ class DataEngine(DebugEngine):
 class LoadEngine(DataEngine):
     def scan_plugin(self):
         # 扫描插件文件
-        plugin_path_list = self.scan('erajs/plugin')
+        path = os.path.dirname(os.path.abspath(__file__))
+        plugin_path_list = self.scan('{}/plugin'.format(path))
         # 提取插件名称
         plugin_name_list = []
         for each in plugin_path_list:
@@ -256,9 +255,10 @@ class LoadEngine(DataEngine):
 
     def load_plugin(self):
         num_of_loaded_plugins = 0
+        path = os.path.dirname(os.path.abspath(__file__))
         for each in self.data['config']['plugin'].keys():
             if self.data['config']['plugin'][each] == 'yes':
-                plugin_path_list = self.scan('erajs/plugin')
+                plugin_path_list = self.scan('{}/plugin'.format(path))
                 for every in plugin_path_list:
                     module_name = '.'.join(every.replace(
                         '/', '\\').split('\\')[-1].split('.')[0:-1])

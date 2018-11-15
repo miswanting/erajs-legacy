@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="erajs",
-    version="0.1.0.181116.1",
+    version="0.1.0.181116.3",
     author="Miswanting",
     author_email="453542772@qq.com",
     description="A game script engine for Era.js.",
