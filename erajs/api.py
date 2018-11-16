@@ -1,6 +1,6 @@
 # coding:utf-8
+import typing as t
 from . import mid
-
 m = mid.mid
 version = '0.1.0'
 data = {}
@@ -17,47 +17,47 @@ def init():
     data = m.get_data()
 
 
-def debug(text):
+def debug(text: t.Text) -> None:
     """
     调试用输出。\n
     """
     global m
-    return m.debug(text)
+    m.debug(text)
 
 
-def info(text):
+def info(text: str) -> None:
     """
     调试用输出。\n
     """
     global m
-    return m.info(text)
+    m.info(text)
 
 
-def warn(text):
+def warn(text: str) -> None:
     """
     调试用输出。\n
     """
     global m
-    return m.warn(text)
+    m.warn(text)
 
 
-def error(text):
+def error(text: str) -> None:
     """
     调试用输出。\n
     """
     global m
-    return m.error(text)
+    m.error(text)
 
 
-def critical(text):
+def critical(text: str) -> None:
     """
     调试用输出。\n
     """
     global m
-    return m.critical(text)
+    m.critical(text)
 
 
-def title(text):
+def title(text: str) -> None:
     """
     更改游戏窗口标题。\n
     """
@@ -65,7 +65,7 @@ def title(text):
     m.title(text)
 
 
-def page(color='default'):
+def page(color: str = 'default') -> None:
     """
     新建页面。\n
     """
@@ -73,7 +73,7 @@ def page(color='default'):
     m.page(color)
 
 
-def t(text='', wait=False, color='default', bcolor='default'):
+def t(text: str = '', wait: bool = False, color: str = 'default', bcolor: str = 'default') -> None:
     """
     显示 text。\n
     当 text 为 "" 时，换行（所有控件间均可以使用该方法换行）；\n
@@ -84,7 +84,7 @@ def t(text='', wait=False, color='default', bcolor='default'):
     m.t(text, wait, color, bcolor)
 
 
-def b(text, func, *arg, **kw):
+def b(text: str, func: callable, *arg, **kw) -> None:
     """
     显示按钮，其内容为 text。\n
     func 为 返回函数，当按钮按下时，func 执行，且其执行参数为 *arg 和 **kw ；\n
@@ -95,7 +95,7 @@ def b(text, func, *arg, **kw):
     m.b(text, func, *arg, **kw)
 
 
-def h(text, rank=1, color='default', bcolor='default'):
+def h(text, rank=1, color='default', bcolor='default') -> None:
     """
     显示标题，其内容为 text。\n
     """
@@ -103,7 +103,7 @@ def h(text, rank=1, color='default', bcolor='default'):
     m.h(text, rank, color, bcolor)
 
 
-def rate(now=0,  max=5, func=None, disabled=True):
+def rate(now=0,  max=5, func=None, disabled=True) -> None:
     """
     显示评级，其内容为 text。\n
     func 为 返回函数，当评级的数值改变时，func 执行，且其执行参数为：\n
@@ -112,19 +112,19 @@ def rate(now=0,  max=5, func=None, disabled=True):
     }\n
     """
     global m
-    return m.rate(now, max, func, disabled)
+    m.rate(now, max, func, disabled)
 
 
-def progress(now, max=100, length=100):
+def progress(now, max=100, length=100) -> None:
     """
     显示进度条，其长度为 length。\n
     now 表示当前值；max 表示最大值。\n
     """
     global m
-    return m.progress(now, max, length)
+    m.progress(now, max, length)
 
 
-def radio(choice_list, default_index=0, func=None):
+def radio(choice_list, default_index=0, func=None) -> None:
     """
     显示单选。\n
     choice_list 表示显示内容，如["低", "中", "高"]；\n
@@ -135,10 +135,10 @@ def radio(choice_list, default_index=0, func=None):
     }\n
     """
     global m
-    return m.radio(choice_list, default_index, func)
+    m.radio(choice_list, default_index, func)
 
 
-def input(func=None):
+def input(func=None) -> None:
     """
     显示输入框。\n
     func 是返回函数，当输入框的内容被改变时触发，其参数为：\n
@@ -148,24 +148,24 @@ def input(func=None):
     Tips：可与按钮连用进行自定义文本的输入。\n
     """
     global m
-    return m.input(func)
+    m.input(func)
 
 
-def divider(text=''):
+def divider(text='') -> None:
     """
     显示横线。\n
     Bug：显示文字暂时有Bug。\n
     """
     global m
-    return m.divider(text)
+    m.divider(text)
 
 
-def chart(chart_type, data, width=200, height=200):
+def chart(chart_type, data, width=200, height=200) -> None:
     global m
-    return m.chart(chart_type, data, width, height)
+    m.chart(chart_type, data, width, height)
 
 
-def clear(last=False):
+def clear(last=False) -> None:
     """
     清除所有显示。\n
     """
@@ -173,7 +173,7 @@ def clear(last=False):
     m.clear(last)
 
 
-def goto(func, *arg, **kw):
+def goto(func, *arg, **kw) -> None:
     """
     【界面逻辑函数】\n
     进入其中的页面。\n
@@ -182,7 +182,7 @@ def goto(func, *arg, **kw):
     m.goto(func, *arg, **kw)
 
 
-def back(*arg, **kw):
+def back(*arg, **kw) -> None:
     """
     【界面逻辑函数】\n
     退回到上一个浏览的页面。\n
@@ -191,7 +191,7 @@ def back(*arg, **kw):
     m.back(*arg, **kw)
 
 
-def repeat(*arg, **kw):
+def repeat(*arg, **kw) -> None:
     """
     【界面逻辑函数】\n
     重复当前的页面。\n
@@ -201,7 +201,7 @@ def repeat(*arg, **kw):
     m.repeat(*arg, **kw)
 
 
-def clear_gui(num=0):
+def clear_gui(num=0) -> None:
     """
     【界面逻辑函数】\n
     清除所有界面逻辑关系。\n
@@ -210,7 +210,7 @@ def clear_gui(num=0):
     m.clear_gui(num)
 
 
-def append_gui(func, *arg, **kw):
+def append_gui(func, *arg, **kw) -> None:
     """
     【界面逻辑函数】\n
     向界面链的末尾增加一个界面（但不触发）。\n
@@ -219,7 +219,7 @@ def append_gui(func, *arg, **kw):
     m.append_gui(func, *arg, **kw)
 
 
-def show_save_to_save():
+def show_save_to_save() -> None:
     """
     显示当前存档（存档用）。\n
     """
@@ -227,7 +227,7 @@ def show_save_to_save():
     m.show_save_to_save()
 
 
-def show_save_to_load(func_after_load):
+def show_save_to_load(func_after_load) -> None:
     """
     显示当前存档（读档用）。\n
     """
@@ -235,7 +235,7 @@ def show_save_to_load(func_after_load):
     m.show_save_to_load(func_after_load)
 
 
-def mode():
+def mode() -> None:
     """
     改变显示模式。\n
     """
@@ -243,28 +243,27 @@ def mode():
     pass
 
 
-def exit(save=False):
+def exit(save=False) -> None:
     """
     改变显示模式。\n
     """
     global m
     m.exit(save)
 
+
 # 资源控制
-
-
-def add(item):
+def add(item) -> None:
     global m
     return m.add(item)
 
 
-def get(pattern):
+def get(pattern) -> None:
     global m
     return m.get(pattern)
 
 
 # EraTime
-def get_full_time():
+def get_full_time() -> str:
     """
     以文本方式返回当前时间（全部）。\n
     """
@@ -272,7 +271,7 @@ def get_full_time():
     return m.get_full_time()
 
 
-def tick():
+def tick() -> None:
     """
     时间流逝一个单位。\n
     """
@@ -284,7 +283,7 @@ def ________________________________________________________________():
     pass
 
 
-def new_hash():
+def new_hash() -> str:
     """
     返回一个HASH字符串。\n
     Tips：可用于索引和标记。\n
