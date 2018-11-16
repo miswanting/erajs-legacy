@@ -290,3 +290,8 @@ def new_hash() -> str:
     """
     global m
     return m.new_hash()
+
+
+def save_data_to_file(dot_path):
+    global m
+    return m.save_data_to_file(dot_path)

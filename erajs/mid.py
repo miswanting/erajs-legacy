@@ -293,6 +293,8 @@ mid = Mid()
 
 # def repeat(*arg, **kw):
 #     engine.repeat(*arg, **kw)
+    def save_data_to_file(self, dot_path):
+        return engine.save_data_to_file(dot_path)
 
 
 # def clear_gui(num=1):

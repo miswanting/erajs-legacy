@@ -174,17 +174,35 @@ class DataEngine(DebugEngine):
                 candidate_item.append(each)
         return candidate_item
 
+    def path2dot(self, path):
+        """将路径转换为点路径"""
+        path = path.replace('/', '\\')
+        dot = '.'.join('.'.join(path.split('.')[0:-1]).split('\\'))
+        ext = path.split('.')[-1]
+        return dot, ext
+
+    def dot2path(self, dot, ext):
+        """将点路径转换为路径"""
+        path = '.'.join(['\\'.join(dot.split('.')), ext])
+        return path
+
     def load_data(self, files):
         data = {}
         for each in files:
-            each = each.replace('/', '\\')
-            key = '.'.join('.'.join(each.split('.')[0:-1]).split('\\'))
+            key = self.path2dot(each)[0]
             # 载入文件
             self.info('│  ├─ Loading [{}]...'.format(each))
             data[key] = self.load_file(each)
         return data
 
+    def save_data_to_file(self, dot_path):
+        """将一个data文件夹中加载的数据重新保存回去"""
+        data = self.data[dot_path]
+        path_to_file = self.dot2path(dot_path, 'yaml')
+        self.save_file(data, path_to_file)
+
     def load_file(self, path_to_file):
+        """从文件加载数据，并返回"""
         path_to_file = path_to_file.replace('/', '\\')
         ext = path_to_file.split('\\')[-1].split('.')[-1]
         data = None
@@ -211,6 +229,7 @@ class DataEngine(DebugEngine):
         return data
 
     def save_file(self, data, path_to_file):
+        """保存数据到某文件"""
         path_to_file = path_to_file.replace('/', '\\')
         ext = path_to_file.split('\\')[-1].split('.')[-1]
         if ext in ['cfg', 'ini', 'inf', 'config']:
