@@ -756,6 +756,16 @@ class BagEngine(LockEngine):
                }
         self.send(bag)
 
+    def shake(self, duration=500):
+        bag = {'type': 'shake',
+               'value': {
+                   'duration': duration
+               },
+               'from': 'b',
+               'to': 'r'
+               }
+        self.send(bag)
+
     def _show_gui_list(self):
         gui_list = []
         for each in self._gui_list:

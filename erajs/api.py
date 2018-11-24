@@ -295,3 +295,8 @@ def new_hash() -> str:
 def save_data_to_file(dot_path):
     global m
     return m.save_data_to_file(dot_path)
+
+
+def shake(duration=500):
+    global m
+    return m.shake(duration)

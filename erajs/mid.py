@@ -191,5 +191,8 @@ class Mid():
     def save_data_to_file(self, dot_path):
         return engine.save_data_to_file(dot_path)
 
+    def shake(self, duration=500):
+        return engine.shake(duration)
+
 
 mid = Mid()
