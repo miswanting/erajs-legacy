@@ -448,12 +448,12 @@ class SocketEngine(LoadEngine):
         self.send(bag)
 
     def send(self, bag):
-        self.debug("发送：{}".format(bag))
+        # self.debug("发送：{}".format(bag))
         self._conn.send(json.dumps(bag, ensure_ascii=False).encode())
 
     def recv(self):
         data = self._conn.recv(4096)
-        self.debug("接收：{}".format(data))
+        # self.debug("接收：{}".format(data))
         if not data:
             return
         data = data.decode().split('}{')
@@ -702,7 +702,7 @@ class BagEngine(LockEngine):
             'to': 'r'
         }
         self.send(bag)
-        global _cmd_list
+        # global _cmd_list
         self._cmd_list.clear()
 
     def clear(self, last=False):
@@ -715,18 +715,22 @@ class BagEngine(LockEngine):
         self.send(bag)
 
     def goto(self, func, *arg, **kw):
+        self.debug('GOTO: [{}] by ↓'.format(func.__name__))
         self.append_gui(func, *arg, **kw)
+        self.debug('GOTO: Run [{}] from [{}]'.format(
+            func.__name__, self._show_gui_list()))
         func(*arg, **kw)
 
     def back(self, num=1, *arg, **kw):
-        for i in range(num):
-            self.debug('BACK: Pop [{}] from [{}]'.format(
-                self._gui_list[-1][0].__name__, self._show_gui_list()))
-            self._gui_list.pop()
+        self.debug('BACK: Pop [{}] from [{}] by ↓'.format(
+            self._gui_list[-1][0].__name__, self._show_gui_list()))
+        self.clear_gui(num)
+        self.debug('BACK: Run [{}] from [{}] by ↓'.format(
+            self._gui_list[-1][0].__name__, self._show_gui_list()))
         self.repeat()
 
     def repeat(self, *arg, **kw):
-        self.debug('REPEAT: Repeat [{}] in [{}]'.format(
+        self.debug('REPEAT: Run [{}] in [{}]'.format(
             self._gui_list[-1][0].__name__, self._show_gui_list()))
         self._gui_list[-1][0](*self._gui_list[-1][1], **self._gui_list[-1][2])
 
@@ -742,7 +746,7 @@ class BagEngine(LockEngine):
                 self._gui_list.pop()
 
     def append_gui(self, func, *arg, **kw):
-        self.debug('GOTO: Append [{}] to [{}]'.format(
+        self.debug('APPEND: Append [{}] to [{}]'.format(
             func.__name__, self._show_gui_list()))
         self._gui_list.append((func, arg, kw))
 
