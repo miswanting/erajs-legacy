@@ -140,7 +140,7 @@ class DataEngine(DebugEngine):
         save_file_path_list = self.scan('save')
         for each in save_file_path_list:
             if each.split('\\')[-1].split('.')[0] == str(save_num):
-                self.data['db'] = self.load_file(each)['data']
+                self.data['db'] = self.load_file(each)
 
     def add(self, item):
         item['hash'] = new_hash()
