@@ -715,28 +715,34 @@ class BagEngine(LockEngine):
         self.send(bag)
 
     def goto(self, func, *arg, **kw):
-        self.debug('GOTO: [{}] by ↓'.format(func.__name__))
-        self.append_gui(func, *arg, **kw)
-        self.debug('GOTO: Run [{}] from [{}]'.format(
+        self.debug('GOTO: Append [{}] to [{}] & run'.format(
             func.__name__, self._show_gui_list()))
+        self._gui_list.append((func, arg, kw))  # append_gui
         func(*arg, **kw)
 
     def back(self, num=1, *arg, **kw):
-        self.debug('BACK: Pop [{}] from [{}] by ↓'.format(
-            self._gui_list[-1][0].__name__, self._show_gui_list()))
         self.clear_gui(num)
-        self.debug('BACK: Run [{}] from [{}] by ↓'.format(
-            self._gui_list[-1][0].__name__, self._show_gui_list()))
-        self.repeat()
+        for i in range(num):
+            self.debug('BACK: Pop [{}] from [{}]'.format(
+                self._gui_list[-1][0].__name__, self._show_gui_list()))
+            self._gui_list.pop()
+        self.debug('BACK: & run last')
+        self._gui_list[-1][0](*self._gui_list[-1][1], **
+                              self._gui_list[-1][2])  # repeat
 
     def repeat(self, *arg, **kw):
         self.debug('REPEAT: Run [{}] in [{}]'.format(
             self._gui_list[-1][0].__name__, self._show_gui_list()))
         self._gui_list[-1][0](*self._gui_list[-1][1], **self._gui_list[-1][2])
 
+    def append_gui(self, func, *arg, **kw):
+        self.debug('APPEND: Append [{}] to [{}]'.format(
+            func.__name__, self._show_gui_list()))
+        self._gui_list.append((func, arg, kw))
+
     def clear_gui(self, num=0):
         if num == 0:
-            self.debug('CLEAR_GUI: Set [{}] to []'.format(
+            self.debug('CLEAR_ALL_GUI: Set [{}] to []'.format(
                 self._show_gui_list()))
             self._gui_list.clear()
         else:
@@ -744,11 +750,6 @@ class BagEngine(LockEngine):
                 self.debug('CLEAR_LAST_GUI: Pop [{}] from [{}]'.format(
                     self._gui_list[-1][0].__name__, self._show_gui_list()))
                 self._gui_list.pop()
-
-    def append_gui(self, func, *arg, **kw):
-        self.debug('APPEND: Append [{}] to [{}]'.format(
-            func.__name__, self._show_gui_list()))
-        self._gui_list.append((func, arg, kw))
 
     def exit(self, save=False):
         bag = {'type': 'exit',
