@@ -246,7 +246,8 @@ class DataEngine(DebugEngine):
                 f.write(json.dumps(data, ensure_ascii=False))
         elif ext == 'yaml':
             with open(path_to_file, 'w', encoding='utf-8') as f:
-                f.write(yaml.dump(data, allow_unicode=True))
+                f.write(yaml.dump(data, allow_unicode=True,
+                                  default_flow_style=False))
 
 
 class LoadEngine(DataEngine):
