@@ -292,9 +292,9 @@ def new_hash() -> str:
     return m.new_hash()
 
 
-def save_data_to_file(dot_path):
+def save_data_to_file(dot_path, ext='yaml'):
     global m
-    return m.save_data_to_file(dot_path)
+    return m.save_data_to_file(dot_path, ext)
 
 
 def shake(duration=500):

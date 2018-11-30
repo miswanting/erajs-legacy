@@ -188,8 +188,8 @@ class Mid():
     def exit(self, save=False):
         return engine.exit(save)
 
-    def save_data_to_file(self, dot_path):
-        return engine.save_data_to_file(dot_path)
+    def save_data_to_file(self, dot_path, ext='yaml'):
+        return engine.save_data_to_file(dot_path, ext)
 
     def shake(self, duration=500):
         return engine.shake(duration)

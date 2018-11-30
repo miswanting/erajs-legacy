@@ -195,10 +195,10 @@ class DataEngine(DebugEngine):
             data[key] = self.load_file(each)
         return data
 
-    def save_data_to_file(self, dot_path):
+    def save_data_to_file(self, dot_path, ext='yaml'):
         """将一个data文件夹中加载的数据重新保存回去"""
         data = self.data[dot_path]
-        path_to_file = self.dot2path(dot_path, 'yaml')
+        path_to_file = self.dot2path(dot_path, ext)
         self.save_file(data, path_to_file)
 
     def load_file(self, path_to_file):
