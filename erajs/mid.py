@@ -86,8 +86,8 @@ class Mid():
     def radio(self, choice_list, default_index=0, func=None):
         return engine.data['api']['radio'](choice_list, default_index, func)
 
-    def input(self, func=None):
-        return engine.data['api']['input'](func)
+    def input(self, func=None, default=''):
+        return engine.data['api']['input'](func, default)
 
     def divider(self, text=''):
         return engine.data['api']['divider'](text)

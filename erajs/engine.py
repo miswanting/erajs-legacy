@@ -654,13 +654,14 @@ class BagEngine(LockEngine):
         }
         self.send(bag)
 
-    def input(self, func=None):
+    def input(self, func=None, default=''):
         hash = new_hash()
         self._cmd_list.append((hash, func))
         bag = {
             'type': 'input',
             'value': {
-                'hash': hash
+                'hash': hash,
+                'default': default
             },
             'from': 'b',
             'to': 'r'

@@ -138,7 +138,7 @@ def radio(choice_list, default_index=0, func=None) -> None:
     m.radio(choice_list, default_index, func)
 
 
-def input(func=None) -> None:
+def input(func=None, default='') -> None:
     """
     显示输入框。\n
     func 是返回函数，当输入框的内容被改变时触发，其参数为：\n
@@ -148,7 +148,7 @@ def input(func=None) -> None:
     Tips：可与按钮连用进行自定义文本的输入。\n
     """
     global m
-    m.input(func)
+    m.input(func, default)
 
 
 def divider(text='') -> None:
