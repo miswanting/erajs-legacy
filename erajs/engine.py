@@ -249,6 +249,36 @@ class DataEngine(DebugEngine):
                 f.write(yaml.dump(data, allow_unicode=True,
                                   default_flow_style=False))
 
+    def load_zip_file(self, path_to_file):
+        """给一个路径，获得zip文件中的一切
+        如给一个test.zip
+        返回一个dict：
+        {
+            文件1（点语法）：{
+
+            },
+            文件2（点语法）：[
+
+            ]
+        }
+        """
+        pass
+
+    def save_zip_file(self, data, path_to_file):
+        """给一个路径，保存zip文件
+        如给一个test.zip
+        给一个dict：
+        {
+            文件1（路径）：{
+
+            },
+            文件2（路径）：[
+
+            ]
+        }
+        """
+        pass
+
 
 class LoadEngine(DataEngine):
     def scan_plugin(self):
