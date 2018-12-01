@@ -567,7 +567,7 @@ class BagEngine(LockEngine):
             elif bag['type'] == 'INPUT_CHANGE':
                 for each in self._cmd_list:
                     if bag['hash'] == each[0]:
-                        each[1](bag['value']['value'])
+                        each[1](bag['value'])
             elif bag['type'] == 'DROPDOWN_CHANGE':
                 for each in self._cmd_list:
                     if bag['hash'] == each[0]:
