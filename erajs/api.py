@@ -151,6 +151,20 @@ def input(func=None, default='') -> None:
     m.input(func, default)
 
 
+def dropdown(options, func=None, default='', search=False, multiple=False, placeholder='', allowAdditions=False) -> None:
+    """
+    显示输入框。\n
+    func 是返回函数，当输入框的内容被改变时触发，其参数为：\n
+    {
+        "value": 【改变后的内容】
+    }\n
+    Tips：可与按钮连用进行自定义文本的输入。\n
+    """
+    global m
+    m.dropdown(options, func, default, search,
+               multiple, placeholder, allowAdditions)
+
+
 def divider(text='') -> None:
     """
     显示横线。\n

@@ -89,6 +89,9 @@ class Mid():
     def input(self, func=None, default=''):
         return engine.data['api']['input'](func, default)
 
+    def dropdown(self, options, func=None, default='', search=False, multiple=False, placeholder='', allowAdditions=False):
+        return engine.data['api']['dropdown'](options, func, default, search, multiple, placeholder, allowAdditions)
+
     def divider(self, text=''):
         return engine.data['api']['divider'](text)
 

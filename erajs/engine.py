@@ -568,6 +568,10 @@ class BagEngine(LockEngine):
                 for each in self._cmd_list:
                     if bag['hash'] == each[0]:
                         each[1](bag['value']['value'])
+            elif bag['type'] == 'DROPDOWN_CHANGE':
+                for each in self._cmd_list:
+                    if bag['hash'] == each[0]:
+                        each[1](bag['value'])
 
         t = threading.Thread(target=parse, args=(bag, ))
         t.start()
@@ -693,6 +697,35 @@ class BagEngine(LockEngine):
             'value': {
                 'hash': hash,
                 'default': default
+            },
+            'from': 'b',
+            'to': 'r'
+        }
+        self.send(bag)
+
+    def dropdown(self, options, func=None, default='', search=False, multiple=False, placeholder='', allowAdditions=False):
+        hash = new_hash()
+        self._cmd_list.append((hash, func))
+        new_options = []
+        for each in options:
+            new_options.append({
+                'value': each,
+                'text': each
+            })
+        # default = {
+        #     'value': default,
+        #     'text': default
+        # }
+        bag = {
+            'type': 'dropdown',
+            'value': {
+                'hash': hash,
+                'options': new_options,
+                'default': default,
+                'search': search,
+                'multiple': multiple,
+                'placeholder': placeholder,
+                'allowAdditions': allowAdditions
             },
             'from': 'b',
             'to': 'r'
