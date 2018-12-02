@@ -233,6 +233,15 @@ def append_gui(func, *arg, **kw) -> None:
     m.append_gui(func, *arg, **kw)
 
 
+def get_gui_list() -> None:
+    """
+    【界面逻辑函数】\n
+    向界面链的末尾增加一个界面（但不触发）。\n
+    """
+    global m
+    return m.get_gui_list()
+
+
 def show_save_to_save() -> None:
     """
     显示当前存档（存档用）。\n

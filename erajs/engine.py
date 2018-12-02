@@ -815,6 +815,12 @@ class BagEngine(LockEngine):
                     self._gui_list[-1][0].__name__, self._show_gui_list()))
                 self._gui_list.pop()
 
+    def get_gui_list(self):
+        gui_list = []
+        for each in self._gui_list:
+            gui_list.append(each[0].__name__)
+        return gui_list
+
     def exit(self, save=False):
         bag = {'type': 'exit',
                'value': {

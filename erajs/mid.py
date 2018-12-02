@@ -119,6 +119,9 @@ class Mid():
     def append_gui(self, func, *arg, **kw):
         engine.append_gui(func, *arg, **kw)
 
+    def get_gui_list(self):
+        return engine.get_gui_list()
+
     def show_save_to_save(self):
         def save_to(save_num):
             engine.save_to(save_num)
