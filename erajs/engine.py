@@ -574,6 +574,18 @@ class BagEngine(LockEngine):
                 for each in self._cmd_list:
                     if bag['hash'] == each[0]:
                         each[1](bag['value'])
+            elif bag['type'] == 'CMD':
+                def result(data):
+                    bag = {
+                        'type': 'result',
+                        'value': data,
+                        'from': 'b',
+                        'to': 'r'
+                    }
+                    self.send(bag)
+                cmd = bag['value'].split(' ')
+                if cmd[0] == 'help':
+                    result('test result')
 
         t = threading.Thread(target=parse, args=(bag, ))
         t.start()
