@@ -29,7 +29,7 @@ class Mid():
         engine.info('├─ Transfering Configuration to Server...')
         engine.send_config()
         engine.info('├─ Loading Data Files...')
-        data = engine.load_data(engine.scan('data'))
+        data = engine.load_data(engine.scan('data'), engine.send)
         for each in data.keys():
             engine.data[each] = data[each]
         engine.info('│  └─ Data Files Loaded!')

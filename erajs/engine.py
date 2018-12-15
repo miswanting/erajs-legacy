@@ -127,19 +127,10 @@ class DataEngine(DebugEngine):
         return fileList
 
     def save_to(self, save_num, save_name=''):
-        # with open('save/'+str(save_num)+'.save', 'w', encoding='utf-8') as f:
-        #     save_object = {
-        #         'name': save_name,
-        #         'data': self.data['db']
-        #     }
-        #     f.write(json.dumps(save_object, ensure_ascii=False))
         self.save_file(self.data['db'],
                        'save/{}.{}.json'.format(save_num, save_name))
 
     def load_from(self, save_num):
-        # with open('save/'+str(save_num)+'.save', 'r', encoding='utf-8') as f:
-        #     self.data['db'] = json.loads(''.join(f.readlines()))['data']
-        # self.data['db'] = self.load_data()
         save_file_path_list = self.scan('save')
         for each in save_file_path_list:
             if each.split('\\')[-1].split('.')[0] == str(save_num):
@@ -189,12 +180,20 @@ class DataEngine(DebugEngine):
         path = '.'.join(['\\'.join(dot.split('.')), ext])
         return path
 
-    def load_data(self, files):
+    def load_data(self, files, send_func=None):
         data = {}
         for each in files:
             key = self.path2dot(each)[0]
             # 载入文件
             self.info('│  ├─ Loading [{}]...'.format(each))
+            if not send_func == None:
+                bag = {
+                    'type': 'load_text',
+                    'value': 'Loading:[ {} ]...'.format(key),
+                    'from': 'b',
+                    'to': 'r'
+                }
+                send_func(bag)
             data[key] = self.load_file(each)
         return data
 
