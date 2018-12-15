@@ -8,6 +8,7 @@ import json
 import runpy
 import random
 import socket
+import gettext
 import hashlib
 import logging
 import importlib
@@ -15,6 +16,8 @@ import threading
 import configparser
 
 import yaml
+
+_ = gettext.gettext
 
 
 def new_hash():
