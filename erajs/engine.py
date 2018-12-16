@@ -592,8 +592,8 @@ class BagEngine(LockEngine):
                     }
                     self.send(bag)
                 cmd = bag['value']
-                if cmd[0] == 'help':
-                    result('test result')
+                if cmd[0] == 'fix':
+                    result('OK!')
 
         t = threading.Thread(target=parse, args=(bag, ))
         t.start()
