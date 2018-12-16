@@ -36,7 +36,8 @@ class Mid():
         engine.info('├─ Scanning Scripts...')
         engine.info('│  └─ {} Scripts Scanned!'.format(engine.scan_script()))
         engine.info('├─ Loading Scripts...')
-        engine.info('│  └─ {} Scripts Loaded!'.format(engine.load_script()))
+        engine.info('│  └─ {} Scripts Loaded!'.format(
+            engine.load_script(engine.send)))
         engine.info('├─ Scanning DLCs...')
         engine.info('│  └─ {} DLCs Scanned!'.format(engine.scan_dlc()))
         engine.info('├─ Loading DLCs...')

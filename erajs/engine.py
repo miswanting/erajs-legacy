@@ -189,7 +189,7 @@ class DataEngine(DebugEngine):
             if not send_func == None:
                 bag = {
                     'type': 'load_text',
-                    'value': 'Loading:[ {} ]...'.format(key),
+                    'value': 'Data: [ {} ]...'.format(key),
                     'from': 'b',
                     'to': 'r'
                 }
@@ -334,13 +334,21 @@ class LoadEngine(DataEngine):
             script_name_list.append(script_name)
         return len(script_path_list)
 
-    def load_script(self):
+    def load_script(self, send_func=None):
         num_of_loaded_script = 0
         script_path_list = self.scan('script')
         for every in script_path_list:
             module_name = '.'.join(every.replace(
                 '/', '\\').split('\\')[-1].split('.')[0:-1])
             self.info('│  ├─ Loading [{}]...'.format(module_name))
+            if not send_func == None:
+                bag = {
+                    'type': 'load_text',
+                    'value': 'Script: [ {} ]...'.format(module_name),
+                    'from': 'b',
+                    'to': 'r'
+                }
+                send_func(bag)
             with open(every, 'r', encoding='utf8') as target:
                 sys.argv = [self]
                 exec(''.join(target.readlines()))
@@ -583,7 +591,7 @@ class BagEngine(LockEngine):
                         'to': 'r'
                     }
                     self.send(bag)
-                cmd = bag['value'].split(' ')
+                cmd = bag['value']
                 if cmd[0] == 'help':
                     result('test result')
 
