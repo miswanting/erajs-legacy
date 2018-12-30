@@ -275,7 +275,7 @@ def back(num=1, *arg, **kw) -> None:
         返回到上num个界面。默认为上一个界面。
     """
     global m
-    m.back(num=1, *arg, **kw)
+    m.back(num, *arg, **kw)
 
 
 def repeat(*arg, **kw) -> None:
