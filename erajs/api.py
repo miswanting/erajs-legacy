@@ -19,7 +19,7 @@ def init():
     data = m.get_data()
 
 
-def debug(text: t.Text) -> None:
+def debug(text: str) -> None:
     """【系统：输出Debug级别的调试信息】\n
     text: str
         调试信息。
@@ -261,86 +261,86 @@ def clear(num=0) -> None:
 
 def goto(func, *arg, **kw) -> None:
     """【界面：进入到下一界面】\n
-    【界面逻辑函数】\n
-    进入其中的页面。\n
+    func: callable
+        要进入的界面函数。
+        当执行时，相当于触发了func(*arg, **kw)
     """
     global m
     m.goto(func, *arg, **kw)
 
 
-def back(*arg, **kw) -> None:
+def back(num=1, *arg, **kw) -> None:
     """【界面：退回到上一界面】\n
-    【界面逻辑函数】\n
-    退回到上一个浏览的页面。\n
+    num: int
+        返回到上num个界面。默认为上一个界面。
     """
     global m
-    m.back(*arg, **kw)
+    m.back(num=1, *arg, **kw)
 
 
 def repeat(*arg, **kw) -> None:
-    """
-    【界面逻辑函数】\n
-    重复当前的页面。\n
-    Tips：刷新数据时常用\n
+    """【界面：重新显示当前界面】\n
     """
     global m
     m.repeat(*arg, **kw)
 
 
 def clear_gui(num=0) -> None:
-    """
-    【界面逻辑函数】\n
-    清除所有界面逻辑关系。\n
+    """【界面：清除界面逻辑节点】\n
+    num: int
+        从后向前清除num个界面逻辑节点；
+        值为0时，清除全部界面逻辑节点。
     """
     global m
     m.clear_gui(num)
 
 
 def append_gui(func, *arg, **kw) -> None:
-    """
-    【界面逻辑函数】\n
-    向界面链的末尾增加一个界面（但不触发）。\n
+    """【界面：新增界面逻辑节点】\n
+    向界面链的末尾增加一个界面逻辑节点（但不触发）。\n
     """
     global m
     m.append_gui(func, *arg, **kw)
 
 
 def get_gui_list() -> None:
-    """
-    【界面逻辑函数】\n
-    向界面链的末尾增加一个界面（但不触发）。\n
+    """【界面：获取当前界面逻辑链】\n
+    获取一个list，内含当前界面链中各个界面逻辑节点的名字。
     """
     global m
     return m.get_gui_list()
 
 
 def show_save_to_save() -> None:
-    """
-    显示当前存档（存档用）。\n
+    """【复合控件：存档列表】\n
+    显示存档列表（存档用）。\n
     """
     global m
     m.show_save_to_save()
 
 
 def show_save_to_load(func_after_load) -> None:
-    """
-    显示当前存档（读档用）。\n
+    """【复合控件：读档列表】\n
+    显示存档列表（读档用）。\n
+    func_after_load: callable
+        读取存档成功后，该函数会被执行。
     """
     global m
     m.show_save_to_load(func_after_load)
 
 
-def mode() -> None:
-    """
-    改变显示模式。\n
+def mode(name, *arg, **kw) -> None:
+    """【开发中】【系统：变更显示/排版模式】\n
+    变更显示/排版模式。\n
     """
     global m
     pass
 
 
 def exit(save=False) -> None:
-    """
-    改变显示模式。\n
+    """【系统：退出程序】\n
+    save: bool
+        值为True时，临时存档会被保存。
     """
     global m
     m.exit(save)
