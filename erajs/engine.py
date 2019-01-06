@@ -64,7 +64,47 @@ class DebugEngine:
         self.logger.critical(text)
 
 
-class DataEngine(DebugEngine):
+class Event:
+    type = ''
+    target = {}
+
+
+class EventEngine(DebugEngine):
+    _listener_list = []
+
+    def add_listener(self, type, listener, hash=''):
+        new_listener = {
+            'type': type,
+            'listener': listener,
+            'hash': hash
+        }
+        self._listener_list.append(new_listener)
+
+    def remove_listener(self, type, listener=None, hash=''):
+        for i, each in enumerate(self._listener_list):
+            if each.type == type and each.listener.__name__ == listener.__name__ and each.hash == hash:
+                self._listener_list.pop(i)
+                break
+
+    def has_listener(self, type):
+        found = False
+        for each in self._listener_list:
+            if each.type == type:
+                found = True
+        return found
+
+    def dispatch_event(self, event):
+        for each in self._listener_list:
+            if event.type == each.type:
+                t = threading.Thread(
+                    target=each.listener,
+                    args=(event, ),
+                    kwargs={}
+                )
+                t.start()
+
+
+class DataEngine(EventEngine):
     data = {}
     pool = []
 
@@ -594,6 +634,10 @@ class BagEngine(LockEngine):
                 cmd = bag['value']
                 if cmd[0] == 'fix':
                     result('OK!')
+            else:
+                for each in self._cmd_list:
+                    if bag['hash'] == each[0]:
+                        each[1](bag['value'])
 
         t = threading.Thread(target=parse, args=(bag, ))
         t.start()
