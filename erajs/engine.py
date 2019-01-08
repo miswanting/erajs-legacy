@@ -861,6 +861,7 @@ class BagEngine(LockEngine):
         self.send(bag)
 
     def page(self, color='default'):
+        self.mode()
         bag = {
             'type': 'page',
             'value': {
@@ -940,6 +941,14 @@ class BagEngine(LockEngine):
                'value': {
                    'duration': duration
                },
+               'from': 'b',
+               'to': 'r'
+               }
+        self.send(bag)
+
+    def mode(self, type='default', *arg, **kw):
+        bag = {'type': 'mode',
+               'value': [type, *arg],
                'from': 'b',
                'to': 'r'
                }

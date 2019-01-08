@@ -329,12 +329,12 @@ def show_save_to_load(func_after_load) -> None:
     m.show_save_to_load(func_after_load)
 
 
-def mode(name, *arg, **kw) -> None:
+def mode(type, *arg, **kw) -> None:
     """【开发中】【系统：变更显示/排版模式】\n
     变更显示/排版模式。\n
     """
     global m
-    pass
+    m.mode(type, *arg, **kw)
 
 
 def exit(save=False) -> None:
