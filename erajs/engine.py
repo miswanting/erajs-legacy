@@ -177,7 +177,7 @@ class DataEngine(EventEngine):
 
     def save_to(self, save_num, save_name=''):
         self.save_file(self.data['db'],
-                       'save/{}.{}.json'.format(save_num, save_name))
+                       'save/{}.{}.zip'.format(save_num, save_name))
 
     def load_from(self, save_num):
         save_file_path_list = self.scan('save')
