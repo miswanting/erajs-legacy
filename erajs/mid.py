@@ -203,7 +203,7 @@ class Mid():
     def shake(self, duration=500):
         return engine.shake(duration)
 
-    def mode(self, type, *arg, **kw):
+    def mode(self, type='default', *arg, **kw):
         return engine.mode(type, *arg, **kw)
 
     def add_listener(self, type, listener, hash='', removable=True):

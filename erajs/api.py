@@ -329,7 +329,7 @@ def show_save_to_load(func_after_load) -> None:
     m.show_save_to_load(func_after_load)
 
 
-def mode(type, *arg, **kw) -> None:
+def mode(type='default', *arg, **kw) -> None:
     """【开发中】【系统：变更显示/排版模式】\n
     变更显示/排版模式。\n
     """
