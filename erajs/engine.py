@@ -285,6 +285,10 @@ class DataEngine(EventEngine):
                     with z.open(file_name) as f:
                         data['.'.join(file_name.split('.')[0:-1])
                              ] = json.loads(f.read())
+        elif ext == 'txt':
+            data = []
+            with open(path_to_file, 'r') as f:
+                for line in f.readlines():
                     if line[-1] == '\n':
                         data.append(line[:-1])
                     else:
