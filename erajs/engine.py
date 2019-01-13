@@ -8,10 +8,10 @@ import json
 import runpy
 import random
 import socket
-import zipfile
 import gettext
 import hashlib
 import logging
+import zipfile
 import importlib
 import threading
 import configparser
@@ -257,6 +257,7 @@ class DataEngine(EventEngine):
         path_to_file = path_to_file.replace('/', '\\')
         ext = path_to_file.split('\\')[-1].split('.')[-1]
         data = None
+        time_start = time.time()
         if ext in ['cfg', 'ini', 'inf', 'config']:
             config = configparser.ConfigParser()
             config.read(path_to_file)
@@ -282,15 +283,18 @@ class DataEngine(EventEngine):
                 data = {}
                 for file_name in z.namelist():
                     with z.open(file_name) as f:
-                        print(file_name, file_name.split('.')[:-1])
                         data['.'.join(file_name.split('.')[0:-1])
                              ] = json.loads(f.read())
+        time_stop = time.time()
+        # print('加载{}文件用时：{}ms'.format(path_to_file,
+        #                              int((time_stop-time_start)*1000)))
         return data
 
     def save_file(self, data, path_to_file):
         """保存数据到某文件"""
         path_to_file = path_to_file.replace('/', '\\')
         ext = path_to_file.split('\\')[-1].split('.')[-1]
+        time_start = time.time()
         if ext in ['cfg', 'ini', 'inf', 'config']:
             config = configparser.ConfigParser()
             config.read_dict(data)
@@ -308,7 +312,7 @@ class DataEngine(EventEngine):
                 f.write(yaml.dump(data, allow_unicode=True,
                                   default_flow_style=False))
         elif ext == 'zip':
-            with zipfile.ZipFile(path_to_file, 'w') as z:
+            with zipfile.ZipFile(path_to_file, 'w', zipfile.ZIP_LZMA) as z:
                 for key in data:
                     z.writestr('{}.json'.format(key), json.dumps(
                         data[key], ensure_ascii=False))
