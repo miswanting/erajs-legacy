@@ -42,5 +42,5 @@ class EraMap:
 #         a.data['api'][each.__name__] = each
 
 
-# a = sys.argv[0]
-# register()
+a = sys.argv[0]
+register()
