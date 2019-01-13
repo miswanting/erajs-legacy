@@ -8,6 +8,7 @@ import json
 import runpy
 import random
 import socket
+import zipfile
 import gettext
 import hashlib
 import logging
@@ -276,6 +277,14 @@ class DataEngine(EventEngine):
         elif ext == 'yaml':
             with open(path_to_file, 'r', encoding='utf-8') as f:
                 data = yaml.load(''.join(f.readlines()))
+        elif ext == 'zip':
+            with zipfile.ZipFile(path_to_file) as z:
+                data = {}
+                for file_name in z.namelist():
+                    with z.open(file_name) as f:
+                        print(file_name, file_name.split('.')[:-1])
+                        data['.'.join(file_name.split('.')[0:-1])
+                             ] = json.loads(f.read())
         return data
 
     def save_file(self, data, path_to_file):
@@ -298,36 +307,11 @@ class DataEngine(EventEngine):
             with open(path_to_file, 'w', encoding='utf-8') as f:
                 f.write(yaml.dump(data, allow_unicode=True,
                                   default_flow_style=False))
-
-    def load_zip_file(self, path_to_file):
-        """给一个路径，获得zip文件中的一切
-        如给一个test.zip
-        返回一个dict：
-        {
-            文件1（点语法）：{
-
-            },
-            文件2（点语法）：[
-
-            ]
-        }
-        """
-        pass
-
-    def save_zip_file(self, data, path_to_file):
-        """给一个路径，保存zip文件
-        如给一个test.zip
-        给一个dict：
-        {
-            文件1（路径）：{
-
-            },
-            文件2（路径）：[
-
-            ]
-        }
-        """
-        pass
+        elif ext == 'zip':
+            with zipfile.ZipFile(path_to_file, 'w') as z:
+                for key in data:
+                    z.writestr('{}.json'.format(key), json.dumps(
+                        data[key], ensure_ascii=False))
 
 
 class LoadEngine(DataEngine):
