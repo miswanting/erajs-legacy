@@ -285,6 +285,10 @@ class DataEngine(EventEngine):
                     with z.open(file_name) as f:
                         data['.'.join(file_name.split('.')[0:-1])
                              ] = json.loads(f.read())
+                    if line[-1] == '\n':
+                        data.append(line[:-1])
+                    else:
+                        data.append(line)
         time_stop = time.time()
         # print('加载{}文件用时：{}ms'.format(path_to_file,
         #                              int((time_stop-time_start)*1000)))
@@ -316,6 +320,10 @@ class DataEngine(EventEngine):
                 for key in data:
                     z.writestr('{}.json'.format(key), json.dumps(
                         data[key], ensure_ascii=False))
+        elif ext == 'txt':
+            with open(path_to_file, 'w') as f:
+                for line in data:
+                    f.write('{}\n'.format(line))
         time_stop = time.time()
         # print('保存{}文件用时：{}ms'.format(path_to_file,
         #                              int((time_stop-time_start)*1000)))
