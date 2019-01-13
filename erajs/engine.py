@@ -258,7 +258,7 @@ class DataEngine(EventEngine):
         ext = path_to_file.split('\\')[-1].split('.')[-1]
         data = None
         time_start = time.time()
-        if ext in ['cfg', 'ini', 'inf', 'config']:
+        if ext in ['cfg', 'config', 'ini', 'inf']:
             config = configparser.ConfigParser()
             config.read(path_to_file)
             d = dict(config._sections)
@@ -289,10 +289,7 @@ class DataEngine(EventEngine):
             data = []
             with open(path_to_file, 'r') as f:
                 for line in f.readlines():
-                    if line[-1] == '\n':
-                        data.append(line[:-1])
-                    else:
-                        data.append(line)
+                    data.append(line[:-1])
         time_stop = time.time()
         # print('加载{}文件用时：{}ms'.format(path_to_file,
         #                              int((time_stop-time_start)*1000)))
@@ -303,7 +300,7 @@ class DataEngine(EventEngine):
         path_to_file = path_to_file.replace('/', '\\')
         ext = path_to_file.split('\\')[-1].split('.')[-1]
         time_start = time.time()
-        if ext in ['cfg', 'ini', 'inf', 'config']:
+        if ext in ['cfg', 'config', 'ini', 'inf']:
             config = configparser.ConfigParser()
             config.read_dict(data)
             with open(path_to_file, 'w')as f:
