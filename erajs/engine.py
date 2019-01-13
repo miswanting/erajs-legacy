@@ -316,6 +316,8 @@ class DataEngine(EventEngine):
                 for key in data:
                     z.writestr('{}.json'.format(key), json.dumps(
                         data[key], ensure_ascii=False))
+        # print('保存{}文件用时：{}ms'.format(path_to_file,
+        #                              int((time_stop-time_start)*1000)))
 
 
 class LoadEngine(DataEngine):
