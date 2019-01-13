@@ -395,3 +395,23 @@ def save_data_to_file(dot_path, ext='yaml'):
 def shake(duration=500):
     global m
     return m.shake(duration)
+
+
+def generate_map():
+    global m
+    return m.generate_map()
+
+
+def add_listener(type, listener, hash='', removable=True):
+    global m
+    return m.add_listener(type, listener, hash, removable)
+
+
+def remove_listener(type, listener=None, hash=''):
+    global m
+    return m.remove_listener(type, listener, hash)
+
+
+def dispatch_event(type, target='', value={}):
+    global m
+    return m.dispatch_event(type, target, value)

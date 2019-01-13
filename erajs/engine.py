@@ -547,7 +547,7 @@ class SocketEngine(LoadEngine):
         self._conn.send(json.dumps(bag, ensure_ascii=False).encode())
 
     def recv(self):
-        data = self._conn.recv(4096)
+        data = self._conn.recv(4096000)
         # self.debug("接收：{}".format(data))
         if not data:
             return
@@ -949,6 +949,14 @@ class BagEngine(LockEngine):
     def mode(self, type='default', *arg, **kw):
         bag = {'type': 'mode',
                'value': [type, *arg],
+               'from': 'b',
+               'to': 'r'
+               }
+        self.send(bag)
+
+    def generate_map(self):
+        bag = {'type': 'generate_map',
+               'value': {},
                'from': 'b',
                'to': 'r'
                }
