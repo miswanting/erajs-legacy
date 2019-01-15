@@ -697,6 +697,10 @@ class BagEngine(LockEngine):
             if kw['disabled']:
                 bag['value']['disabled'] = True
             kw.pop('disabled')
+        if 'isLink' in kw.keys():
+            if kw['isLink']:
+                bag['value']['isLink'] = True
+            kw.pop('isLink')
         if 'popup' in kw.keys():
             bag['value']['popup'] = kw['popup']
             kw.pop('popup')

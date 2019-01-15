@@ -77,6 +77,9 @@ class Mid():
     def b(self, text, func, *arg, **kw):
         engine.b(text, func, *arg, **kw)
 
+    def l(self, text, func, *arg, **kw):
+        engine.b(text, func, *arg, isLink=True, **kw)
+
     def h(self, text, rank=1, color='default', bcolor='default'):
         engine.h(text, rank, color, bcolor)
 
