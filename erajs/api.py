@@ -442,3 +442,19 @@ def remove_listener(type, listener=None, hash=''):
 def dispatch_event(type, target='', value={}):
     global m
     return m.dispatch_event(type, target, value)
+
+
+def enable(*arg):
+    pass
+
+
+def is_enabled(name):
+    pass
+
+
+def disable(*arg):
+    pass
+
+
+def get_dynamic_api():
+    return

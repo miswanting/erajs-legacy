@@ -1,13 +1,13 @@
 import sys
 
 
-class Plugin:
-    pass
+# class Plugin:
+#     pass
 
 
-class EraMap:
-    def generate_map(self):
-        pass
+# class EraMap:
+#     def generate_map(self):
+#         pass
 
 
 # def register():
@@ -42,5 +42,5 @@ class EraMap:
 #         a.data['api'][each.__name__] = each
 
 
-a = sys.argv[0]
-register()
+# a = sys.argv[0]
+# register()
