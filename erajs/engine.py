@@ -1003,6 +1003,10 @@ class Engine(BagEngine):
                 result('OK!')
         self.add_listener('CMD', handle_cmd, removable=False)
 
+        def handle_send(e):
+            self.send(e['value'])
+        self.add_listener('SEND', handle_send, removable=False)
+
     def register_api(self):
         def ban_sys(name):
             if not name[0] == '_':
