@@ -698,6 +698,8 @@ class BagEngine(LockEngine):
             if kw['disabled']:
                 bag['value']['disabled'] = True
             kw.pop('disabled')
+        if func == None:
+            bag['value']['disabled'] = True
         if 'isLink' in kw.keys():
             if kw['isLink']:
                 bag['value']['isLink'] = True
