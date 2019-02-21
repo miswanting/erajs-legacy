@@ -2,7 +2,8 @@
 import typing as ty
 from . import mid
 m = mid.mid
-version = '0.1.0'
+version = '0.1.0-190127'
+aka = '“全局事件”更新'
 data = {}
 
 # 显示控制
