@@ -137,6 +137,7 @@ class DataEngine(EventEngine):
             },
             "class": {},
             "api": {},
+            "tmp": {},
             "entity": {},
             "db": {},  # 可保存的数据
             "act": {},
