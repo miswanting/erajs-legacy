@@ -956,10 +956,23 @@ class BagEngine(LockEngine):
 
     def mode(self, type='default', *arg, **kw):
         bag = {'type': 'mode',
-               'value': [type, *arg],
+               'value': {
+                   'mode': type
+               },
                'from': 'b',
                'to': 'r'
                }
+        if type == 'grid':
+            bag['value']['celled'] = False
+            bag['value']['compact'] = False
+            if 'column' in kw:
+                bag['value']['column'] == kw['column']
+            if len(arg) == 1:
+                bag['value']['column'] = arg[0]
+            if 'celled'in kw:
+                bag['value']['celled'] = kw['celled']
+            if 'compact'in kw:
+                bag['value']['compact'] = kw['compact']
         self.send(bag)
 
     def generate_map(self):
