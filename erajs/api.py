@@ -358,8 +358,22 @@ def show_save_to_load(func_after_load) -> None:
 
 
 def mode(type='default', *arg, **kw) -> None:
-    """【开发中】【系统：变更显示/排版模式】\n
+    """【系统：变更显示/排版模式】\n
     变更显示/排版模式。\n
+    例子
+    type：str
+        可用的值：'grid'
+    例子：
+        mode('grid', 3)
+            进入3列网格模式
+        mode('grid', column=3)
+            进入3列网格模式（与上个命令等价）
+        mode('grid', 3, compact=True)
+            进入3列网格的紧密排列模式
+        mode('grid', 3, celled=True)
+            进入带网格线的3列网格模式
+        mode()
+            回到默认排版模式（从左至右+换行）
     """
     global m
     m.mode(type, *arg, **kw)
