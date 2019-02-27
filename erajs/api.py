@@ -435,8 +435,8 @@ def save_data_to_file(dot_path, ext='yaml'):
 
 
 def shake(duration=500):
-    # global m
-    # return m.shake(duration)
+    global m
+    return m.shake(duration)
     pass
 
 
