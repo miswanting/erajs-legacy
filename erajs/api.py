@@ -2,7 +2,7 @@
 import typing as ty
 from . import mid
 m = mid.mid
-version = '0.1.0-190302'
+version = '0.1.0-190331'
 aka = '“全局事件”更新'
 data = {}
 
