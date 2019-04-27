@@ -227,7 +227,7 @@ def input(func=None, default='') -> None:
     m.input(func, default)
 
 
-def dropdown(options, func=None, default='', search=False, multiple=False, placeholder='', allowAdditions=False) -> None:
+def dropdown(options, func=None, default=None, search=False, multiple=False, placeholder='', allowAdditions=False) -> None:
     """【控件：下拉列表】\n
     显示下拉列表。\n
     options: list

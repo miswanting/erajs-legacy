@@ -811,7 +811,7 @@ class BagEngine(LockEngine):
         }
         self.send(bag)
 
-    def dropdown(self, options, func=None, default='', search=False, multiple=False, placeholder='', allowAdditions=False):
+    def dropdown(self, options, func=None, default=None,  search=False, multiple=False, placeholder='', allowAdditions=False):
         hash = new_hash()
 
         def handle_callback(e):
@@ -830,7 +830,7 @@ class BagEngine(LockEngine):
             'value': {
                 'hash': hash,
                 'options': new_options,
-                'default': str(default),
+                'default': default,
                 'search': search,
                 'multiple': multiple,
                 'placeholder': str(placeholder),
