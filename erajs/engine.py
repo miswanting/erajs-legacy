@@ -291,6 +291,11 @@ class DataEngine(EventEngine):
             with open(path_to_file, 'r') as f:
                 for line in f.readlines():
                     data.append(line[:-1])
+        elif ext == 'kjml':
+            data = []
+            with open(path_to_file, 'r') as f:
+                for line in f.readlines():
+                    data.append(line[:-1])
         # time_stop = time.time()
         # print('加载{}文件用时：{}ms'.format(path_to_file,
         #                              int((time_stop-time_start)*1000)))
