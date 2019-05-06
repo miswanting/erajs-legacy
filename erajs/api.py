@@ -2,8 +2,8 @@
 import typing as ty
 from . import mid
 m = mid.mid
-version = '0.1.0-190331'
-aka = '“全局事件”更新'
+version = '0.1.0-190506'
+aka = '“文本区域”更新'
 data = {}
 
 # 显示控制
@@ -215,16 +215,20 @@ def radio(choice_list, default_index=0, func=None) -> None:
     m.radio(choice_list, default_index, func)
 
 
-def input(func=None, default='') -> None:
+def input(func=None, default='', is_area=False, placeholder='') -> None:
     """【控件：输入框】\n
     显示输入框。\n
     func: callable
         返回函数，当输入框的内容被改变时触发，其参数为当前新输入的文本。
     default: str
         默认值。
+    is_area: bool
+        替换为全宽度文本区域。
+    placeholder: str
+        输入框提示文字（不影响默认值）。
     """
     global m
-    m.input(func, default)
+    m.input(func, default, is_area, placeholder)
 
 
 def dropdown(options, func=None, default=None, search=False, multiple=False, placeholder='', allowAdditions=False) -> None:

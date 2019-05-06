@@ -797,7 +797,7 @@ class BagEngine(LockEngine):
         }
         self.send(bag)
 
-    def input(self, func=None, default=''):
+    def input(self, func=None, default='', is_area=False, placeholder=''):
         hash = new_hash()
 
         def handle_callback(e):
@@ -809,7 +809,9 @@ class BagEngine(LockEngine):
             'type': 'input',
             'value': {
                 'hash': hash,
-                'default': str(default)
+                'default': str(default),
+                'is_area': is_area,
+                'placehoder': str(placeholder)
             },
             'from': 'b',
             'to': 'r'
