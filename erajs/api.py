@@ -201,6 +201,20 @@ def progress(now, max=100, length=100) -> None:
     m.progress(now, max, length)
 
 
+def check(text: str, func=None, default: bool = False, disabled: bool = False, read_only: bool = False) -> None:
+    """【控件：单项选择】\n
+    显示单项选择。\n
+    choice_list: list
+        表示显示内容，如["低", "中", "高"]；
+    default_index: list
+        表示默认选中的内容，如 1 表示 “中” 被默认选中。
+    func: callable
+        返回函数，当单选的状态被改变时触发，其参数为当前新选中的文本。
+    """
+    global m
+    m.check(text, func, default, disabled, read_only)
+
+
 def radio(choice_list, default_index=0, func=None) -> None:
     """【控件：单项选择】\n
     显示单项选择。\n

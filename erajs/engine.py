@@ -777,6 +777,28 @@ class BagEngine(LockEngine):
         }
         self.send(bag)
 
+    def check(self, text: str, func=None, default: bool = False, disabled: bool = False, read_only: bool = False):
+        hash = new_hash()
+
+        def handle_callback(e):
+            if e['target'] == hash:
+                func(e['value'])
+        self.add_listener('CHECK_CHANGE', handle_callback, hash)
+        # self._cmd_list.append((hash, func))
+        bag = {
+            'type': 'check',
+            'value': {
+                'text': text,
+                'default': default,
+                'disabled': disabled,
+                'read_only': read_only,
+                'hash': hash
+            },
+            'from': 'b',
+            'to': 'r'
+        }
+        self.send(bag)
+
     def radio(self, choice_list, default_index=0, func=None):
         hash = new_hash()
 
