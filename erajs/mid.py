@@ -89,8 +89,8 @@ class Mid():
     def progress(self, now, max=100, length='100px'):
         return engine.data['api']['progress'](now, max, length)
 
-    def check(self, text: str, func=None, default: bool = False, disabled: bool = False, read_only: bool = False):
-        return engine.data['api']['check'](text, func, default, disabled, read_only)
+    def check(self, text: str = '', func=None, *arg, **kw):
+        return engine.data['api']['check'](text, func, *arg, **kw)
 
     def radio(self, choice_list, default_index=0, func=None):
         return engine.data['api']['radio'](choice_list, default_index, func)

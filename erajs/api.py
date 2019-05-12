@@ -201,18 +201,22 @@ def progress(now, max=100, length=100) -> None:
     m.progress(now, max, length)
 
 
-def check(text: str, func=None, default: bool = False, disabled: bool = False, read_only: bool = False) -> None:
-    """【控件：单项选择】\n
-    显示单项选择。\n
-    choice_list: list
-        表示显示内容，如["低", "中", "高"]；
-    default_index: list
-        表示默认选中的内容，如 1 表示 “中” 被默认选中。
+def check(text: str = '', func=None, *arg, **kw) -> None:
+    """【控件：多项选择】\n
+    显示多项选择。\n
+    text: string
+        控件的文本信息；
     func: callable
-        返回函数，当单选的状态被改变时触发，其参数为当前新选中的文本。
+        回调函数，当多选的状态被改变时触发，其参数为当前选中的状态（bool）。
+    default: bool
+        表示默认值（bool）。
+    disabled: bool
+        当前选项是否可用，其意义为该选项当前无效、无意义。
+    read_only: bool
+        当前选项是否可改，其意义为该选项有效、有意义但玩家尚无法变更。
     """
     global m
-    m.check(text, func, default, disabled, read_only)
+    m.check(text, func, *arg, **kw)
 
 
 def radio(choice_list, default_index=0, func=None) -> None:

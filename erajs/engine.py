@@ -691,7 +691,7 @@ class BagEngine(LockEngine):
             self.lock()
             self.wait_for_unlock()
 
-    def b(self, text, func, *arg, **kw):
+    def b(self, text, func=None, *arg, **kw):
         hash = new_hash()
         bag = {
             'type': 'b',
@@ -780,26 +780,33 @@ class BagEngine(LockEngine):
         }
         self.send(bag)
 
-    def check(self, text: str, func=None, default: bool = False, disabled: bool = False, read_only: bool = False):
-        hash = new_hash()
-
+    def check(self, text='', func=None, *arg, **kw):
         def handle_callback(e):
             if e['target'] == hash:
                 func(e['value'])
+        hash = new_hash()
         self.add_listener('CHECK_CHANGE', handle_callback, hash)
-        # self._cmd_list.append((hash, func))
         bag = {
             'type': 'check',
             'value': {
-                'text': text,
-                'default': default,
-                'disabled': disabled,
-                'read_only': read_only,
+                'text': str(text),
                 'hash': hash
             },
             'from': 'b',
             'to': 'r'
         }
+        if 'disabled' in kw.keys():
+            if kw['disabled']:
+                bag['value']['disabled'] = True
+            kw.pop('disabled')
+        if func == None:
+            bag['value']['disabled'] = True
+        if 'default' in kw.keys():
+            bag['value']['default'] = kw['default']
+            kw.pop('default')
+        if 'read_only' in kw.keys():
+            bag['value']['read_only'] = kw['read_only']
+            kw.pop('read_only')
         self.send(bag)
 
     def radio(self, choice_list, default_index=0, func=None):
