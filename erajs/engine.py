@@ -809,7 +809,7 @@ class BagEngine(LockEngine):
             kw.pop('read_only')
         self.send(bag)
 
-    def radio(self, choice_list, default_index=0, func=None):
+    def radio(self, choice_list, func=None, default_index=0):
         hash = new_hash()
 
         def handle_callback(e):

@@ -2,7 +2,7 @@
 import typing as ty
 from . import mid
 m = mid.mid
-version = '0.1.0-190506'
+version = '0.1.0-190518'
 aka = '“文本区域”更新'
 data = {}
 
@@ -219,7 +219,7 @@ def check(text: str = '', func=None, *arg, **kw) -> None:
     m.check(text, func, *arg, **kw)
 
 
-def radio(choice_list, default_index=0, func=None) -> None:
+def radio(choice_list, func=None, default_index=0, ) -> None:
     """【控件：单项选择】\n
     显示单项选择。\n
     choice_list: list

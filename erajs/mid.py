@@ -92,7 +92,7 @@ class Mid():
     def check(self, text: str = '', func=None, *arg, **kw):
         return engine.data['api']['check'](text, func, *arg, **kw)
 
-    def radio(self, choice_list, default_index=0, func=None):
+    def radio(self, choice_list, func=None, default_index=0):
         return engine.data['api']['radio'](choice_list, default_index, func)
 
     def input(self, func=None, default='', is_area=False, placeholder=''):
