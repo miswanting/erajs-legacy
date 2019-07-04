@@ -1,4 +1,4 @@
-import NEngine
+from . import NEngine
 
 
 def init():

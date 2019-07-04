@@ -2,8 +2,10 @@ import os
 import configparser
 import sys
 
-import LogManager
-import NEngine
+from . import LogManager
+from . import NEngine
+# import LogManager
+# import NEngine
 
 
 class ModuleManager:

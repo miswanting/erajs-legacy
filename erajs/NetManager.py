@@ -3,7 +3,8 @@ import socket
 import threading
 import time
 
-import LogManager
+from . import LogManager
+# import LogManager
 
 
 class NetManager:

@@ -22,14 +22,22 @@
 # import yaml
 
 # 自有库
-import DataManager
-import EventManager
-import LogManager
-import ModuleManager
-import NetManager
-import LockManager
-import BagManager
-import Tools
+from . import DataManager
+from . import EventManager
+from . import LogManager
+from . import ModuleManager
+from . import NetManager
+from . import LockManager
+from . import BagManager
+from . import Tools
+# import DataManager
+# import EventManager
+# import LogManager
+# import ModuleManager
+# import NetManager
+# import LockManager
+# import BagManager
+# import Tools
 
 
 class Singleton:  # 单例模式核心

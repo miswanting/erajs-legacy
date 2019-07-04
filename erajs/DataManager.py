@@ -8,7 +8,8 @@ import json
 
 import yaml
 
-import LogManager
+from . import LogManager
+# import LogManager
 
 
 class DataManager:

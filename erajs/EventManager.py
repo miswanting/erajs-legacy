@@ -1,6 +1,7 @@
 import threading
 
-import LogManager
+from . import LogManager
+# import LogManager
 
 
 class EventManager:
