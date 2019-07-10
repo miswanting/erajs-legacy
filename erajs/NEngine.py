@@ -29,6 +29,7 @@ from . import ModuleManager
 from . import NetManager
 from . import LockManager
 from . import BagManager
+from . import FrontManager
 from . import Tools
 # import DataManager
 # import EventManager
@@ -60,10 +61,16 @@ class Engine(Singleton):
         self.module = ModuleManager.ModuleManager()  # 模块管理
         self.net = NetManager.NetManager()  # 网络管理
         self.bag = BagManager.BagManager()  # 通信协议管理
+        self.front = FrontManager.FrontManager()  # 通信协议管理
 
     # 系统控制
     def init(self) -> None:  # 引擎初始化
+        """双线程：
+        1. 数据载入
+        2. Web服务器"""
         self.log.info('Initializing...')
+        self.front.start_server()
+        self.front.start_browser()
         self.log.info('├─ Fixing Path...')
         Tools.fix_path()
         self.log.info('├─ Checking Program Integrity...')
