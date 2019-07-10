@@ -144,33 +144,33 @@ if __name__ == "__main__":
     e.init()
 # 整体构筑特性 示例代码
 # 一次生成含有三行文本的单独页面
-e.push(
-    e.page, {
-        'item': [
-            (e.line, {
-                'item': [
-                    (e.text, {
-                        'value': '第1行 第1段文字'
-                    }),
-                    (e.text, {
-                        'value': '第1行 第2段文字'
-                    })
-                ]
-            }),
-            (e.line, {
-                'item': [
-                    (e.text, {
-                        'value': '第2行 第1段文字'
-                    })
-                ]
-            }),
-            (e.line, {
-                'item': [
-                    (e.text, {
-                        'value': '第3行 第1段文字'
-                    })
-                ]
-            }),
-        ]
-    }
-)
+# e.push(
+#     e.page, {
+#         'item': [
+#             (e.line, {
+#                 'item': [
+#                     (e.text, {
+#                         'value': '第1行 第1段文字'
+#                     }),
+#                     (e.text, {
+#                         'value': '第1行 第2段文字'
+#                     })
+#                 ]
+#             }),
+#             (e.line, {
+#                 'item': [
+#                     (e.text, {
+#                         'value': '第2行 第1段文字'
+#                     })
+#                 ]
+#             }),
+#             (e.line, {
+#                 'item': [
+#                     (e.text, {
+#                         'value': '第3行 第1段文字'
+#                     })
+#                 ]
+#             }),
+#         ]
+#     }
+# )
