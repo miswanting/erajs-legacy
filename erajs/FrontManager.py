@@ -3,10 +3,12 @@ import hashlib
 import http.server
 import os
 import socketserver
+import ssl
 import threading
 import webbrowser
-import ssl
 from datetime import datetime
+
+from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
 
 from . import LogManager
 
@@ -25,18 +27,34 @@ class FrontManager:
 
     def start_server(self):
         def start():
-            context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
-            context.load_cert_chain(certfile="mycertfile")
-            handler = FrontServerHandler
-            self.server = socketserver.TCPServer((HOST, PORT), handler)
-            # self.server = http.server.HTTPServer(("localhost", PORT), handler)
-            print("serving at port", PORT)
-            self.server.serve_forever()
+            # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
+            # context.load_cert_chain(certfile="mycertfile")
+            # handler = FrontServerHandler
+            # self.server = socketserver.TCPServer((HOST, PORT), handler)
+            # # self.server = http.server.HTTPServer(("localhost", PORT), handler)
+            # print("serving at port", PORT)
+            # self.server.serve_forever()
+            server = SimpleWebSocketServer('', 8000, SimpleEcho)
+            server.serveforever()
+
         t = threading.Thread(target=start)
         t.start()
 
     def start_browser(self):
         webbrowser.open('http://{}:{}'.format(HOST, PORT), 1)
+
+
+class SimpleEcho(WebSocket):
+
+    def handleMessage(self):
+        # echo message back to client
+        self.sendMessage(self.data)
+
+    def handleConnected(self):
+        print(self.address, 'connected')
+
+    def handleClose(self):
+        print(self.address, 'closed')
 
 
 class FrontServerHandler(socketserver.BaseRequestHandler):
