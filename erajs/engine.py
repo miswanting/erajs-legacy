@@ -509,8 +509,12 @@ class SocketEngine(LoadEngine):
         def core():
             while True:
                 data = self.recv()
-                for each in data:
-                    self._parse_bag(each)
+                if data != None:
+                    for each in data:
+                        self._parse_bag(each)
+                else:
+                    self.warn('对方已断开连接！')
+                    break
 
         def func_connect():
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as c:
@@ -801,6 +805,7 @@ class BagEngine(LockEngine):
             kw.pop('disabled')
         if func == None:
             bag['value']['disabled'] = True
+
         if 'default' in kw.keys():
             bag['value']['default'] = kw['default']
             kw.pop('default')
