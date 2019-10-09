@@ -806,6 +806,7 @@ class BagEngine(LockEngine):
         if func == None:
             bag['value']['disabled'] = True
 
+        bag['value']['default'] = False
         if 'default' in kw.keys():
             bag['value']['default'] = kw['default']
             kw.pop('default')
