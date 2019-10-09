@@ -1,2 +1,4 @@
 bson
 PyYAML
+python-socketio
+flask
