@@ -1,5 +1,5 @@
 # coding:utf-8
-import erajs.api as a
+import erajs.NAPI as a
 
 
 def start_new_game():
@@ -17,9 +17,10 @@ def default_person():
     a.t()
 
 
-a.init()
-a.title('EraLife')
-a.h('EraLife')
-a.t()
-a.t()
-a.b('新建游戏', a.goto, start_new_game)
+if __name__ == "__main__":
+    a.init()
+    a.title('EraLife')
+    a.h('EraLife')
+    a.t()
+    a.t()
+    a.b('新建游戏', a.goto, start_new_game)

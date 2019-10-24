@@ -1,4 +1,5 @@
 bson
-PyYAML
-python-socketio
 flask
+pytest
+python-socketio
+pyyaml
