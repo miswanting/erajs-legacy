@@ -2,6 +2,10 @@
 import erajs.NAPI as a
 
 
+def cover():
+    pass
+
+
 def start_new_game():
     a.page()
     a.h('玩家角色创建方式')

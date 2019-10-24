@@ -130,6 +130,12 @@ def run() -> None:
     return m.run()
 
 
+# 数据获取
+std = m.std()
+data = m.data()
+save = m.save()
+
+
 # 窗口方法
 def title(text: Any) -> None:
     pass

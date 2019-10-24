@@ -1,26 +1,5 @@
 # coding:utf-8
 
-# # 标准库
-# import configparser
-# import csv
-# import gettext
-# import glob
-# import hashlib
-# import importlib
-# import json
-# import logging
-# import os
-# import random
-# import runpy
-# import socket
-# import sys
-# import threading
-# import time
-# import zipfile
-
-# # 第三方库
-# import yaml
-
 # 自有库
 from . import DataManager
 from . import EventManager
@@ -30,14 +9,6 @@ from . import NetManager
 from . import LockManager
 from . import BagManager
 from . import Tools
-# import DataManager
-# import EventManager
-# import LogManager
-# import ModuleManager
-# import NetManager
-# import LockManager
-# import BagManager
-# import Tools
 
 
 class Singleton:  # 单例模式核心
