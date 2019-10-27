@@ -13,7 +13,7 @@ class ModuleManager:
         self.log = LogManager.LogManager()
 
     def scan_plugin(self, plugin_config):
-        "扫描插件的现实状况"
+        "扫描插件的现状"
         config = {
             'plugin': {}
         }

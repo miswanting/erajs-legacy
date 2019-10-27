@@ -160,7 +160,7 @@ def header(text: Any, callback: Callable = None) -> object:
     return object
 
 
-def text(text: Any, callback: Callable = None) -> object:
+def text(*arg) -> object:
     return object
 
 
@@ -168,7 +168,7 @@ def link(text: Any, callback: Callable = None) -> object:
     return object
 
 
-def button(text: Any, callback: Callable = None) -> object:
+def button(text: Any, callback: Callable = None, *arg, **kw) -> object:
     return object
 
 

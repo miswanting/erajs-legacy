@@ -9,10 +9,11 @@ import json
 import yaml
 
 from . import LogManager
+from . import Prototypes
 # import LogManager
 
 
-class DataManager:
+class DataManager(Prototypes.Singleton):
     data = {}
     pool = []
 
@@ -20,18 +21,23 @@ class DataManager:
         self.log = LogManager.LogManager()
 
     def self_check(self):
+        """
+        # 数据初始化
+        - 维护数据完整性
+        - 维护文件夹完整性
+        """
         self.data = {
             "config": {
-                "plugin": {},
-                "dlc": {},
-                "mod": {},
+                "plugin": {},  # 插件
+                "dlc": {},  # DLC
+                "mod": {},  # MOD
             },
             "class": {},
             "api": {},
             "tmp": {},
             "entity": {},
-            "db": {},  # 可保存的数据
-            "act": {},
+            "db": {},  # 存档的数据
+            "act": {},  # ？
             "kojo": {}
         }
         check_folder_list = [
@@ -46,17 +52,22 @@ class DataManager:
         check_file_list = [
             'config/config.ini'
         ]
+        # 补全文件夹
         for each in check_folder_list:
             if not os.path.isdir(each):
                 self.log.warn(
-                    'Folder {} is not Exist. Creating...'.format(each))
+                    'Folder {} not Exist. Creating...'.format(each))
                 os.mkdir(each)
+        # 补全文件
         for each in check_file_list:
             if not os.path.isfile(each):
-                self.log.warn('File {} is not Exist. Creating...'.format(each))
+                self.log.warn('File {} not Exist. Creating...'.format(each))
                 open(each, 'w')
 
     def load_config(self, config_path):
+        """
+        从路径读入ConfigPath，并挂载到data config key
+        """
         config = self.load_data(config_path)
         for each in config['config.config'].keys():
             self.data['config'][each] = config['config.config'][each]
@@ -69,10 +80,16 @@ class DataManager:
         return fileList
 
     def save_to(self, save_num, save_name=''):
+        """
+        将存档按序号保存到存档文件中
+        """
         self.save_file(self.data['db'],
                        'save/{}.{}.zip'.format(save_num, save_name))
 
     def load_from(self, save_num):
+        """
+        将存档按数值保存到存档文件中
+        """
         save_file_path_list = self.scan('save')
         for each in save_file_path_list:
             if each.split('\\')[-1].split('.')[0] == str(save_num):

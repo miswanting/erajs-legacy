@@ -8,20 +8,15 @@ from . import ModuleManager
 from . import NetManager
 from . import LockManager
 from . import BagManager
-from . import Tools
+from . import Prototypes
 
 
-class Singleton:  # 单例模式核心
-    _instance = None
-
-    def __new__(cls, *args, **kw):
-        if not cls._instance:
-            cls._instance = super(Singleton, cls).__new__(cls, *args, **kw)
-        return cls._instance
+# 设计第一，架构第二，技术第三，实现第四
+# 多快好省，力争上游，为开发世界一流游戏引擎而奋斗
 
 
-class Engine(Singleton):
-    VERSION: str = '0.1.0'
+class Engine(Prototypes.Singleton):
+    VERSION: str = '0.1.0-191026'
 
     def __init__(self) -> None:  # 架构初始化
         self.log = LogManager.LogManager()  # 调试框架
@@ -31,55 +26,6 @@ class Engine(Singleton):
         self.module = ModuleManager.ModuleManager()  # 模块管理
         self.net = NetManager.NetManager()  # 网络管理
         self.bag = BagManager.BagManager()  # 通信协议管理
-
-    # 系统控制
-    def init(self) -> None:  # 引擎初始化
-        self.log.info('Initializing...')
-        self.log.info('├─ Fixing Path...')
-        Tools.fix_path()
-        self.log.info('├─ Checking Program Integrity...')
-        self.data.self_check()
-        self.log.info('├─ Loading Engine Configuration...')
-        self.data.load_config(['config/config.ini'])
-        self.log.info('├─ Registering Native API...')
-        # TODO: 软API装载
-        # self.log.info('│  └─ {} Native APIs Registered!'.format(
-        #     engine.register_api()))
-        self.log.info('├─ Scanning Plugins...')
-        self.data.data['config']['plugin'].update(self.module.scan_plugin(
-            self.data.data['config']['plugin']))
-        self.log.info('│  └─ {} Plugins Scanned!'.format(
-            len(self.data.data['config']['plugin'])))
-        self.log.info('├─ Loading Plugins...')
-        # n,self.module.load_plugin(self.data.data['config']['plugin'])
-        # self.log.info('│  └─ {} Plugins Loaded!'.format(
-        #     self.module.load_plugin()))
-        self.log.info('├─ Connecting Server...')
-        self.net.connect()
-        self.log.info('├─ Transfering Configuration to Server...')
-        self.net.send_config()
-        self.log.info('├─ Loading Data Files...')
-        data = self.data.load_data(self.data.scan('data'), self.net.send)
-        for each in data.keys():
-            self.data.data[each] = data[each]
-        self.log.info('│  └─ Data Files Loaded!')
-        self.log.info('├─ Scanning Scripts...')
-        self.log.info('│  └─ {} Scripts Scanned!'.format(
-            self.module.scan_script()))
-        # self.log.info('├─ Loading Scripts...')
-        # self.log.info('│  └─ {} Scripts Loaded!'.format(
-        #     self.module.load_script(self.net.send)))
-        # self.log.info('├─ Scanning DLCs...')
-        # self.log.info('│  └─ {} DLCs Scanned!'.format(self.module.scan_dlc()))
-        # self.log.info('├─ Loading DLCs...')
-        # self.log.info('│  └─ {} DLCs Loaded!'.format(self.module.load_dlc()))
-        # self.log.info('├─ Scanning MODs...')
-        # self.log.info('│  └─ {} MODs Scanned!'.format(self.module.scan_mod()))
-        # self.log.info('├─ Loading MODs...')
-        # self.log.info('│  └─ {} MODs Loaded!'.format(self.module.load_mod()))
-        self.log.info('├─ Transferring Loading Complete Signal...')
-        self.net.send_loaded()
-        self.log.info('└─ Initialize Complete!')
 
     def config(self, data: dict) -> None:  # 新特性：设置引擎
         pass
