@@ -20,7 +20,7 @@ class DataManager(Prototypes.Singleton):
     def __init__(self):
         self.log = LogManager.LogManager()
 
-    def self_check(self):
+    def check_file_system(self):
         """
         # 数据初始化
         - 维护数据完整性

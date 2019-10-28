@@ -9,7 +9,7 @@ def init():
     e.log.info('├─ Fixing Path...')
     Tools.fix_path()
     e.log.info('├─ Checking Program Integrity...')
-    e.data.self_check()
+    e.data.check_file_system()
     e.log.info('├─ Loading Engine Configuration...')
     e.data.load_config(['config/config.ini'])
     e.log.info('├─ Scanning Plugins...')
