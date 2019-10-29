@@ -1,31 +1,136 @@
 # coding:utf-8
 
 # 自有库
-from . import DataManager
-from . import EventManager
-from . import LogManager
-from . import ModuleManager
-from . import NetManager
-from . import LockManager
-from . import BagManager
-from . import Prototypes
+from . import (NAPI, BagManager, DataManager, EventManager, LockManager,
+               LogManager, ModuleManager, NetManager, Prototypes)
 
-
+logger = LogManager.logger
 # 设计第一，架构第二，技术第三，实现第四
 # 多快好省，力争上游，为开发世界一流游戏引擎而奋斗
 
 
 class Engine(Prototypes.Singleton):
-    VERSION: str = '0.1.0-191026'
+    ENGINE_VERSION: str = '0.1.0-191029'
+    PROTOCOL_VERSION: str = '0.1.0-191029'
+    API_VERSION: str = '0.1.0-191029'
 
     def __init__(self) -> None:  # 架构初始化
-        self.log = LogManager.LogManager()  # 调试框架
+        print("<->")
+        logger.info('Era.js Game Engine')
+        logger.info('Engine Version: v{}'.format(self.ENGINE_VERSION))
+        logger.info('Protocol Version: v{}'.format(self.PROTOCOL_VERSION))
+        logger.info('API Version: v{}'.format(self.API_VERSION))
+        logger.info('Copyright © 2018-2019 Miswanting')
+        print()
+        # logger = LogManager.LogManager()  # 调试框架
         self.data = DataManager.DataManager()  # 数据管理
-        self.event = EventManager.EventManager()  # 基本事件框架
+        self.event = EventManager.EventDispatcher()  # 基本事件框架
         self.lock = LockManager.LockManager()  # 锁管理框架
         self.module = ModuleManager.ModuleManager()  # 模块管理
         self.net = NetManager.NetManager()  # 网络管理
         self.bag = BagManager.BagManager()  # 通信协议管理
+
+    def init(self):
+        def show_init_info(e):
+            if e.type == EventManager.EventType.ENGINE_INIT_STARTED:
+                logger.info('├─ Checking Program Integrity...')
+            elif e.type == EventManager.EventType.FILE_SYSTEM_CHECKED:
+                logger.info('├─ Loading Engine Configuration...')
+            elif e.type == EventManager.EventType.ENGINE_CONFIG_LOADED:
+                logger.info('├─ Scanning Plugins...')
+            elif e.type == EventManager.EventType.PLUGIN_FOUND:
+                logger.info('│  ├─ Plugin [{}] Found.'.format(e.data))
+            elif e.type == EventManager.EventType.PLUGIN_SCAN_FINISHED:
+                logger.info('│  └─ {} Plugins Found!'.format(e.data))
+                logger.info('├─ Loading Plugins...')
+            elif e.type == EventManager.EventType.PLUGIN_LOADED:
+                logger.info('│  ├─ Plugin [{}] Loaded.'.format(e.data))
+            elif e.type == EventManager.EventType.PLUGIN_LOAD_FINISHED:
+                logger.info('│  └─ {} Plugins Loaded!'.format(e.data))
+                logger.info('├─ Connecting Server...')
+            elif e.type == EventManager.EventType.SERVER_CONNECTED:
+                logger.info('├─ Server Connected.')
+                logger.info('├─ Sending Config to Server...')
+            elif e.type == EventManager.EventType.SERVER_CONFIG_SENT:
+                logger.info('├─ Send Config to Server Finished.')
+                logger.info('├─ Scanning Data Files...')
+            elif e.type == EventManager.EventType.DATA_FILE_FOUND:
+                logger.info('│  ├─ Data File [{}] Found.'.format(e.data))
+            elif e.type == EventManager.EventType.DATA_FILE_SCAN_FINISHED:
+                logger.info('│  └─ {} Data Files Found!'.format(e.data))
+                logger.info('├─ Loading Data Files...')
+            elif e.type == EventManager.EventType.DATA_FILE_LOADED:
+                logger.info('│  ├─ Data File [{}] Loaded.'.format(e.data))
+            elif e.type == EventManager.EventType.DATA_FILE_LOAD_FINISHED:
+                logger.info('│  └─ {} Data Files Loaded!'.format(e.data))
+                logger.info('├─ Scanning Scripts...')
+            elif e.type == EventManager.EventType.SCRIPT_FOUND:
+                logger.info('│  ├─ Script [{}] Found.'.format(e.data))
+            elif e.type == EventManager.EventType.SCRIPT_SCAN_FINISHED:
+                logger.info('│  └─ {} Scripts Found!'.format(e.data))
+                logger.info('├─ Loading Scripts...')
+            elif e.type == EventManager.EventType.SCRIPT_LOADED:
+                logger.info('│  ├─ Script [{}] Loaded.'.format(e.data))
+            elif e.type == EventManager.EventType.SCRIPT_LOAD_FINISHED:
+                logger.info('│  └─ {} Scripts Loaded!'.format(e.data))
+                logger.info('├─ Scanning DLCs...')
+            elif e.type == EventManager.EventType.DLC_FOUND:
+                logger.info('│  ├─ DLC [{}] Found.'.format(e.data))
+            elif e.type == EventManager.EventType.DLC_SCAN_FINISHED:
+                logger.info('│  └─ {} DLCs Found!'.format(e.data))
+                logger.info('├─ Loading DLCs...')
+            elif e.type == EventManager.EventType.DLC_LOADED:
+                logger.info('│  ├─ DLC [{}] Loaded.'.format(e.data))
+            elif e.type == EventManager.EventType.DLC_LOAD_FINISHED:
+                logger.info('│  └─ {} DLCs Loaded!'.format(e.data))
+                logger.info('├─ Scanning MODs...')
+            elif e.type == EventManager.EventType.MOD_FOUND:
+                logger.info('│  ├─ MOD [{}] Found.'.format(e.data))
+            elif e.type == EventManager.EventType.MOD_SCAN_FINISHED:
+                logger.info('│  └─ {} MODs Found!'.format(e.data))
+                logger.info('├─ Loading MODs...')
+            elif e.type == EventManager.EventType.MOD_LOADED:
+                logger.info('│  ├─ MOD [{}] Loaded.'.format(e.data))
+            elif e.type == EventManager.EventType.MOD_LOAD_FINISHED:
+                logger.info('│  └─ {} MODs Loaded!'.format(e.data))
+            elif e.type == EventManager.EventType.ENGINE_INIT_FINISHED:
+                logger.info('├─ Sending Loaded Signal to Server...')
+                logger.info('└─ Initialize Complete!')
+        init_event_types = [
+            (EventManager.EventType.ENGINE_INIT_STARTED, True),
+            (EventManager.EventType.FILE_SYSTEM_CHECKED, True),
+            (EventManager.EventType.ENGINE_CONFIG_LOADED, True),
+            (EventManager.EventType.PLUGIN_FOUND, False),
+            (EventManager.EventType.PLUGIN_SCAN_FINISHED, True),
+            (EventManager.EventType.PLUGIN_LOADED, False),
+            (EventManager.EventType.PLUGIN_LOAD_FINISHED, True),
+            (EventManager.EventType.SERVER_CONNECTED, True),
+            (EventManager.EventType.SERVER_CONFIG_SENT, True),
+            (EventManager.EventType.DATA_FILE_FOUND, False),
+            (EventManager.EventType.DATA_FILE_SCAN_FINISHED, True),
+            (EventManager.EventType.DATA_FILE_LOADED, False),
+            (EventManager.EventType.DATA_FILE_LOAD_FINISHED, True),
+            (EventManager.EventType.SCRIPT_FOUND, False),
+            (EventManager.EventType.SCRIPT_SCAN_FINISHED, True),
+            (EventManager.EventType.SCRIPT_LOADED, False),
+            (EventManager.EventType.SCRIPT_LOAD_FINISHED, True),
+            (EventManager.EventType.DLC_FOUND, False),
+            (EventManager.EventType.DLC_SCAN_FINISHED, True),
+            (EventManager.EventType.DLC_LOADED, False),
+            (EventManager.EventType.DLC_LOAD_FINISHED, True),
+            (EventManager.EventType.MOD_FOUND, False),
+            (EventManager.EventType.MOD_SCAN_FINISHED, True),
+            (EventManager.EventType.MOD_LOADED, False),
+            (EventManager.EventType.MOD_LOAD_FINISHED, True),
+            (EventManager.EventType.ENGINE_INIT_FINISHED, True),
+        ]
+        for data in init_event_types:
+            self.event.add_listener(
+                data[0],
+                show_init_info,
+                one_time=data[1],
+                priority=1
+            )
 
     def config(self, data: dict) -> None:  # 新特性：设置引擎
         pass

@@ -151,6 +151,10 @@ class Event:
         return self.__is_default_prevented
 
     @property
+    def is_propagation_stopped(self):
+        return self.__is_propagation_stopped
+
+    @property
     def stoppable(self):
         return self.__stoppable
 
@@ -171,12 +175,14 @@ class EventDispatcher(Prototypes.Singleton):
     def __init__(self):
         self.log = LogManager.LogManager()
 
-    def add_listener(self, type, listener, priority=0, removable=True):
+    def add_listener(self, type, listener, priority=0,
+                     removable=True, one_time=False):
         new_listener = {
             'type': type,
             'listener': listener,
             'priority': priority,
             'removable': removable,
+            'one_time': one_time,
         }
         self.__listener_list.append(new_listener)
         self.__listener_list.sort(key=lambda x: -x['priority'])
@@ -205,12 +211,19 @@ class EventDispatcher(Prototypes.Singleton):
 
     def dispatch(self, type, data=None):
         event = Event(type, data)
-        for each in self.__listener_list:
-            if event['type'] == each['type']:
-                t = threading.Thread(
-                    target=each['listener'],
-                    args=(event, ),
-                    kwargs={}
-                )
-                t.start()
+        for i, listener in enumerate(self.__listener_list):
+            if event.is_propagation_stopped:
+                break
+            if event.is_default_prevented and listener['priority'] == 0:
+                break
+            if event.type != listener['type']:
+                continue
+            t = threading.Thread(
+                target=listener['listener'],
+                args=(event, ),
+                kwargs={}
+            )
+            if listener['one_time']:
+                self.__listener_list.pop(i)
+            t.start()
     emit = dispatch

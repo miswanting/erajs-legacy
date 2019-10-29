@@ -1,68 +1,96 @@
-import os
-import sys
-import csv
 import configparser
-import zipfile
+import csv
 import json
-
+import os
+import zipfile
 
 import yaml
 
-from . import LogManager
-from . import Prototypes
-# import LogManager
+from . import EventManager, LogManager, Prototypes
+
+logger = LogManager.logger
+dispatcher = EventManager.EventDispatcher()
 
 
 class DataManager(Prototypes.Singleton):
-    data = {}
-    pool = []
+    # data = {}
+    # pool = []
 
     def __init__(self):
-        self.log = LogManager.LogManager()
+        # logger = LogManager.LogManager()
+        self.__data = {}
+
+        def handle_engine_init_started(e):
+            self.check_file_system()
+        listener_factory = [
+            (
+                EventManager.EventType.ENGINE_INIT_STARTED,
+                handle_engine_init_started,
+                True,
+            ),
+        ]
+        for each in listener_factory:
+            dispatcher.add_listener(
+                each[0],
+                each[1],
+                one_time=each[2],
+            )
+
+    @property
+    def data(self):
+        return self.__data
+
+    @data.setter
+    def data(self, value):
+        self.__data = value
 
     def check_file_system(self):
         """
         # 数据初始化
         - 维护数据完整性
-        - 维护文件夹完整性
+        - 维护数据文件夹完整性
+        - 维护数据文件完整性
         """
-        self.data = {
+        self.__data = {
             "config": {
-                "plugin": {},  # 插件
-                "dlc": {},  # DLC
-                "mod": {},  # MOD
+                "plugin": {},  # 插件激活状态
+                "dlc": {},  # DLC激活状态
+                "mod": {},  # MOD激活状态
             },
-            "class": {},
-            "api": {},
-            "tmp": {},
-            "entity": {},
             "db": {},  # 存档的数据
-            "act": {},  # ？
-            "kojo": {}
+            # "class": {},
+            # "api": {},
+            # "tmp": {},
+            # "entity": {},
+            # "act": {},
+            # "kojo": {}
         }
         check_folder_list = [
-            'config',
-            'dlc',
-            'logic',
-            'mod',
-            'data',
-            'save',
-            'script'
+            'config',  # 配置文件存放处
+            'data',  # 静态数据文件存放处
+            'logic',  # 核心逻辑脚本存放处
+            'save',  # 存档文件存放处
+            'scripts'  # 热加载脚本存放处
+            'dlc',  # DLC包存放处
+            'mod',  # MOD包存放处
+            'resources',  # 二进制数据文件存放处（图片，视频，音频等）
         ]
         check_file_list = [
-            'config/config.ini'
+            'config/config.ini'  # 配置信息统一存放于此
         ]
         # 补全文件夹
         for each in check_folder_list:
             if not os.path.isdir(each):
-                self.log.warn(
-                    'Folder {} not Exist. Creating...'.format(each))
+                logger.warn(
+                    'Folder [{}] Missing. Creating...'.format(each))
                 os.mkdir(each)
         # 补全文件
         for each in check_file_list:
             if not os.path.isfile(each):
-                self.log.warn('File {} not Exist. Creating...'.format(each))
+                logger.warn('File [{}] Missing. Creating...'.format(each))
                 open(each, 'w')
+        dispatcher.dispatch(
+            EventManager.EventType.FILE_SYSTEM_CHECKED)
 
     def load_config(self, config_path):
         """
@@ -105,7 +133,7 @@ class DataManager(Prototypes.Singleton):
         def match(item, pattern):
             found = True
             for each_key in pattern.keys():
-                if not each_key in item.keys():
+                if each_key not in item.keys():
                     found = False
                     break
             if found:
@@ -144,7 +172,7 @@ class DataManager(Prototypes.Singleton):
         for each in files:
             key = self.path2dot(each)[0]
             # 载入文件
-            self.log.info('│  ├─ Loading [{}]...'.format(each))
+            logger.info('│  ├─ Loading [{}]...'.format(each))
             if not send_func == None:
                 bag = {
                     'type': 'load_text',
