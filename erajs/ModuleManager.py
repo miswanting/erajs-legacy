@@ -12,6 +12,18 @@ class ModuleManager:
     def __init__(self):
         self.log = LogManager.LogManager()
 
+        # def handle_engine_config_load(e):
+        #     self.scan_plugin('config/config.ini')
+
+        # def handle_plugin_scann_finished(e):
+        #     self.load_plugin()
+
+        # def handle_plugin_load_finished(e):
+        #     self.connect_server()
+
+        # def handle_server_connected(e):
+        #     self.send_config_to_server()
+
     def scan_plugin(self, plugin_config):
         "扫描插件的现状"
         config = {

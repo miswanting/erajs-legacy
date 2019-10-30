@@ -15,7 +15,7 @@ class Engine(Prototypes.Singleton):
     API_VERSION: str = '0.1.0-191029'
 
     def __init__(self) -> None:  # 架构初始化
-        print("<->")
+        print()
         logger.info('Era.js Game Engine')
         logger.info('Engine Version: v{}'.format(self.ENGINE_VERSION))
         logger.info('Protocol Version: v{}'.format(self.PROTOCOL_VERSION))

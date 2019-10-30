@@ -22,10 +22,35 @@ class DataManager(Prototypes.Singleton):
 
         def handle_engine_init_started(e):
             self.check_file_system()
+
+        def handle_file_system_checked(e):
+            self.load_config('config/config.ini')
+
+        def handle_server_config_sent(e):
+            self.scan_data_files()
+
+        def handle_data_file_scan_finished(e):
+            self.load_data_files()
+
         listener_factory = [
             (
                 EventManager.EventType.ENGINE_INIT_STARTED,
                 handle_engine_init_started,
+                True,
+            ),
+            (
+                EventManager.EventType.DATA_FILE_SCAN_FINISHED,
+                handle_file_system_checked,
+                True,
+            ),
+            (
+                EventManager.EventType.DATA_FILE_LOAD_FINISHED,
+                handle_server_config_sent,
+                True,
+            ),
+            (
+                EventManager.EventType.SERVER_CONFIG_SENT,
+                handle_data_file_scan_finished,
                 True,
             ),
         ]
