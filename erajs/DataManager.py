@@ -10,6 +10,7 @@ from . import EventManager, LogManager, Prototypes
 
 logger = LogManager.logger
 dispatcher = EventManager.EventDispatcher()
+event_type = EventManager.EventType
 
 
 class DataManager(Prototypes.Singleton):
@@ -24,7 +25,7 @@ class DataManager(Prototypes.Singleton):
             self.check_file_system()
 
         def handle_file_system_checked(e):
-            self.load_config('config/config.ini')
+            self.load_config(['config/config.ini'])
 
         def handle_server_config_sent(e):
             self.scan_data_files()
@@ -34,22 +35,22 @@ class DataManager(Prototypes.Singleton):
 
         listener_factory = [
             (
-                EventManager.EventType.ENGINE_INIT_STARTED,
+                event_type.ENGINE_INIT_STARTED,
                 handle_engine_init_started,
                 True,
             ),
             (
-                EventManager.EventType.DATA_FILE_SCAN_FINISHED,
+                event_type.FILE_SYSTEM_CHECKED,
                 handle_file_system_checked,
                 True,
             ),
             (
-                EventManager.EventType.DATA_FILE_LOAD_FINISHED,
+                event_type.SERVER_CONFIG_SENT,
                 handle_server_config_sent,
                 True,
             ),
             (
-                EventManager.EventType.SERVER_CONFIG_SENT,
+                event_type.DATA_FILE_SCAN_FINISHED,
                 handle_data_file_scan_finished,
                 True,
             ),
@@ -78,14 +79,14 @@ class DataManager(Prototypes.Singleton):
         """
         self.__data = {
             "config": {
-                "plugin": {},  # 插件激活状态
-                "dlc": {},  # DLC激活状态
-                "mod": {},  # MOD激活状态
+                "plugins": {},  # 插件激活状态
+                "dlcs": {},  # DLC激活状态
+                "mods": {},  # MOD激活状态
             },
             "db": {},  # 存档的数据
             # "class": {},
             # "api": {},
-            # "tmp": {},
+            "tmp": {},
             # "entity": {},
             # "act": {},
             # "kojo": {}
@@ -99,6 +100,7 @@ class DataManager(Prototypes.Singleton):
             'dlc',  # DLC包存放处
             'mod',  # MOD包存放处
             'resources',  # 二进制数据文件存放处（图片，视频，音频等）
+            'plugins',  # 引擎插件
         ]
         check_file_list = [
             'config/config.ini'  # 配置信息统一存放于此
@@ -107,23 +109,25 @@ class DataManager(Prototypes.Singleton):
         for each in check_folder_list:
             if not os.path.isdir(each):
                 logger.warn(
-                    'Folder [{}] Missing. Creating...'.format(each))
+                    '│  ├─ Folder [{}] Missing. Creating...'.format(each))
                 os.mkdir(each)
         # 补全文件
         for each in check_file_list:
             if not os.path.isfile(each):
-                logger.warn('File [{}] Missing. Creating...'.format(each))
+                logger.warn(
+                    '│  ├─ File [{}] Missing. Creating...'.format(each))
                 open(each, 'w')
-        dispatcher.dispatch(
-            EventManager.EventType.FILE_SYSTEM_CHECKED)
+        dispatcher.dispatch(event_type.FILE_SYSTEM_CHECKED)
 
     def load_config(self, config_path):
         """
         从路径读入ConfigPath，并挂载到data config key
         """
+        logger.info('├─ Loading Engine Config...')
         config = self.load_data(config_path)
         for each in config['config.config'].keys():
             self.data['config'][each] = config['config.config'][each]
+        dispatcher.dispatch(event_type.ENGINE_CONFIG_LOADED)
 
     def scan(self, path_to_folder):
         fileList = []

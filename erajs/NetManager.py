@@ -19,6 +19,12 @@ class NetManager:
     def __init__(self):
         self.log = LogManager.LogManager()
 
+        def handle_plugin_load_finished(e):
+            self.connect_server()
+
+        def handle_server_connected(e):
+            self.send_config_to_server()
+
     def _parse_bag(self, bag):
         target = ''
         value = {}

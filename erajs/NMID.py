@@ -1,15 +1,31 @@
-from . import EventManager, NEngine, Tools, LogManager, NAPI
+from . import EventManager, NEngine, LogManager
 
 e = NEngine.Engine()
 logger = LogManager.logger
+event_type = EventManager.EventType
+dispatcher = EventManager.EventDispatcher()
+
+
+def config(**kw):
+    logger.debug(kw)
 
 
 def init():
-    logger.info('┌─ Era.js Engine Initializing...')
-    logger.info('├─ Fixing Path...')
-    Tools.fix_path()
     e.init()
     e.event.dispatch(EventManager.EventType.ENGINE_INIT_STARTED)
+    is_init_finished = False
+
+    def change_init_status(e):
+        nonlocal is_init_finished
+        is_init_finished = True
+    dispatcher.add_listener(
+        event_type.ENGINE_INIT_FINISHED,
+        change_init_status,
+        one_time=True
+    )
+    while True:
+        if is_init_finished:
+            break
     # e.data.check_file_system()
     # logger.info('├─ Loading Engine Configuration...')
     # e.data.load_config(['config/config.ini'])

@@ -1,8 +1,8 @@
 # coding:utf-8
 
 # 自有库
-from . import (NAPI, BagManager, DataManager, EventManager, LockManager,
-               LogManager, ModuleManager, NetManager, Prototypes)
+from . import (BagManager, DataManager, EventManager, LockManager, LogManager,
+               ModuleManager, NetManager, Prototypes, Tools)
 
 logger = LogManager.logger
 # 设计第一，架构第二，技术第三，实现第四
@@ -33,10 +33,14 @@ class Engine(Prototypes.Singleton):
     def init(self):
         def show_init_info(e):
             if e.type == EventManager.EventType.ENGINE_INIT_STARTED:
-                logger.info('├─ Checking Program Integrity...')
+                logger.info('┌─ Era.js Engine Initializing...')
+                logger.info('├─ Fixing Path...')
+                Tools.fix_path()
+                logger.info('├─ Checking Data Integrity...')
             elif e.type == EventManager.EventType.FILE_SYSTEM_CHECKED:
-                logger.info('├─ Loading Engine Configuration...')
+                logger.info('│  └─ Data Integrity Checked!')
             elif e.type == EventManager.EventType.ENGINE_CONFIG_LOADED:
+                logger.info('│  └─ Engine Config Loaded!')
                 logger.info('├─ Scanning Plugins...')
             elif e.type == EventManager.EventType.PLUGIN_FOUND:
                 logger.info('│  ├─ Plugin [{}] Found.'.format(e.data))

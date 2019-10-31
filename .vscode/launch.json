@@ -8,14 +8,14 @@
             "name": "Python: API",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/test_API.py",
+            "program": "${workspaceFolder}/API_Sample.py",
             "console": "integratedTerminal"
         },
         {
             "name": "Python: NAPI",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/test_NAPI.py",
+            "program": "${workspaceFolder}/NAPI_Sample.py",
             "console": "integratedTerminal"
         }
     ]

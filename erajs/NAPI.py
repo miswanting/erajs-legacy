@@ -80,7 +80,7 @@ def critical(*arg) -> None:
 
 
 # 引擎生命周期
-def config(cfg: object, **kw) -> None:
+def config(**kw) -> None:
     """
     # 配置引擎参数
     用于设置引擎的
@@ -115,7 +115,7 @@ def config(cfg: object, **kw) -> None:
     }
     ```
     """
-    return m.config()
+    return m.config(**kw)
 
 
 def init() -> None:

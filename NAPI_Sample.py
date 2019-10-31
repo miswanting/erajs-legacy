@@ -1,5 +1,13 @@
 # coding:utf-8
-import erajs.api as a
+import erajs.NAPI as a
+
+
+def cover():
+    a.title('EraLife')
+    a.h('EraLife')
+    a.t()
+    a.t()
+    a.b('新建游戏', a.goto, cover)
 
 
 def start_new_game():
@@ -16,10 +24,14 @@ def default_person():
     a.t()
     a.t()
 
+
 if __name__ == "__main__":
+    # 新使用方法
+    # a.config()
+    # a.init()
+    # a.entry()
+    # a.start()
+    # 旧使用方法
+    a.config()
     a.init()
-    a.title('EraLife')
-    a.h('EraLife')
-    a.t()
-    a.t()
-    a.b('新建游戏', a.goto, start_new_game)
+    a.goto(cover)

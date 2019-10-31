@@ -1,9 +1,13 @@
-import os
 import configparser
+import os
 import sys
+from pathlib import Path
 
-from . import LogManager
-from . import NEngine
+from . import EventManager, LogManager, NEngine
+
+logger = LogManager.logger
+dispatcher = EventManager.EventDispatcher()
+event_type = EventManager.EventType
 # import LogManager
 # import NEngine
 
@@ -12,17 +16,54 @@ class ModuleManager:
     def __init__(self):
         self.log = LogManager.LogManager()
 
-        # def handle_engine_config_load(e):
-        #     self.scan_plugin('config/config.ini')
+        def handle_engine_config_loaded(e):
+            self.scan_plugins()
 
-        # def handle_plugin_scann_finished(e):
-        #     self.load_plugin()
+        def handle_plugin_scan_finished(e):
+            self.load_plugins()
 
-        # def handle_plugin_load_finished(e):
-        #     self.connect_server()
+        def handle_data_file_load_finished(e):
+            self.load_plugins()
 
-        # def handle_server_connected(e):
-        #     self.send_config_to_server()
+        def handle_script_scan_finished(e):
+            self.load_plugins()
+
+        listener_factory = [
+            (
+                event_type.ENGINE_CONFIG_LOADED,
+                handle_engine_config_loaded,
+                True,
+            ),
+            (
+                event_type.PLUGIN_SCAN_FINISHED,
+                handle_plugin_scan_finished,
+                True,
+            ),
+            (
+                event_type.DATA_FILE_LOAD_FINISHED,
+                handle_data_file_load_finished,
+                True,
+            ),
+            (
+                event_type.SCRIPT_SCAN_FINISHED,
+                handle_script_scan_finished,
+                True,
+            ),
+        ]
+        for each in listener_factory:
+            dispatcher.add_listener(
+                each[0],
+                each[1],
+                one_time=each[2],
+            )
+
+    def scan_plugins(self):
+        # scan收集文件信息
+        # path = Path('plugins')
+        dispatcher.dispatch(event_type.PLUGIN_SCAN_FINISHED)
+
+    def load_plugins(self):
+        dispatcher.dispatch(event_type.PLUGIN_LOAD_FINISHED)
 
     def scan_plugin(self, plugin_config):
         "扫描插件的现状"
