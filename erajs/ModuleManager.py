@@ -60,9 +60,11 @@ class ModuleManager:
     def scan_plugins(self):
         # scan收集文件信息
         # path = Path('plugins')
+        logger.info('├─ Scanning Plugins...')
         dispatcher.dispatch(event_type.PLUGIN_SCAN_FINISHED)
 
     def load_plugins(self):
+        logger.info('├─ Loading Plugins...')
         dispatcher.dispatch(event_type.PLUGIN_LOAD_FINISHED)
 
     def scan_plugin(self, plugin_config):

@@ -131,12 +131,23 @@ def run() -> None:
 
 
 # 数据获取
-std = m.std()
-data = m.data()
-save = m.save()
-
+std = m.std()  # data文件夹中的静态数据，全局引用
+data = m.data()  # 【旧】data文件夹中的数据文件，全局引用，拆成
+save = m.save()  # 当前存档的存档数据
+cache = m.cache()  # 缓存数据，动态数据，全局引用
+# File
+# cfg/: cfg
+# data/: std
+# cache/: cache
+# save/: data, tmp, save
+# Data
+# Server: cfg + std + cache
+# World: data + tmp
+# Player: save + ram
 
 # 窗口方法
+
+
 def title(text: Any) -> None:
     pass
 

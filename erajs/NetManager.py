@@ -1,11 +1,16 @@
-import os
 import json
+import os
 import socket
 import threading
 import time
 
-from . import LogManager
+from . import EventManager, LogManager
+
 # import LogManager
+
+logger = LogManager.logger
+dispatcher = EventManager.EventDispatcher()
+event_type = EventManager.EventType
 
 
 class NetManager:
@@ -20,10 +25,29 @@ class NetManager:
         self.log = LogManager.LogManager()
 
         def handle_plugin_load_finished(e):
-            self.connect_server()
+            self.connect()
 
         def handle_server_connected(e):
-            self.send_config_to_server()
+            self.send_config()
+
+        listener_factory = [
+            (
+                event_type.PLUGIN_LOAD_FINISHED,
+                handle_plugin_load_finished,
+                True,
+            ),
+            (
+                event_type.SERVER_CONNECTED,
+                handle_server_connected,
+                True,
+            ),
+        ]
+        for each in listener_factory:
+            dispatcher.add_listener(
+                each[0],
+                each[1],
+                one_time=each[2],
+            )
 
     def _parse_bag(self, bag):
         target = ''
@@ -62,6 +86,7 @@ class NetManager:
             if self.isConnected:
                 break
             time.sleep(0.1)
+        dispatcher.dispatch(event_type.SERVER_CONNECTED)
 
     def send_config(self):
         bag = {
@@ -72,6 +97,7 @@ class NetManager:
             'to': 'm'
         }
         self.send(bag)
+        dispatcher.dispatch(event_type.SERVER_CONFIG_SENT)
 
     def send_loaded(self):
         bag = {

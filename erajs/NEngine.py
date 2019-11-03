@@ -41,12 +41,10 @@ class Engine(Prototypes.Singleton):
                 logger.info('│  └─ Data Integrity Checked!')
             elif e.type == EventManager.EventType.ENGINE_CONFIG_LOADED:
                 logger.info('│  └─ Engine Config Loaded!')
-                logger.info('├─ Scanning Plugins...')
             elif e.type == EventManager.EventType.PLUGIN_FOUND:
                 logger.info('│  ├─ Plugin [{}] Found.'.format(e.data))
             elif e.type == EventManager.EventType.PLUGIN_SCAN_FINISHED:
                 logger.info('│  └─ {} Plugins Found!'.format(e.data))
-                logger.info('├─ Loading Plugins...')
             elif e.type == EventManager.EventType.PLUGIN_LOADED:
                 logger.info('│  ├─ Plugin [{}] Loaded.'.format(e.data))
             elif e.type == EventManager.EventType.PLUGIN_LOAD_FINISHED:
@@ -56,7 +54,7 @@ class Engine(Prototypes.Singleton):
                 logger.info('├─ Server Connected.')
                 logger.info('├─ Sending Config to Server...')
             elif e.type == EventManager.EventType.SERVER_CONFIG_SENT:
-                logger.info('├─ Send Config to Server Finished.')
+                logger.info('│  └─ Config to Server Sent.')
                 logger.info('├─ Scanning Data Files...')
             elif e.type == EventManager.EventType.DATA_FILE_FOUND:
                 logger.info('│  ├─ Data File [{}] Found.'.format(e.data))

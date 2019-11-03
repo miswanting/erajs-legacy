@@ -5,6 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: 当前文件",
+            "type": "python",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/loogoos/dot_path/",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Python: API",
             "type": "python",
             "request": "launch",

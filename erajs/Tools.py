@@ -9,9 +9,23 @@ import secrets
 #     m = hashlib.md5()
 #     m.update(str(random.random()).encode("utf-8"))
 #     return m.hexdigest().upper()
+def file_hash(path):
+    """
+    # 获取文件MD5值
+    """
+    BLOCKSIZE = 65536
+    hasher = hashlib.md5()
+    with open(path, 'rb') as t:
+        while True:
+            buffer = t.read(BLOCKSIZE)
+            if len(buffer) > 0:
+                hasher.update(buffer)
+            else:
+                break
+    return hasher.hexdigest().upper()
 
 
-def new_hash(level=8):
+def random_hash(level=4):
     """
     # 随机哈希值生成器
     返回随机生成的哈希字符串

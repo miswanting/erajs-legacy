@@ -76,5 +76,9 @@ def data():
     pass
 
 
+def cache():
+    pass
+
+
 def save():
     pass
