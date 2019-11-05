@@ -106,7 +106,8 @@ def find_path_by_priority(dot_path, simple=True):
         sep2 = len(path_element)-1
         while True:
             path = "{}\\{}.{}".format(path_element[: -1], path_element[: -1])
-    if os.path.exists()
+    if os.path.exists():
+        pass
     return
 
 
