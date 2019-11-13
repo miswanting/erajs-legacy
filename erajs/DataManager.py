@@ -237,13 +237,13 @@ class DataManager(Prototypes.Singleton):
     def scan_data_files(self):
         file_list = self.scan('data')
         dispatcher.dispatch(
-            event_type.DATA_FILE_SCAN_FINISHED, len(file_list)
+            event_type.DATA_FILES_SCAN_FINISHED, len(file_list)
         )
 
     def load_data_files(self):
         file_list = self.scan('data')
         dispatcher.dispatch(
-            event_type.DATA_FILE_SCAN_FINISHED, len(file_list)
+            event_type.DATA_FILES_LOAD_FINISHED, len(file_list)
         )
 
     # TODO：↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
@@ -382,7 +382,7 @@ class DataManager(Prototypes.Singleton):
                 True,
             ),
             (
-                event_type.DATA_FILE_SCAN_FINISHED,
+                event_type.DATA_FILES_SCAN_FINISHED,
                 handle_data_file_scan_finished,
                 True,
             ),

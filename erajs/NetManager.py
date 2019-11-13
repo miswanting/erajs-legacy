@@ -32,7 +32,7 @@ class NetManager:
 
         listener_factory = [
             (
-                event_type.PLUGIN_LOAD_FINISHED,
+                event_type.PLUGINS_LOAD_FINISHED,
                 handle_plugin_load_finished,
                 True,
             ),

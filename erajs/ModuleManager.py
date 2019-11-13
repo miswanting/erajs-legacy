@@ -8,8 +8,6 @@ from . import EventManager, LogManager, NEngine
 logger = LogManager.logger
 dispatcher = EventManager.EventDispatcher()
 event_type = EventManager.EventType
-# import LogManager
-# import NEngine
 
 
 class ModuleManager:
@@ -19,14 +17,26 @@ class ModuleManager:
         def handle_engine_config_loaded(e):
             self.scan_plugins()
 
-        def handle_plugin_scan_finished(e):
+        def handle_plugins_scan_finished(e):
             self.load_plugins()
 
-        def handle_data_file_load_finished(e):
-            self.load_plugins()
+        def handle_data_files_load_finished(e):
+            self.scan_scripts()
 
-        def handle_script_scan_finished(e):
-            self.load_plugins()
+        def handle_scripts_scan_finished(e):
+            self.load_scripts()
+
+        def handle_scripts_load_finished(e):
+            self.scan_dlcs()
+
+        def handle_dlcs_scan_finished(e):
+            self.load_dlcs()
+
+        def handle_dlcs_load_finished(e):
+            self.scan_mods()
+
+        def handle_mods_scan_finished(e):
+            self.load_mods()
 
         listener_factory = [
             (
@@ -35,18 +45,38 @@ class ModuleManager:
                 True,
             ),
             (
-                event_type.PLUGIN_SCAN_FINISHED,
-                handle_plugin_scan_finished,
+                event_type.PLUGINS_SCAN_FINISHED,
+                handle_plugins_scan_finished,
                 True,
             ),
             (
-                event_type.DATA_FILE_LOAD_FINISHED,
-                handle_data_file_load_finished,
+                event_type.DATA_FILES_LOAD_FINISHED,
+                handle_data_files_load_finished,
                 True,
             ),
             (
-                event_type.SCRIPT_SCAN_FINISHED,
-                handle_script_scan_finished,
+                event_type.SCRIPTS_SCAN_FINISHED,
+                handle_scripts_scan_finished,
+                True,
+            ),
+            (
+                event_type.SCRIPTS_LOAD_FINISHED,
+                handle_scripts_load_finished,
+                True,
+            ),
+            (
+                event_type.DLCS_SCAN_FINISHED,
+                handle_dlcs_scan_finished,
+                True,
+            ),
+            (
+                event_type.DLCS_LOAD_FINISHED,
+                handle_dlcs_load_finished,
+                True,
+            ),
+            (
+                event_type.MODS_SCAN_FINISHED,
+                handle_mods_scan_finished,
                 True,
             ),
         ]
@@ -61,11 +91,11 @@ class ModuleManager:
         # scan收集文件信息
         # path = Path('plugins')
         logger.info('├─ Scanning Plugins...')
-        dispatcher.dispatch(event_type.PLUGIN_SCAN_FINISHED)
+        dispatcher.dispatch(event_type.PLUGINS_SCAN_FINISHED)
 
     def load_plugins(self):
         logger.info('├─ Loading Plugins...')
-        dispatcher.dispatch(event_type.PLUGIN_LOAD_FINISHED)
+        dispatcher.dispatch(event_type.PLUGINS_LOAD_FINISHED)
 
     def scan_plugin(self, plugin_config):
         "扫描插件的现状"
@@ -119,7 +149,7 @@ class ModuleManager:
                         num_of_loaded_plugins += 1
         return num_of_loaded_plugins
 
-    def scan_script(self):
+    def scan_scripts(self):
         # 扫描插件文件
         script_path_list = self.scan('script')
         # 提取插件名称
@@ -129,9 +159,10 @@ class ModuleManager:
                 '/', '\\').split('\\')[-1].split('.')[0:-1])
             self.log.info('│  ├─ Scanning [{}]...'.format(script_name))
             script_name_list.append(script_name)
-        return len(script_path_list)
+        dispatcher.dispatch(event_type.SCRIPTS_SCAN_FINISHED)
+        # return len(script_path_list)
 
-    def load_script(self, send_func=None):
+    def load_scripts(self, send_func=None):
         num_of_loaded_script = 0
         script_path_list = self.scan('script')
         for every in script_path_list:
@@ -150,80 +181,85 @@ class ModuleManager:
                 sys.argv = [self]
                 exec(''.join(target.readlines()))
             num_of_loaded_script += 1
-        return num_of_loaded_script
+        dispatcher.dispatch(event_type.SCRIPTS_LOAD_FINISHED)
+        # return num_of_loaded_script
 
-    def scan_dlc(self):
-        # 扫描插件文件
-        dlc_path_list = self.scan('dlc')
-        # 提取插件名称
-        dlc_name_list = []
-        for each in dlc_path_list:
-            dlc_name = '.'.join(each.replace(
-                '/', '\\').split('\\')[-1].split('.')[0:-1])
-            self.log.info('│  ├─ Scanning [{}]...'.format(dlc_name))
-            dlc_name_list.append(dlc_name)
-        # 比对配置信息
-        for each in dlc_name_list:
-            if not each.lower() in e.data.data['config']['dlc'].keys():
-                e.data.data['config']['dlc'][each.lower()] = 'no'
-        # 同步
-        config = configparser.ConfigParser()
-        config.read_dict(e.data.data['config'])
-        with open('config/config.ini', 'w') as configfile:
-            config.write(configfile)
-        return len(dlc_path_list)
+    def scan_dlcs(self):
+        # # 扫描插件文件
+        # dlc_path_list = self.scan('dlc')
+        # # 提取插件名称
+        # dlc_name_list = []
+        # for each in dlc_path_list:
+        #     dlc_name = '.'.join(each.replace(
+        #         '/', '\\').split('\\')[-1].split('.')[0:-1])
+        #     self.log.info('│  ├─ Scanning [{}]...'.format(dlc_name))
+        #     dlc_name_list.append(dlc_name)
+        # # 比对配置信息
+        # for each in dlc_name_list:
+        #     if not each.lower() in e.data.data['config']['dlc'].keys():
+        #         e.data.data['config']['dlc'][each.lower()] = 'no'
+        # # 同步
+        # config = configparser.ConfigParser()
+        # config.read_dict(e.data.data['config'])
+        # with open('config/config.ini', 'w') as configfile:
+        #     config.write(configfile)
+        # return len(dlc_path_list)
+        dispatcher.dispatch(event_type.DLCS_SCAN_FINISHED)
 
-    def load_dlc(self):
-        num_of_loaded_dlcs = 0
-        for each in e.data.data['config']['dlc'].keys():
-            if e.data.data['config']['dlc'][each] == 'yes':
-                dlc_path_list = self.scan('dlc')
-                for every in dlc_path_list:
-                    module_name = '.'.join(every.replace(
-                        '/', '\\').split('\\')[-1].split('.')[0:-1])
-                    if module_name.lower() == each:
-                        self.log.info(
-                            '│  ├─ Loading [{}]...'.format(module_name))
-                        with open(every, 'r', encoding='utf8') as target:
-                            sys.argv = [self]
-                            exec(''.join(target.readlines()))
-                        num_of_loaded_dlcs += 1
-        return num_of_loaded_dlcs
+    def load_dlcs(self):
+        # num_of_loaded_dlcs = 0
+        # for each in e.data.data['config']['dlc'].keys():
+        #     if e.data.data['config']['dlc'][each] == 'yes':
+        #         dlc_path_list = self.scan('dlc')
+        #         for every in dlc_path_list:
+        #             module_name = '.'.join(every.replace(
+        #                 '/', '\\').split('\\')[-1].split('.')[0:-1])
+        #             if module_name.lower() == each:
+        #                 self.log.info(
+        #                     '│  ├─ Loading [{}]...'.format(module_name))
+        #                 with open(every, 'r', encoding='utf8') as target:
+        #                     sys.argv = [self]
+        #                     exec(''.join(target.readlines()))
+        #                 num_of_loaded_dlcs += 1
+        dispatcher.dispatch(event_type.DLCS_LOAD_FINISHED)
+        # return num_of_loaded_dlcs
 
-    def scan_mod(self):
-        # 扫描插件文件
-        mod_path_list = self.scan('mod')
-        # 提取插件名称
-        mod_name_list = []
-        for each in mod_path_list:
-            mod_name = '.'.join(each.replace(
-                '/', '\\').split('\\')[-1].split('.')[0:-1])
-            self.log.info('│  ├─ Scanning [{}]...'.format(mod_name))
-            mod_name_list.append(mod_name)
-        # 比对配置信息
-        for each in mod_name_list:
-            if not each.lower() in e.data.data['config']['mod'].keys():
-                e.data.data['config']['mod'][each.lower()] = 'no'
-        # 同步
-        config = configparser.ConfigParser()
-        config.read_dict(e.data.data['config'])
-        with open('config/config.ini', 'w') as configfile:
-            config.write(configfile)
-        return len(mod_path_list)
+    def scan_mods(self):
+        # # 扫描插件文件
+        # mod_path_list = self.scan('mod')
+        # # 提取插件名称
+        # mod_name_list = []
+        # for each in mod_path_list:
+        #     mod_name = '.'.join(each.replace(
+        #         '/', '\\').split('\\')[-1].split('.')[0:-1])
+        #     self.log.info('│  ├─ Scanning [{}]...'.format(mod_name))
+        #     mod_name_list.append(mod_name)
+        # # 比对配置信息
+        # for each in mod_name_list:
+        #     if not each.lower() in e.data.data['config']['mod'].keys():
+        #         e.data.data['config']['mod'][each.lower()] = 'no'
+        # # 同步
+        # config = configparser.ConfigParser()
+        # config.read_dict(e.data.data['config'])
+        # with open('config/config.ini', 'w') as configfile:
+        #     config.write(configfile)
+        dispatcher.dispatch(event_type.MODS_SCAN_FINISHED)
+        # return len(mod_path_list)
 
-    def load_mod(self):
-        num_of_loaded_mods = 0
-        for each in e.data.data['config']['mod'].keys():
-            if e.data.data['config']['mod'][each] == 'yes':
-                mod_path_list = self.scan('mod')
-                for every in mod_path_list:
-                    module_name = '.'.join(every.replace(
-                        '/', '\\').split('\\')[-1].split('.')[0:-1])
-                    if module_name.lower() == each:
-                        self.log.info(
-                            '│  ├─ Loading [{}]...'.format(module_name))
-                        with open(every, 'r', encoding='utf8') as target:
-                            sys.argv = [self]
-                            exec(''.join(target.readlines()))
-                        num_of_loaded_mods += 1
-        return num_of_loaded_mods
+    def load_mods(self):
+        # num_of_loaded_mods = 0
+        # for each in e.data.data['config']['mod'].keys():
+        #     if e.data.data['config']['mod'][each] == 'yes':
+        #         mod_path_list = self.scan('mod')
+        #         for every in mod_path_list:
+        #             module_name = '.'.join(every.replace(
+        #                 '/', '\\').split('\\')[-1].split('.')[0:-1])
+        #             if module_name.lower() == each:
+        #                 self.log.info(
+        #                     '│  ├─ Loading [{}]...'.format(module_name))
+        #                 with open(every, 'r', encoding='utf8') as target:
+        #                     sys.argv = [self]
+        #                     exec(''.join(target.readlines()))
+        #                 num_of_loaded_mods += 1
+        dispatcher.dispatch(event_type.MODS_LOAD_FINISHED)
+        # return num_of_loaded_mods

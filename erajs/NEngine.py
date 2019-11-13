@@ -43,11 +43,11 @@ class Engine(Prototypes.Singleton):
                 logger.info('│  └─ Engine Config Loaded!')
             elif e.type == EventManager.EventType.PLUGIN_FOUND:
                 logger.info('│  ├─ Plugin [{}] Found.'.format(e.data))
-            elif e.type == EventManager.EventType.PLUGIN_SCAN_FINISHED:
+            elif e.type == EventManager.EventType.PLUGINS_SCAN_FINISHED:
                 logger.info('│  └─ {} Plugins Found!'.format(e.data))
             elif e.type == EventManager.EventType.PLUGIN_LOADED:
                 logger.info('│  ├─ Plugin [{}] Loaded.'.format(e.data))
-            elif e.type == EventManager.EventType.PLUGIN_LOAD_FINISHED:
+            elif e.type == EventManager.EventType.PLUGINS_LOAD_FINISHED:
                 logger.info('│  └─ {} Plugins Loaded!'.format(e.data))
                 logger.info('├─ Connecting Server...')
             elif e.type == EventManager.EventType.SERVER_CONNECTED:
@@ -58,42 +58,42 @@ class Engine(Prototypes.Singleton):
                 logger.info('├─ Scanning Data Files...')
             elif e.type == EventManager.EventType.DATA_FILE_FOUND:
                 logger.info('│  ├─ Data File [{}] Found.'.format(e.data))
-            elif e.type == EventManager.EventType.DATA_FILE_SCAN_FINISHED:
+            elif e.type == EventManager.EventType.DATA_FILES_SCAN_FINISHED:
                 logger.info('│  └─ {} Data Files Found!'.format(e.data))
                 logger.info('├─ Loading Data Files...')
             elif e.type == EventManager.EventType.DATA_FILE_LOADED:
                 logger.info('│  ├─ Data File [{}] Loaded.'.format(e.data))
-            elif e.type == EventManager.EventType.DATA_FILE_LOAD_FINISHED:
+            elif e.type == EventManager.EventType.DATA_FILES_LOAD_FINISHED:
                 logger.info('│  └─ {} Data Files Loaded!'.format(e.data))
                 logger.info('├─ Scanning Scripts...')
             elif e.type == EventManager.EventType.SCRIPT_FOUND:
                 logger.info('│  ├─ Script [{}] Found.'.format(e.data))
-            elif e.type == EventManager.EventType.SCRIPT_SCAN_FINISHED:
+            elif e.type == EventManager.EventType.SCRIPTS_SCAN_FINISHED:
                 logger.info('│  └─ {} Scripts Found!'.format(e.data))
                 logger.info('├─ Loading Scripts...')
             elif e.type == EventManager.EventType.SCRIPT_LOADED:
                 logger.info('│  ├─ Script [{}] Loaded.'.format(e.data))
-            elif e.type == EventManager.EventType.SCRIPT_LOAD_FINISHED:
+            elif e.type == EventManager.EventType.SCRIPTS_LOAD_FINISHED:
                 logger.info('│  └─ {} Scripts Loaded!'.format(e.data))
                 logger.info('├─ Scanning DLCs...')
             elif e.type == EventManager.EventType.DLC_FOUND:
                 logger.info('│  ├─ DLC [{}] Found.'.format(e.data))
-            elif e.type == EventManager.EventType.DLC_SCAN_FINISHED:
+            elif e.type == EventManager.EventType.DLCS_SCAN_FINISHED:
                 logger.info('│  └─ {} DLCs Found!'.format(e.data))
                 logger.info('├─ Loading DLCs...')
             elif e.type == EventManager.EventType.DLC_LOADED:
                 logger.info('│  ├─ DLC [{}] Loaded.'.format(e.data))
-            elif e.type == EventManager.EventType.DLC_LOAD_FINISHED:
+            elif e.type == EventManager.EventType.DLCS_LOAD_FINISHED:
                 logger.info('│  └─ {} DLCs Loaded!'.format(e.data))
                 logger.info('├─ Scanning MODs...')
             elif e.type == EventManager.EventType.MOD_FOUND:
                 logger.info('│  ├─ MOD [{}] Found.'.format(e.data))
-            elif e.type == EventManager.EventType.MOD_SCAN_FINISHED:
+            elif e.type == EventManager.EventType.MODS_SCAN_FINISHED:
                 logger.info('│  └─ {} MODs Found!'.format(e.data))
                 logger.info('├─ Loading MODs...')
             elif e.type == EventManager.EventType.MOD_LOADED:
                 logger.info('│  ├─ MOD [{}] Loaded.'.format(e.data))
-            elif e.type == EventManager.EventType.MOD_LOAD_FINISHED:
+            elif e.type == EventManager.EventType.MODS_LOAD_FINISHED:
                 logger.info('│  └─ {} MODs Loaded!'.format(e.data))
             elif e.type == EventManager.EventType.ENGINE_INIT_FINISHED:
                 logger.info('├─ Sending Loaded Signal to Server...')
@@ -103,27 +103,27 @@ class Engine(Prototypes.Singleton):
             (EventManager.EventType.FILE_SYSTEM_CHECKED, True),
             (EventManager.EventType.ENGINE_CONFIG_LOADED, True),
             (EventManager.EventType.PLUGIN_FOUND, False),
-            (EventManager.EventType.PLUGIN_SCAN_FINISHED, True),
+            (EventManager.EventType.PLUGINS_SCAN_FINISHED, True),
             (EventManager.EventType.PLUGIN_LOADED, False),
-            (EventManager.EventType.PLUGIN_LOAD_FINISHED, True),
+            (EventManager.EventType.PLUGINS_LOAD_FINISHED, True),
             (EventManager.EventType.SERVER_CONNECTED, True),
             (EventManager.EventType.SERVER_CONFIG_SENT, True),
             (EventManager.EventType.DATA_FILE_FOUND, False),
-            (EventManager.EventType.DATA_FILE_SCAN_FINISHED, True),
+            (EventManager.EventType.DATA_FILES_SCAN_FINISHED, True),
             (EventManager.EventType.DATA_FILE_LOADED, False),
-            (EventManager.EventType.DATA_FILE_LOAD_FINISHED, True),
+            (EventManager.EventType.DATA_FILES_LOAD_FINISHED, True),
             (EventManager.EventType.SCRIPT_FOUND, False),
-            (EventManager.EventType.SCRIPT_SCAN_FINISHED, True),
+            (EventManager.EventType.SCRIPTS_SCAN_FINISHED, True),
             (EventManager.EventType.SCRIPT_LOADED, False),
-            (EventManager.EventType.SCRIPT_LOAD_FINISHED, True),
+            (EventManager.EventType.SCRIPTS_LOAD_FINISHED, True),
             (EventManager.EventType.DLC_FOUND, False),
-            (EventManager.EventType.DLC_SCAN_FINISHED, True),
+            (EventManager.EventType.DLCS_SCAN_FINISHED, True),
             (EventManager.EventType.DLC_LOADED, False),
-            (EventManager.EventType.DLC_LOAD_FINISHED, True),
+            (EventManager.EventType.DLCS_LOAD_FINISHED, True),
             (EventManager.EventType.MOD_FOUND, False),
-            (EventManager.EventType.MOD_SCAN_FINISHED, True),
+            (EventManager.EventType.MODS_SCAN_FINISHED, True),
             (EventManager.EventType.MOD_LOADED, False),
-            (EventManager.EventType.MOD_LOAD_FINISHED, True),
+            (EventManager.EventType.MODS_LOAD_FINISHED, True),
             (EventManager.EventType.ENGINE_INIT_FINISHED, True),
         ]
         for data in init_event_types:
