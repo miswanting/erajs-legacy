@@ -14,7 +14,6 @@ def config(**kw):
 
 def init():
     def change_init_status(e):
-        print(123)
         nonlocal is_init_finished
         is_init_finished = True
         dispatcher.remove_all_listeners()
@@ -87,4 +86,8 @@ def cache():
 
 
 def save():
+    pass
+
+
+def text():
     pass

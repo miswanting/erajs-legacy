@@ -2,7 +2,7 @@
 
 # 自有库
 from . import (BagManager, DataManager, EventManager, LockManager, LogManager,
-               ModuleManager, NetManager, Prototypes, Tools)
+               ModuleManager, NetManager, Prototypes, StyleManager, Tools)
 
 logger = LogManager.logger
 # 设计第一，架构第二，技术第三，实现第四
@@ -33,6 +33,7 @@ class Engine(Prototypes.Singleton):
         self.module = ModuleManager.ModuleManager()  # 模块管理
         self.net = NetManager.NetManager()  # 网络管理
         self.bag = BagManager.BagManager()  # 通信协议管理
+        self.style = StyleManager.StyleManager()  # 样式管理
 
     def init(self):
         def show_init_info(e):

@@ -172,7 +172,7 @@ def header(text: Any, callback: Callable = None) -> object:
 
 
 def text(*arg) -> object:
-    return object
+    return m.text()
 
 
 def link(text: Any, callback: Callable = None) -> object:

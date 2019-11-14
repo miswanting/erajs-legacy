@@ -222,20 +222,15 @@ class EventDispatcher(Prototypes.Singleton):
             if event.type != listener['type']:
                 i += 1
                 continue
-            # self.show_listener_list()
-            # if event.type == EventType.ENGINE_INIT_FINISHED:
-            #     self.show_listener_list()
-            #     print("---------------")
-            #     print(i)
             t = threading.Thread(
                 target=listener['listener'],
                 args=(event, ),
                 kwargs={}
             )
-            t.start()
             if listener['one_time']:
                 self.__listener_list.pop(i)
                 i -= 1
+            t.start()
             i += 1
     emit = dispatch
 
