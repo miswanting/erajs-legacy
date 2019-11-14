@@ -9,6 +9,10 @@ logger = LogManager.logger
 # 多快好省，力争上游，为开发世界一流游戏引擎而奋斗
 
 
+dispatcher = EventManager.EventDispatcher()
+event_type = EventManager.EventType
+
+
 class Engine(Prototypes.Singleton):
     ENGINE_VERSION: str = '0.1.0-191029'
     PROTOCOL_VERSION: str = '0.1.0-191029'
@@ -32,6 +36,9 @@ class Engine(Prototypes.Singleton):
 
     def init(self):
         def show_init_info(e):
+            """
+            仅仅显示信息
+            """
             if e.type == EventManager.EventType.ENGINE_INIT_STARTED:
                 logger.info('┌─ Era.js Engine Initializing...')
                 logger.info('├─ Fixing Path...')
@@ -51,7 +58,6 @@ class Engine(Prototypes.Singleton):
                 logger.info('│  └─ {} Plugins Loaded!'.format(e.data))
                 logger.info('├─ Connecting Server...')
             elif e.type == EventManager.EventType.SERVER_CONNECTED:
-                logger.info('├─ Server Connected.')
                 logger.info('├─ Sending Config to Server...')
             elif e.type == EventManager.EventType.SERVER_CONFIG_SENT:
                 logger.info('│  └─ Config to Server Sent.')
@@ -65,38 +71,34 @@ class Engine(Prototypes.Singleton):
                 logger.info('│  ├─ Data File [{}] Loaded.'.format(e.data))
             elif e.type == EventManager.EventType.DATA_FILES_LOAD_FINISHED:
                 logger.info('│  └─ {} Data Files Loaded!'.format(e.data))
-                logger.info('├─ Scanning Scripts...')
+                # logger.info('├─ Scanning Scripts...')
             elif e.type == EventManager.EventType.SCRIPT_FOUND:
                 logger.info('│  ├─ Script [{}] Found.'.format(e.data))
             elif e.type == EventManager.EventType.SCRIPTS_SCAN_FINISHED:
                 logger.info('│  └─ {} Scripts Found!'.format(e.data))
-                logger.info('├─ Loading Scripts...')
             elif e.type == EventManager.EventType.SCRIPT_LOADED:
                 logger.info('│  ├─ Script [{}] Loaded.'.format(e.data))
             elif e.type == EventManager.EventType.SCRIPTS_LOAD_FINISHED:
                 logger.info('│  └─ {} Scripts Loaded!'.format(e.data))
-                logger.info('├─ Scanning DLCs...')
             elif e.type == EventManager.EventType.DLC_FOUND:
                 logger.info('│  ├─ DLC [{}] Found.'.format(e.data))
             elif e.type == EventManager.EventType.DLCS_SCAN_FINISHED:
                 logger.info('│  └─ {} DLCs Found!'.format(e.data))
-                logger.info('├─ Loading DLCs...')
             elif e.type == EventManager.EventType.DLC_LOADED:
                 logger.info('│  ├─ DLC [{}] Loaded.'.format(e.data))
             elif e.type == EventManager.EventType.DLCS_LOAD_FINISHED:
                 logger.info('│  └─ {} DLCs Loaded!'.format(e.data))
-                logger.info('├─ Scanning MODs...')
             elif e.type == EventManager.EventType.MOD_FOUND:
                 logger.info('│  ├─ MOD [{}] Found.'.format(e.data))
             elif e.type == EventManager.EventType.MODS_SCAN_FINISHED:
                 logger.info('│  └─ {} MODs Found!'.format(e.data))
-                logger.info('├─ Loading MODs...')
             elif e.type == EventManager.EventType.MOD_LOADED:
                 logger.info('│  ├─ MOD [{}] Loaded.'.format(e.data))
             elif e.type == EventManager.EventType.MODS_LOAD_FINISHED:
                 logger.info('│  └─ {} MODs Loaded!'.format(e.data))
+            elif e.type == EventManager.EventType.ENGINE_INIT_FINISHED_SIGNAL_SENT:
+                logger.info('│  └─ Signal to Server Sent.')
             elif e.type == EventManager.EventType.ENGINE_INIT_FINISHED:
-                logger.info('├─ Sending Loaded Signal to Server...')
                 logger.info('└─ Initialize Complete!')
         init_event_types = [
             (EventManager.EventType.ENGINE_INIT_STARTED, True),
@@ -124,6 +126,7 @@ class Engine(Prototypes.Singleton):
             (EventManager.EventType.MODS_SCAN_FINISHED, True),
             (EventManager.EventType.MOD_LOADED, False),
             (EventManager.EventType.MODS_LOAD_FINISHED, True),
+            (EventManager.EventType.ENGINE_INIT_FINISHED_SIGNAL_SENT, True),
             (EventManager.EventType.ENGINE_INIT_FINISHED, True),
         ]
         for data in init_event_types:
@@ -133,6 +136,16 @@ class Engine(Prototypes.Singleton):
                 one_time=data[1],
                 priority=1
             )
+
+        def handle_engine_init_signal_sent(e):
+            dispatcher.dispatch(
+                event_type.ENGINE_INIT_FINISHED
+            )
+        dispatcher.add_listener(
+            event_type.ENGINE_INIT_FINISHED_SIGNAL_SENT,
+            handle_engine_init_signal_sent,
+            one_time=True
+        )
 
     def config(self, data: dict) -> None:  # 新特性：设置引擎
         pass

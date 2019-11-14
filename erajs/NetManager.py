@@ -30,6 +30,9 @@ class NetManager:
         def handle_server_connected(e):
             self.send_config()
 
+        def handle_mods_load_finished(e):
+            self.send_init_finished_signal()
+
         listener_factory = [
             (
                 event_type.PLUGINS_LOAD_FINISHED,
@@ -41,6 +44,11 @@ class NetManager:
                 handle_server_connected,
                 True,
             ),
+            (
+                event_type.MODS_LOAD_FINISHED,
+                handle_mods_load_finished,
+                True,
+            )
         ]
         for each in listener_factory:
             dispatcher.add_listener(
@@ -106,6 +114,16 @@ class NetManager:
             'to': 'r'
         }
         self.send(bag)
+
+    def send_init_finished_signal(self):
+        logger.info('├─ Sending Loaded Signal to Server...')
+        bag = {
+            'type': 'loaded',
+            'from': 'b',
+            'to': 'r'
+        }
+        self.send(bag)
+        dispatcher.dispatch(event_type.ENGINE_INIT_FINISHED_SIGNAL_SENT)
 
     def send(self, bag):
         # self.debug("发送：{}".format(bag))

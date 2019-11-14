@@ -1,9 +1,11 @@
-from . import EventManager, NEngine, LogManager
+import time
+
+from . import EventManager, LogManager, NEngine
 
 e = NEngine.Engine()
 logger = LogManager.logger
-event_type = EventManager.EventType
 dispatcher = EventManager.EventDispatcher()
+event_type = EventManager.EventType
 
 
 def config(**kw):
@@ -11,21 +13,25 @@ def config(**kw):
 
 
 def init():
-    e.init()
-    e.event.dispatch(EventManager.EventType.ENGINE_INIT_STARTED)
-    is_init_finished = False
-
     def change_init_status(e):
+        print(123)
         nonlocal is_init_finished
         is_init_finished = True
+        dispatcher.remove_all_listeners()
+
+    e.init()
+    is_init_finished = False
     dispatcher.add_listener(
-        event_type.ENGINE_INIT_FINISHED,
+        EventManager.EventType.ENGINE_INIT_FINISHED,
         change_init_status,
         one_time=True
     )
+    dispatcher.dispatch(EventManager.EventType.ENGINE_INIT_STARTED)
     while True:
         if is_init_finished:
             break
+        time.sleep(1)
+        # dispatcher.show_listener_list()
     # e.data.check_file_system()
     # logger.info('├─ Loading Engine Configuration...')
     # e.data.load_config(['config/config.ini'])

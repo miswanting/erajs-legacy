@@ -150,6 +150,7 @@ class ModuleManager:
         return num_of_loaded_plugins
 
     def scan_scripts(self):
+        logger.info('├─ Scanning Scripts...')
         # 扫描插件文件
         script_path_list = self.scan('script')
         # 提取插件名称
@@ -163,6 +164,7 @@ class ModuleManager:
         # return len(script_path_list)
 
     def load_scripts(self, send_func=None):
+        logger.info('├─ Loading Scripts...')
         num_of_loaded_script = 0
         script_path_list = self.scan('script')
         for every in script_path_list:
@@ -185,6 +187,7 @@ class ModuleManager:
         # return num_of_loaded_script
 
     def scan_dlcs(self):
+        logger.info('├─ Scanning DLCs...')
         # # 扫描插件文件
         # dlc_path_list = self.scan('dlc')
         # # 提取插件名称
@@ -207,6 +210,7 @@ class ModuleManager:
         dispatcher.dispatch(event_type.DLCS_SCAN_FINISHED)
 
     def load_dlcs(self):
+        logger.info('├─ Loading DLCs...')
         # num_of_loaded_dlcs = 0
         # for each in e.data.data['config']['dlc'].keys():
         #     if e.data.data['config']['dlc'][each] == 'yes':
@@ -225,6 +229,7 @@ class ModuleManager:
         # return num_of_loaded_dlcs
 
     def scan_mods(self):
+        logger.info('├─ Scanning MODs...')
         # # 扫描插件文件
         # mod_path_list = self.scan('mod')
         # # 提取插件名称
@@ -247,6 +252,7 @@ class ModuleManager:
         # return len(mod_path_list)
 
     def load_mods(self):
+        logger.info('├─ Loading MODs...')
         # num_of_loaded_mods = 0
         # for each in e.data.data['config']['mod'].keys():
         #     if e.data.data['config']['mod'][each] == 'yes':

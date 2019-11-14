@@ -85,6 +85,7 @@ class EventType(enum.Enum):
     MODS_SCAN_FINISHED = enum.auto()
     MOD_LOADED = enum.auto()
     MODS_LOAD_FINISHED = enum.auto()
+    ENGINE_INIT_FINISHED_SIGNAL_SENT = enum.auto()
     ENGINE_INIT_FINISHED = enum.auto()
 
 
@@ -211,19 +212,33 @@ class EventDispatcher(Prototypes.Singleton):
 
     def dispatch(self, type, data=None):
         event = Event(type, data)
-        for i, listener in enumerate(self.__listener_list):
+        i = 0
+        while i < len(self.__listener_list):
+            listener = self.__listener_list[i]
             if event.is_propagation_stopped:
                 break
             if event.is_default_prevented and listener['priority'] == 0:
                 break
             if event.type != listener['type']:
+                i += 1
                 continue
+            # self.show_listener_list()
+            # if event.type == EventType.ENGINE_INIT_FINISHED:
+            #     self.show_listener_list()
+            #     print("---------------")
+            #     print(i)
             t = threading.Thread(
                 target=listener['listener'],
                 args=(event, ),
                 kwargs={}
             )
+            t.start()
             if listener['one_time']:
                 self.__listener_list.pop(i)
-            t.start()
+                i -= 1
+            i += 1
     emit = dispatch
+
+    def show_listener_list(self):
+        for each in self.__listener_list:
+            print(each)

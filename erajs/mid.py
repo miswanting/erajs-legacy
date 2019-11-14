@@ -33,7 +33,6 @@ class Mid():
         for each in data.keys():
             engine.data[each] = data[each]
         engine.info('│  └─ Data Files Loaded!')
-        engine.info('├─ Scanning Scripts...')
         engine.info('│  └─ {} Scripts Scanned!'.format(engine.scan_script()))
         engine.info('├─ Loading Scripts...')
         engine.info('│  └─ {} Scripts Loaded!'.format(
