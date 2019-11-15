@@ -1,137 +1,143 @@
 # 新 · API 设计草案
 
+API Version: 0.1.0-191115
+
+[toc]
+
 ## 调试输出类
 
-debug
+### debug
 
-info
+### info
 
-warn
+### warn
 
-error
+### error
 
-critical
+### critical
 
 ## 系统类
 
-config
+### config
 
-init
+### init
 
-entry
+### entry
 
-go
+### go
 
-dangerously_get_engine_core
+### dangerously_get_engine_core
 
 ## 数据类
 
-std
+### std
 
-dat
+### dat
 
-usr
+### usr
 
-data（deprecated）
+### data（deprecated）
 
 ## 系统级控件
 
-title
+### title
 
 ## 窗口级控件
 
-toast
+### toast
 
 ## 容器级控件
 
-toggle_devtool
+### toggle_devtool
 
-toggle_terminal
+### toggle_terminal
 
-toggle_menu
+### toggle_menu
 
 ## 页面级控件
 
-page（deprecated）
+### page（deprecated）
 
 ## 块级控件
 
-mode（deprecated）
+### mode（deprecated）
 
-divider
+### divider
 
 ## 行内控件
 
-header（h）
+### header（h）
 
-text（t）
+### text（t）
 
-link（l）
+### link（l）
 
-button（b）
+### button（b）
 
-rate
+### rate
 
-progress
+### progress
 
-check
+### check
 
-radio
+### radio
 
-input
+### input
 
-dropdown
+### dropdown
+
+## 控件
 
 ## 显示方式
 
-push
+### push
 
-clear
+### clear
 
 ## 页面逻辑系统
 
-goto
+### goto
 
-back
+### back
 
-repeat
+### repeat
 
-clear_gui
+### clear_gui
 
-append_gui
+### append_gui
 
-get_gui_list
+### get_gui_list
 
 ## 事件系统
 
-get_sys_event_type
+### get_sys_event_type
 
-add_listener
+### add_listener
 
-has_listener
+### has_listener
 
-remove_listener
+### remove_listener
 
-remove_all_listener
+### remove_all_listeners
 
-dispatch（emit）
+### dispatch（emit）
 
-get_listener_list
+### get_listener_list
 
 ## 样式控制
 
 > default → custom → (current) → temporary
 
-set_custom_style
+### set_custom_style
 
-reset_custom_style
+### reset_custom_style
 
-set_style
+### set_style
 
-reset_style
+### reset_style
 
-## 预置界面
+## 界面预设
 
-show_save_preset
+### show_save_preset
 
-show_load_preset
+### show_load_preset

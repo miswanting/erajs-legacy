@@ -3,6 +3,9 @@ from typing import Any, Callable
 from . import NMID as m
 
 
+__API_VERSION__ = '0.1.0-191115'
+
+
 # 系统输出
 def debug(*arg) -> None:
     """
@@ -16,7 +19,7 @@ def debug(*arg) -> None:
     a.debug("1", "2", "Switch!")
     ```
     """
-    return m.msg(0, *arg)
+    return m.print(0, *arg)
 
 
 def info(*arg) -> None:
@@ -30,7 +33,7 @@ def info(*arg) -> None:
     a.info("1", "2", "Switch!")
     ```
     """
-    return m.msg(1, *arg)
+    return m.print(1, *arg)
 
 
 def warn(*arg) -> None:
@@ -46,7 +49,7 @@ def warn(*arg) -> None:
     ```
     """
     print()
-    return m.msg(2, *arg)
+    return m.print(2, *arg)
 
 
 def error(*arg) -> None:
@@ -61,7 +64,7 @@ def error(*arg) -> None:
     a.error("1", "2", "Switch!")
     ```
     """
-    return m.msg(3, *arg)
+    return m.print(3, *arg)
 
 
 def critical(*arg) -> None:
@@ -76,7 +79,7 @@ def critical(*arg) -> None:
     a.critical("1", "2", "Switch!")
     ```
     """
-    return m.msg(4, *arg)
+    return m.print(4, *arg)
 
 
 # 引擎生命周期
@@ -126,15 +129,24 @@ def entry() -> None:
     return m.entry()
 
 
-def run() -> None:
-    return m.run()
+def go() -> None:
+    return m.go()
 
 
 # 数据获取
-std = m.std()  # data文件夹中的静态数据，全局引用
-data = m.data()  # 【旧】data文件夹中的数据文件，全局引用，拆成
-save = m.save()  # 当前存档的存档数据
-cache = m.cache()  # 缓存数据，动态数据，全局引用
+def std():  # data文件夹中的静态数据，全局引用
+    pass
+
+
+def dat():  # 【旧】data文件夹中的数据文件，全局引用，拆成
+    pass
+
+
+def usr():  # 当前存档的存档数据
+    pass
+
+
+data = m.data  # 缓存数据，动态数据，全局引用
 # File
 # cfg/: cfg
 # data/: std
@@ -145,19 +157,36 @@ cache = m.cache()  # 缓存数据，动态数据，全局引用
 # World: data + tmp
 # Player: save + ram
 
-# 窗口方法
 
-
+# 系统级控件
 def title(text: Any) -> None:
     pass
 
 
-# 页级方法
+# 窗口级控件
+def toast():
+    pass
+
+
+# 容器级控件
+def toggle_devtool():
+    pass
+
+
+def toggle_terminal():
+    pass
+
+
+def toggle_menu():
+    pass
+
+
+# 页面级控件
 def page():
     pass
 
 
-# 块级方法
+# 块级控件
 def mode():
     pass
 
@@ -166,23 +195,35 @@ def divider():
     pass
 
 
-# 行级方法
+# 行内控件
 def header(text: Any, callback: Callable = None) -> object:
     return object
+
+
+h = header
 
 
 def text(*arg) -> object:
     return m.text()
 
 
+t = text
+
+
 def link(text: Any, callback: Callable = None) -> object:
     return object
+
+
+l = link
 
 
 def button(text: Any, callback: Callable = None, *arg, **kw) -> object:
     return object
 
 
+b = button
+
+
 def rate(now: int = 0, callback: Callable = None) -> object:
     print('警告：该API有变动！')
     return object
@@ -206,31 +247,6 @@ def input() -> object:
 
 def dropdown() -> object:
     return object
-
-
-def rate(now: int = 0, callback: Callable = None) -> object:
-    print('警告：该API有变动！')
-    return object
-
-
-def progress() -> object:
-    pass
-
-
-def check() -> object:
-    pass
-
-
-def radio() -> object:
-    pass
-
-
-def input() -> object:
-    pass
-
-
-def dropdown() -> object:
-    pass
 
 
 # 整体构筑
@@ -238,11 +254,11 @@ def push(component, data) -> object:
     pass
 
 
-# 界面逻辑
 def clear(num: int = 0) -> object:
     pass
 
 
+# 界面逻辑
 def goto(func, *arg, **kw) -> object:
     pass
 
@@ -268,7 +284,51 @@ def get_gui_list(func, *arg, **kw) -> object:
 
 
 # 样式控制
-def get_default_style_by_component() -> None:
+def get_sys_event_type() -> None:
+    pass
+
+
+def add_listener() -> None:
+    pass
+
+
+def has_listener() -> None:
+    pass
+
+
+def remove_listener() -> None:
+    pass
+
+
+def remove_all_listeners() -> None:
+    pass
+
+
+def dispatch() -> None:
+    pass
+
+
+emit = dispatch
+
+
+def get_listener_list() -> None:
+    pass
+
+
+# 样式控制
+def set_custom_style() -> None:
+    pass
+
+
+def reset_custom_style() -> None:
+    pass
+
+
+def set_style() -> None:
+    pass
+
+
+def reset_style() -> None:
     pass
 
 
@@ -279,10 +339,3 @@ def show_save_to_save() -> None:
 
 def show_save_to_load() -> None:
     pass
-
-
-# 别名定义
-h = header
-t = text
-l = link
-b = button

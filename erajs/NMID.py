@@ -8,6 +8,10 @@ dispatcher = EventManager.EventDispatcher()
 event_type = EventManager.EventType
 
 
+def print():
+    pass
+
+
 def config(**kw):
     logger.debug(kw)
 
