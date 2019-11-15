@@ -8,7 +8,7 @@ dispatcher = EventManager.EventDispatcher()
 event_type = EventManager.EventType
 
 
-def print():
+def print(level,*argF):
     pass
 
 
