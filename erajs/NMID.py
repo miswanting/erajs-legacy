@@ -1,14 +1,20 @@
-import time
+"""
+中间件
+"""
 
-from . import EventManager, LogManager, NEngine
+import time
+import typing
+
+from . import EventManager, LogManager, NEngine, Widgets
 
 e = NEngine.Engine()
+
 logger = LogManager.logger
 dispatcher = EventManager.EventDispatcher()
 event_type = EventManager.EventType
 
 
-def print(level,*argF):
+def print(level, *argF):
     pass
 
 
@@ -93,5 +99,24 @@ def save():
     pass
 
 
-def text():
-    pass
+def text(
+    text: str = '',
+    wait: bool = False,
+    color: str = 'default',
+    bcolor: str = 'default',
+    style: dict = {}
+):
+    data = {
+        'text': text,
+        'wait': wait,
+        'style': style
+    }
+    if color != 'default':
+        data['style']['color'] = color
+    if bcolor != 'default':
+        data['style']['background-color'] = bcolor
+    el = e.push(Widgets.Text(data))
+    if wait and not e.lock.lock_passed():
+        e.lock.lock()
+        e.lock.wait_for_unlock()
+    return el

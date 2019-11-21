@@ -203,8 +203,51 @@ def header(text: Any, callback: Callable = None) -> object:
 h = header
 
 
-def text(*arg) -> object:
-    return m.text()
+def text(
+    text: str = '',
+    wait: bool = False,
+    color: str = 'default',
+    bcolor: str = 'default',
+    style: dict = {}
+) -> object:
+    """
+    # 添加文本控件
+    向光标处添加文本控件。
+    ## 参数
+    - text: str = ""
+        - 文本控件所显示的文字；
+        - 当该参数值为 "" 时，将光标移往`下一位置`；
+            - 当 mode 为 default 时，`下一位置`为下一行；
+            - 当 mode 为 grid 时，`下一位置`为下一个单元格；
+    - wait: bool = False
+        - 添加该文本控件后是否等待。
+        - 当该参数值为 True 时，暂停运行脚本，直至用户`点击鼠标`，才会解除暂停状态。
+            - 用户点击鼠标左键：解除当前暂停状态，下次遇到要求暂停的脚本依然会暂停；
+            - 用户点击鼠标右键：解除当前暂停状态，下次遇到要求暂停的脚本不会暂停，直至新的一页生成。
+    - color: str = 'default'
+        - 设置文字颜色。（临时级）
+        - 支持 CSS3 支持的所有颜色设置方式
+            - 支持颜色名："red", "green", "blue" 等；
+                - 包括一级、二级和三级颜色名。
+                    - 参见：
+            - 支持缩写十六进制颜色值："#f00", "#0f0", "#00f" 等；
+            - 支持十六进制颜色值："#ff0000", "#00ff00", "#0000ff" 等；
+            - 支持 RGB 颜色表达式："rgb(255,0,0)", "rgba(0,255,0,0.5)"；
+    - bcolor: str = 'default'
+        - 设置文字背景颜色。（临时级）
+        - 用法同上。
+    - style: dict = {}
+        - 样式参数。（临时级）
+        - 这用法神奇了。您竟然可以参照 CSS3 中的属性对该控件的样式进行自由设置。
+            - 如若要添加绿底红字的文本控件，应传入：
+    ```json
+    {
+        'color': 'red',
+        'background-color': 'green'
+    }
+    ```
+    """
+    return m.text(text, wait, color, bcolor, style)
 
 
 t = text
