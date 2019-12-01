@@ -209,7 +209,7 @@ def text(
     wait: bool = False,
     color: str = 'default',
     bcolor: str = 'default',
-    style: dict = {}
+    style: dict = None
 ) -> object:
     """
     # 添加文本控件

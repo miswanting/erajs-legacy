@@ -104,7 +104,7 @@ def text(
     wait: bool = False,
     color: str = 'default',
     bcolor: str = 'default',
-    style: dict = {}
+    style: dict = None
 ):
     data = {
         'text': text,
