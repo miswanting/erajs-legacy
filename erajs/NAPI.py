@@ -1,7 +1,6 @@
-from typing import Any, Callable
+from typing import Any, Callable, Dict
 
 from . import NMID as m
-
 
 __API_VERSION__ = '0.1.0-191115'
 
@@ -126,11 +125,13 @@ def init() -> None:
 
 
 def entry() -> None:
-    return m.entry()
+    # return m.entry()
+    pass
 
 
 def go() -> None:
-    return m.go()
+    # return m.go()
+    pass
 
 
 # 数据获取
@@ -203,7 +204,7 @@ def header(text: Any, callback: Callable = None) -> object:
 h = header
 
 
-def text(*arg) -> object:
+def text(text: str = '', wait: bool = False, color: str = 'default', bcolor: str = 'default', style=None) -> object:
     return m.text()
 
 
