@@ -1,8 +1,8 @@
-job:
+jobs:
   include:
     - name: Main
       language: python
-      python: 
+      python:
         - 3.8
       script:
         - pytest
