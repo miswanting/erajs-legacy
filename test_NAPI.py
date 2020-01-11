@@ -1,4 +1,4 @@
-import erajs.NAPI as a
-
-a.init()
-text = a.t("TEST MESSAGE")
+def test1():
+    import erajs.Managers.EventManager as Event
+    e = Event.EventManager()
+    assert e.get_listener_list() == []
