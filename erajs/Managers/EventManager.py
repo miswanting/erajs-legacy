@@ -1,5 +1,5 @@
 import threading
-from typing import List
+from typing import Callable, List
 
 
 class EventManager:
@@ -10,7 +10,7 @@ class EventManager:
     def __init__(self):
         self.__listener_list: List[dict] = []
 
-    def on(self, type, listener):
+    def on(self, type: str, listener: Callable):
         new_listener = {
             'type': type,
             'listener': listener,
@@ -53,7 +53,7 @@ class EventManager:
                 continue
             t = threading.Thread(
                 target=listener['listener'],
-                args=(event, ),
+                args=(data, ),
                 kwargs={}
             )
             if listener['one_time']:
