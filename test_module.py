@@ -1,3 +1,6 @@
+import threading
+
+
 class TestEventManager:
     def test_on(self):
         import erajs.Managers.EventManager as Event
@@ -30,3 +33,7 @@ class TestEventManager:
 
     def callback_function(self, data):
         assert data == 'callback_data'
+
+
+class TestLockManager:
+    pass

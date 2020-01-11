@@ -55,7 +55,7 @@ def find_path_by_priority(dot_path, simple=True):
     find_file_by_priority('data.a.b.json') =>
     FOR DEV:
     ```raw
-    __________________
+    ____________________
          -3  -2   -1
      0    1   2    3   4
     ↓ ↓  ↓ ↓ ↓↓ ↓   ↓ ↓
@@ -64,7 +64,7 @@ def find_path_by_priority(dot_path, simple=True):
     sep:     1   2
          ↑     ↑    ↑
         dir  name  ext
-    _______________
+    ____________________
     ```
     TODO: FindItAll
     """
