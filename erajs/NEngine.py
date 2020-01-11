@@ -1,12 +1,13 @@
 # coding:utf-8
 
 # 自有库
-from . import (BagManager, DataManager, EventManager, LockManager, LogManager,
-               ModuleManager, NetManager, Prototypes, StyleManager, Tools)
+from . import (
+    AbstractDOM, BagManager, DataManager, EventManager, LockManager,
+    LogManager, ModuleManager, NetManager, Prototypes, StyleManager, Tools)
 
 logger = LogManager.logger
 # 设计第一，架构第二，技术第三，实现第四
-# 多快好省，力争上游，为开发世界一流游戏引擎而奋斗
+# 多快好省，力争上游，为开发世界一流游戏引擎而不懈奋斗!
 
 
 dispatcher = EventManager.EventDispatcher()
@@ -34,6 +35,7 @@ class Engine(Prototypes.Singleton):
         self.net = NetManager.NetManager()  # 网络管理
         self.bag = BagManager.BagManager()  # 通信协议管理
         self.style = StyleManager.StyleManager()  # 样式管理
+        self.adom = AbstractDOM.AbstractDOM()
 
     def init(self):
         def show_init_info(e):
@@ -155,51 +157,52 @@ class Engine(Prototypes.Singleton):
         pass
 
     # 显示方法
-    def push(self, widget) -> None:  # 新特性：推送控件
-        pass
+    def push(self, widget) -> object:  # 新特性：推送控件
 
-    # 显示控件
-    def page(self, color: str = 'default') -> None:  # 控件：页面
-        pass
+        return
 
-    def title(self, text: str) -> None:  # 设置游戏窗口标题
-        pass
+    # # 显示控件
+    # def page(self, color: str = 'default') -> None:  # 控件：页面
+    #     pass
 
-    def t(self, text: str = '', wait: bool = False, color: str = 'default', bcolor: str = 'default') -> None:  # 控件：文字
-        pass
+    # def title(self, text: str) -> None:  # 设置游戏窗口标题
+    #     pass
 
-    def l(self, text: str, func: callable, *arg, **kw) -> None:  # 控件：链接
-        pass
+    # def t(self, text: str = '', wait: bool = False, color: str = 'default', bcolor: str = 'default') -> None:  # 控件：文字
+    #     pass
 
-    def b(self, text: str, func: callable, *arg, **kw) -> None:  # 控件：按钮
-        pass
+    # def l(self, text: str, func: callable, *arg, **kw) -> None:  # 控件：链接
+    #     pass
 
-    def h(self, text: str, rank: int = 1, color: str = 'default', bcolor: str = 'default') -> None:  # 控件：标题
-        pass
+    # def b(self, text: str, func: callable, *arg, **kw) -> None:  # 控件：按钮
+    #     pass
 
-    def progress(self, now: int,  max: int = 100, length: int = 100) -> None:  # 控件：进度条
-        pass
+    # def h(self, text: str, rank: int = 1, color: str = 'default', bcolor: str = 'default') -> None:  # 控件：标题
+    #     pass
 
-    def rate(self, now: int = 0,  max: int = 5, func: callable = None, disabled: bool = True) -> None:  # 控件：评分
-        pass
+    # def progress(self, now: int,  max: int = 100, length: int = 100) -> None:  # 控件：进度条
+    #     pass
 
-    def radio(self, choice_list: list, default_index: int = 0, func: callable = None) -> None:  # 控件：单选
-        pass
+    # def rate(self, now: int = 0,  max: int = 5, func: callable = None, disabled: bool = True) -> None:  # 控件：评分
+    #     pass
 
-    def checkbox(self, check_dict_or_list: dict, func: callable = None) -> None:  # 控件：多选
-        pass
+    # def radio(self, choice_list: list, default_index: int = 0, func: callable = None) -> None:  # 控件：单选
+    #     pass
 
-    def input(self, func: callable = None, default: str = '') -> None:  # 控件：输入
-        pass
+    # def checkbox(self, check_dict_or_list: dict, func: callable = None) -> None:  # 控件：多选
+    #     pass
 
-    def dropdown(self, options: list, func: callable = None, default: str = '', search: bool = False, multiple: bool = False, placeholder: str = '', allowAdditions: bool = False) -> None:  # 控件：下拉菜单
-        pass
+    # def input(self, func: callable = None, default: str = '') -> None:  # 控件：输入
+    #     pass
 
-    def divider(self, text: str = '') -> None:  # 控件：水平分割线
-        pass
+    # def dropdown(self, options: list, func: callable = None, default: str = '', search: bool = False, multiple: bool = False, placeholder: str = '', allowAdditions: bool = False) -> None:  # 控件：下拉菜单
+    #     pass
 
-    def clear(self, num: int = 0) -> None:  # 控件：清除显示页面
-        pass
+    # def divider(self, text: str = '') -> None:  # 控件：水平分割线
+    #     pass
+
+    # def clear(self, num: int = 0) -> None:  # 控件：清除显示页面
+    #     pass
 
     # 显示功能
     def shake(self, duration: int = 500) -> None:  # 功能：页面震动（原窗口震动）

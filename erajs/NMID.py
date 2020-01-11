@@ -106,6 +106,10 @@ def text(
     bcolor: str = 'default',
     style: dict = None
 ):
+    """
+    # 文字控件
+    """
+    # 组装数据
     data = {
         'text': text,
         'wait': wait,
@@ -115,7 +119,10 @@ def text(
         data['style']['color'] = color
     if bcolor != 'default':
         data['style']['background-color'] = bcolor
+    # 发射数据
     el = e.push(Widgets.Text(data))
+    print(Widgets.Text(data))
+    # 操作ADOM
     if wait and not e.lock.lock_passed():
         e.lock.lock()
         e.lock.wait_for_unlock()
