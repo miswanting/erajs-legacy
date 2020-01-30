@@ -2,7 +2,7 @@ import threading
 from typing import Callable, List
 
 
-class EventManager:
+class EventEmitter:
     """
     # 事件管理器
     """
@@ -75,3 +75,6 @@ class EventManager:
 
     def get_listener_list(self):
         return self.__listener_list
+
+
+EventDispatcher = EventEmitter

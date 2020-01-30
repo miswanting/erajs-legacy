@@ -26,12 +26,6 @@ def default_person():
 
 
 if __name__ == "__main__":
-    # 新使用方法
-    # a.config()
-    # a.init()
-    # a.entry()
-    # a.start()
-    # 旧使用方法
     a.config()
     a.init()
     a.goto(cover)

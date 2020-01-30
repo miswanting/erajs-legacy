@@ -2,24 +2,25 @@
 
 # 自有库
 from . import (
-    AbstractDOM, BagManager, DataManager, EventManager, LockManager,
+    AbstractDOM, BagManager, DataManager,  LockManager, Events,
     LogManager, ModuleManager, NetManager, Prototypes, StyleManager, Tools)
-
+from .Managers import EventManager
 logger = LogManager.logger
 # 设计第一，架构第二，技术第三，实现第四
 # 多快好省，力争上游，为开发世界一流游戏引擎而不懈奋斗!
 
 
-dispatcher = EventManager.EventDispatcher()
-event_type = EventManager.EventType
+dispatcher = EventManager.EventEmitter()
+SystemEvent = Events.SystemEvent
 
 
-class Engine(Prototypes.Singleton):
+class Engine(Prototypes.Singleton, EventManager.EventEmitter):
     ENGINE_VERSION: str = '0.1.0-191029'
     PROTOCOL_VERSION: str = '0.1.0-191029'
     API_VERSION: str = '0.1.0-191029'
 
     def __init__(self) -> None:  # 架构初始化
+        super().__init__()
         print()
         logger.info('Era.js Game Engine')
         logger.info('Engine Version: v{}'.format(self.ENGINE_VERSION))
@@ -29,7 +30,6 @@ class Engine(Prototypes.Singleton):
         print()
         # logger = LogManager.LogManager()  # 调试框架
         self.data = DataManager.DataManager()  # 数据管理
-        self.event = EventManager.EventDispatcher()  # 基本事件框架
         self.lock = LockManager.LockManager()  # 锁管理框架
         self.module = ModuleManager.ModuleManager()  # 模块管理
         self.net = NetManager.NetManager()  # 网络管理
@@ -42,112 +42,109 @@ class Engine(Prototypes.Singleton):
             """
             仅仅显示信息
             """
-            if e.type == EventManager.EventType.ENGINE_INIT_STARTED:
+            if e.type == SystemEvent.ENGINE_INIT_STARTED:
                 logger.info('┌─ Era.js Engine Initializing...')
                 logger.info('├─ Fixing Path...')
                 Tools.fix_path()
                 logger.info('├─ Checking Data Integrity...')
-            elif e.type == EventManager.EventType.FILE_SYSTEM_CHECKED:
+            elif e.type == SystemEvent.FILE_SYSTEM_CHECKED:
                 logger.info('│  └─ Data Integrity Checked!')
-            elif e.type == EventManager.EventType.ENGINE_CONFIG_LOADED:
+            elif e.type == SystemEvent.ENGINE_CONFIG_LOADED:
                 logger.info('│  └─ Engine Config Loaded!')
-            elif e.type == EventManager.EventType.PLUGIN_FOUND:
+            elif e.type == SystemEvent.PLUGIN_FOUND:
                 logger.info('│  ├─ Plugin [{}] Found.'.format(e.data))
-            elif e.type == EventManager.EventType.PLUGINS_SCAN_FINISHED:
+            elif e.type == SystemEvent.PLUGINS_SCAN_FINISHED:
                 logger.info('│  └─ {} Plugins Found!'.format(e.data))
-            elif e.type == EventManager.EventType.PLUGIN_LOADED:
+            elif e.type == SystemEvent.PLUGIN_LOADED:
                 logger.info('│  ├─ Plugin [{}] Loaded.'.format(e.data))
-            elif e.type == EventManager.EventType.PLUGINS_LOAD_FINISHED:
+            elif e.type == SystemEvent.PLUGINS_LOAD_FINISHED:
                 logger.info('│  └─ {} Plugins Loaded!'.format(e.data))
                 logger.info('├─ Connecting Server...')
-            elif e.type == EventManager.EventType.SERVER_CONNECTED:
+            elif e.type == SystemEvent.SERVER_CONNECTED:
                 logger.info('├─ Sending Config to Server...')
-            elif e.type == EventManager.EventType.SERVER_CONFIG_SENT:
+            elif e.type == SystemEvent.SERVER_CONFIG_SENT:
                 logger.info('│  └─ Config to Server Sent.')
                 logger.info('├─ Scanning Data Files...')
-            elif e.type == EventManager.EventType.DATA_FILE_FOUND:
+            elif e.type == SystemEvent.DATA_FILE_FOUND:
                 logger.info('│  ├─ Data File [{}] Found.'.format(e.data))
-            elif e.type == EventManager.EventType.DATA_FILES_SCAN_FINISHED:
+            elif e.type == SystemEvent.DATA_FILES_SCAN_FINISHED:
                 logger.info('│  └─ {} Data Files Found!'.format(e.data))
                 logger.info('├─ Loading Data Files...')
-            elif e.type == EventManager.EventType.DATA_FILE_LOADED:
+            elif e.type == SystemEvent.DATA_FILE_LOADED:
                 logger.info('│  ├─ Data File [{}] Loaded.'.format(e.data))
-            elif e.type == EventManager.EventType.DATA_FILES_LOAD_FINISHED:
+            elif e.type == SystemEvent.DATA_FILES_LOAD_FINISHED:
                 logger.info('│  └─ {} Data Files Loaded!'.format(e.data))
                 # logger.info('├─ Scanning Scripts...')
-            elif e.type == EventManager.EventType.SCRIPT_FOUND:
+            elif e.type == SystemEvent.SCRIPT_FOUND:
                 logger.info('│  ├─ Script [{}] Found.'.format(e.data))
-            elif e.type == EventManager.EventType.SCRIPTS_SCAN_FINISHED:
+            elif e.type == SystemEvent.SCRIPTS_SCAN_FINISHED:
                 logger.info('│  └─ {} Scripts Found!'.format(e.data))
-            elif e.type == EventManager.EventType.SCRIPT_LOADED:
+            elif e.type == SystemEvent.SCRIPT_LOADED:
                 logger.info('│  ├─ Script [{}] Loaded.'.format(e.data))
-            elif e.type == EventManager.EventType.SCRIPTS_LOAD_FINISHED:
+            elif e.type == SystemEvent.SCRIPTS_LOAD_FINISHED:
                 logger.info('│  └─ {} Scripts Loaded!'.format(e.data))
-            elif e.type == EventManager.EventType.DLC_FOUND:
+            elif e.type == SystemEvent.DLC_FOUND:
                 logger.info('│  ├─ DLC [{}] Found.'.format(e.data))
-            elif e.type == EventManager.EventType.DLCS_SCAN_FINISHED:
+            elif e.type == SystemEvent.DLCS_SCAN_FINISHED:
                 logger.info('│  └─ {} DLCs Found!'.format(e.data))
-            elif e.type == EventManager.EventType.DLC_LOADED:
+            elif e.type == SystemEvent.DLC_LOADED:
                 logger.info('│  ├─ DLC [{}] Loaded.'.format(e.data))
-            elif e.type == EventManager.EventType.DLCS_LOAD_FINISHED:
+            elif e.type == SystemEvent.DLCS_LOAD_FINISHED:
                 logger.info('│  └─ {} DLCs Loaded!'.format(e.data))
-            elif e.type == EventManager.EventType.MOD_FOUND:
+            elif e.type == SystemEvent.MOD_FOUND:
                 logger.info('│  ├─ MOD [{}] Found.'.format(e.data))
-            elif e.type == EventManager.EventType.MODS_SCAN_FINISHED:
+            elif e.type == SystemEvent.MODS_SCAN_FINISHED:
                 logger.info('│  └─ {} MODs Found!'.format(e.data))
-            elif e.type == EventManager.EventType.MOD_LOADED:
+            elif e.type == SystemEvent.MOD_LOADED:
                 logger.info('│  ├─ MOD [{}] Loaded.'.format(e.data))
-            elif e.type == EventManager.EventType.MODS_LOAD_FINISHED:
+            elif e.type == SystemEvent.MODS_LOAD_FINISHED:
                 logger.info('│  └─ {} MODs Loaded!'.format(e.data))
-            elif e.type == EventManager.EventType.ENGINE_INIT_FINISHED_SIGNAL_SENT:
+            elif e.type == SystemEvent.ENGINE_INIT_FINISHED_SIGNAL_SENT:
                 logger.info('│  └─ Signal to Server Sent.')
-            elif e.type == EventManager.EventType.ENGINE_INIT_FINISHED:
+            elif e.type == SystemEvent.ENGINE_INIT_FINISHED:
                 logger.info('└─ Initialize Complete!')
-        init_event_types = [
-            (EventManager.EventType.ENGINE_INIT_STARTED, True),
-            (EventManager.EventType.FILE_SYSTEM_CHECKED, True),
-            (EventManager.EventType.ENGINE_CONFIG_LOADED, True),
-            (EventManager.EventType.PLUGIN_FOUND, False),
-            (EventManager.EventType.PLUGINS_SCAN_FINISHED, True),
-            (EventManager.EventType.PLUGIN_LOADED, False),
-            (EventManager.EventType.PLUGINS_LOAD_FINISHED, True),
-            (EventManager.EventType.SERVER_CONNECTED, True),
-            (EventManager.EventType.SERVER_CONFIG_SENT, True),
-            (EventManager.EventType.DATA_FILE_FOUND, False),
-            (EventManager.EventType.DATA_FILES_SCAN_FINISHED, True),
-            (EventManager.EventType.DATA_FILE_LOADED, False),
-            (EventManager.EventType.DATA_FILES_LOAD_FINISHED, True),
-            (EventManager.EventType.SCRIPT_FOUND, False),
-            (EventManager.EventType.SCRIPTS_SCAN_FINISHED, True),
-            (EventManager.EventType.SCRIPT_LOADED, False),
-            (EventManager.EventType.SCRIPTS_LOAD_FINISHED, True),
-            (EventManager.EventType.DLC_FOUND, False),
-            (EventManager.EventType.DLCS_SCAN_FINISHED, True),
-            (EventManager.EventType.DLC_LOADED, False),
-            (EventManager.EventType.DLCS_LOAD_FINISHED, True),
-            (EventManager.EventType.MOD_FOUND, False),
-            (EventManager.EventType.MODS_SCAN_FINISHED, True),
-            (EventManager.EventType.MOD_LOADED, False),
-            (EventManager.EventType.MODS_LOAD_FINISHED, True),
-            (EventManager.EventType.ENGINE_INIT_FINISHED_SIGNAL_SENT, True),
-            (EventManager.EventType.ENGINE_INIT_FINISHED, True),
+        init_SystemEvents = [
+            (SystemEvent.ENGINE_INIT_STARTED, True),
+            (SystemEvent.FILE_SYSTEM_CHECKED, True),
+            (SystemEvent.ENGINE_CONFIG_LOADED, True),
+            (SystemEvent.PLUGIN_FOUND, False),
+            (SystemEvent.PLUGINS_SCAN_FINISHED, True),
+            (SystemEvent.PLUGIN_LOADED, False),
+            (SystemEvent.PLUGINS_LOAD_FINISHED, True),
+            (SystemEvent.SERVER_CONNECTED, True),
+            (SystemEvent.SERVER_CONFIG_SENT, True),
+            (SystemEvent.DATA_FILE_FOUND, False),
+            (SystemEvent.DATA_FILES_SCAN_FINISHED, True),
+            (SystemEvent.DATA_FILE_LOADED, False),
+            (SystemEvent.DATA_FILES_LOAD_FINISHED, True),
+            (SystemEvent.SCRIPT_FOUND, False),
+            (SystemEvent.SCRIPTS_SCAN_FINISHED, True),
+            (SystemEvent.SCRIPT_LOADED, False),
+            (SystemEvent.SCRIPTS_LOAD_FINISHED, True),
+            (SystemEvent.DLC_FOUND, False),
+            (SystemEvent.DLCS_SCAN_FINISHED, True),
+            (SystemEvent.DLC_LOADED, False),
+            (SystemEvent.DLCS_LOAD_FINISHED, True),
+            (SystemEvent.MOD_FOUND, False),
+            (SystemEvent.MODS_SCAN_FINISHED, True),
+            (SystemEvent.MOD_LOADED, False),
+            (SystemEvent.MODS_LOAD_FINISHED, True),
+            (SystemEvent.ENGINE_INIT_FINISHED_SIGNAL_SENT, True),
+            (SystemEvent.ENGINE_INIT_FINISHED, True),
         ]
-        for data in init_event_types:
-            self.event.add_listener(
+        for data in init_SystemEvents:
+            self.on(
                 data[0],
-                show_init_info,
-                one_time=data[1],
-                priority=1
+                show_init_info
             )
 
         def handle_engine_init_signal_sent(e):
-            dispatcher.dispatch(
-                event_type.ENGINE_INIT_FINISHED
+            self.emit(
+                SystemEvent.ENGINE_INIT_FINISHED
             )
-        dispatcher.add_listener(
-            event_type.ENGINE_INIT_FINISHED_SIGNAL_SENT,
-            handle_engine_init_signal_sent,
-            one_time=True
+        self.once(
+            SystemEvent.ENGINE_INIT_FINISHED_SIGNAL_SENT,
+            handle_engine_init_signal_sent
         )
 
     def config(self, data: dict) -> None:  # 新特性：设置引擎
