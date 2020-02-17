@@ -1,6 +1,6 @@
 from typing import Any, Callable, Dict
 
-from . import NMID as m
+from . import MW as m
 
 __API_VERSION__ = '0.1.0-191115'
 
@@ -161,7 +161,8 @@ data = m.data  # 缓存数据，动态数据，全局引用
 
 # 系统级控件
 def title(text: Any) -> None:
-    pass
+    print(123)
+    m.title(text)
 
 
 # 窗口级控件
@@ -304,7 +305,7 @@ def clear(num: int = 0) -> object:
 
 # 界面逻辑
 def goto(func, *arg, **kw) -> object:
-    pass
+    m.goto(func, *arg, **kw)
 
 
 def back(func, *arg, **kw) -> object:

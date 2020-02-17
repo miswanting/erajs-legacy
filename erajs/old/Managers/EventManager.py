@@ -1,15 +1,13 @@
-# import threading
+import threading
 from typing import Callable, List
-from . import DebugManager
 
 
-class EventManager(DebugManager.DebugManager):
+class EventEmitter:
     """
     # 事件管理器
     """
 
     def __init__(self):
-        super().__init__()
         self.__listener_list: List[dict] = []
 
     def on(self, type: str, listener: Callable):
@@ -53,16 +51,15 @@ class EventManager(DebugManager.DebugManager):
             if event['type'] != listener['type']:
                 i += 1
                 continue
-            # t = threading.Thread(
-            #     target=listener['listener'],
-            #     args=(data, ),
-            #     kwargs={}
-            # )
+            t = threading.Thread(
+                target=listener['listener'],
+                args=(data, ),
+                kwargs={}
+            )
             if listener['one_time']:
                 self.__listener_list.pop(i)
                 i -= 1
-            listener['listener'](data)
-            # t.start()
+            t.start()
             i += 1
     dispatch = emit
 
@@ -78,3 +75,6 @@ class EventManager(DebugManager.DebugManager):
 
     def get_listener_list(self):
         return self.__listener_list
+
+
+EventDispatcher = EventEmitter

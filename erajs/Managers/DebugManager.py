@@ -2,11 +2,12 @@ import logging
 import sys
 from datetime import datetime
 
-from . import Prototypes
+from ..Prototypes import Singleton
 
 
-class LogManager(Prototypes.Singleton):
+class DebugManager(Singleton.Singleton):
     def __init__(self):
+        super().__init__()
         formatter = logging.Formatter('')
         stream_handler = logging.StreamHandler(sys.stdout)
         stream_handler.setFormatter(formatter)
@@ -37,7 +38,4 @@ class LogManager(Prototypes.Singleton):
         temp = '[{}]({}){}'
         date = datetime.today()
         text = temp.format(logo, date.strftime("%y%m%d-%H%M%S-%f"), text)
-        self.logger.critical(text)
-
-
-logger = LogManager()
+        self.logger.debug(text)
