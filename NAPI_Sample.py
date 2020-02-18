@@ -7,7 +7,7 @@ def cover():
     a.h('EraLife')
     a.t()
     a.t()
-    a.b('新建游戏', a.goto, cover)
+    a.b('新建游戏', a.goto, start_new_game)
 
 
 def start_new_game():
@@ -15,7 +15,7 @@ def start_new_game():
     a.h('玩家角色创建方式')
     a.t()
     a.t()
-    a.b('使用默认主角', e.goto, default_person)
+    a.b('使用默认主角', a.goto, default_person)
 
 
 def default_person():

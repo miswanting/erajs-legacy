@@ -5,6 +5,7 @@ from pathlib import Path
 
 # from .. import LogManager
 from . import DataManager, LockManager, ProtocolManager
+from .. import Tools
 
 
 class APIManager(DataManager.DataManager, LockManager.LockManager, ProtocolManager.ProtocolManager):
@@ -27,19 +28,80 @@ class APIManager(DataManager.DataManager, LockManager.LockManager, ProtocolManag
     #     pass
 
     def title(self, text: str) -> None:  # 设置游戏窗口标题
-        self
+        bag = self.get_bag('title')
+        bag['value'] = str(text)
+        self.send(bag)
 
-    # def t(self, text: str = '', wait: bool = False, color: str = 'default', bcolor: str = 'default') -> None:  # 控件：文字
-    #     pass
+    def page(self, color: str = 'default'):
+        bag = self.get_bag('page')
+        bag['value'] = {
+            'color': color
+        }
+        self.send(bag)
+        self.remove_all_listeners()
+        self.mode()
+
+    def t(self, text: str = '', wait: bool = False, color: str = 'default', bcolor: str = 'default', style=None) -> None:  # 控件：文字
+        bag = self.get_bag('t')
+        bag['value'] = {
+            'text': str(text),
+            'color': color,
+            'bcolor': bcolor
+        }
+        self.send(bag)
+        if wait and not self.lock_passed():
+            self.lock()
+            self.wait_for_unlock()
 
     # def l(self, text: str, func: callable, *arg, **kw) -> None:  # 控件：链接
     #     pass
 
-    # def b(self, text: str, func: callable, *arg, **kw) -> None:  # 控件：按钮
-    #     pass
+    def b(self, text: str, func: callable, *arg, **kw) -> None:  # 控件：按钮
+        hash = Tools.random_hash()
+        bag = self.get_bag('b')
+        bag['value'] = {
+            'text': str(text),
+            'hash': hash
+        }
+        bag['value']['disabled'] = False
+        if 'disabled' in kw.keys():
+            if kw['disabled']:
+                bag['value']['disabled'] = True
+            kw.pop('disabled')
+        if func == None:
+            bag['value']['disabled'] = True
+        if 'isLink' in kw.keys():
+            if kw['isLink']:
+                bag['value']['isLink'] = True
+            kw.pop('isLink')
+        if 'popup' in kw.keys():
+            bag['value']['popup'] = str(kw['popup'])
+            kw.pop('popup')
+        else:
+            bag['value']['popup'] = ''
+        if 'color' in kw.keys():
+            bag['value']['color'] = kw['color']
+            kw.pop('color')
+        else:
+            bag['value']['color'] = ''
 
-    # def h(self, text: str, rank: int = 1, color: str = 'default', bcolor: str = 'default') -> None:  # 控件：标题
-    #     pass
+        def handle_callback(e):
+            if e['hash'] == hash:
+                func(*arg, **kw)
+        self.add_listener('BUTTON_CLICK', handle_callback)
+        # self._cmd_list.append((hash, func, arg, kw))
+        self.send(bag)
+        self.unlock()
+
+    def h(self, text: str, rank: int = 1, color: str = 'default', bcolor: str = 'default') -> None:  # 控件：标题
+        bag = self.get_bag('h')
+        bag['value'] = {
+            'text': str(text),
+            'rank': rank,
+            'color': color,
+            'bcolor': bcolor
+        }
+        self.send(bag)
 
     # def progress(self, now: int,  max: int = 100, length: int = 100) -> None:  # 控件：进度条
     #     pass

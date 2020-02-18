@@ -118,12 +118,14 @@ class DataManager(EventManager.EventManager):
         # 补全文件夹
         for each in check_folder_list:
             if not os.path.isdir(each):
-                self.emit('folder_missing', each)
+                event_data = {'value': each}
+                self.emit('folder_missing', event_data)
                 os.mkdir(each)
         # 补全文件
         for each in check_file_list:
             if not os.path.isfile(each):
-                self.emit('file_missing', each)
+                event_data = {'value': each}
+                self.emit('file_missing', event_data)
                 open(each, 'w')
 
     def import_data(self, file_path):

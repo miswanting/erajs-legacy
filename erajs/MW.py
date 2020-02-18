@@ -26,11 +26,11 @@ def init():
     Tools.fix_path()
     e.info('├─ Checking Data Integrity...')
 
-    def on_folder_missing(e):
-        e.warn('│  ├─ Folder [{}] Missing. Creating...'.format(e.value))
+    def on_folder_missing(event):
+        e.warn('│  ├─ Folder [{}] Missing. Creating...'.format(event['value']))
 
-    def on_file_missing(e):
-        e.warn('│  ├─ File [{}] Missing. Creating...'.format(e.value))
+    def on_file_missing(event):
+        e.warn('│  ├─ File [{}] Missing. Creating...'.format(event['value']))
     e.on('folder_missing', on_folder_missing)
     e.on('file_missing', on_file_missing)
     e.check_file_system()
@@ -43,8 +43,8 @@ def init():
     e.info('├─ Scanning Plugins...')
     plugins_found = 0
 
-    def on_plugin_found(e):
-        e.info('│  ├─ Plugin [{}] Found.'.format(e.value))
+    def on_plugin_found(event):
+        e.info('│  ├─ Plugin [{}] Found.'.format(event['value']))
         plugins_found += 1
     e.on('plugin_found', on_plugin_found)
     e.scan_plugins()
@@ -53,8 +53,8 @@ def init():
     e.info('├─ Loading Plugins...')
     plugins_loaded = 0
 
-    def on_plugin_loaded(e):
-        e.info('│  ├─ Plugin [{}] Loaded.'.format(e.value))
+    def on_plugin_loaded(event):
+        e.info('│  ├─ Plugin [{}] Loaded.'.format(event['value']))
         plugins_loaded += 1
     e.on('plugin_loaded', on_plugin_loaded)
     e.load_plugins()
@@ -68,8 +68,8 @@ def init():
     e.info('├─ Scanning Data Files...')
     data_files_found = 0
 
-    def on_data_file_found(e):
-        e.info('│  ├─ Data File [{}] Found.'.format(e.value))
+    def on_data_file_found(event):
+        e.info('│  ├─ Data File [{}] Found.'.format(event['value']))
         data_files_found += 1
     e.on('data_file_found', on_data_file_found)
     e.scan_data_files()
@@ -78,8 +78,8 @@ def init():
     e.info('├─ Loading Data Files...')
     data_files_loaded = 0
 
-    def on_data_file_loaded(e):
-        e.info('│  ├─ Data File [{}] Loaded.'.format(e.value))
+    def on_data_file_loaded(event):
+        e.info('│  ├─ Data File [{}] Loaded.'.format(event['value']))
         data_files_loaded += 1
     e.on('data_file_loaded', on_data_file_loaded)
     e.load_data_files()
@@ -88,8 +88,8 @@ def init():
     e.info('├─ Scanning Scripts...')
     scripts_found = 0
 
-    def on_script_found(e):
-        e.info('│  ├─ Script [{}] Found.'.format(e.value))
+    def on_script_found(event):
+        e.info('│  ├─ Script [{}] Found.'.format(event['value']))
         scripts_found += 1
     e.on('script_found', on_script_found)
     e.scan_scripts()
@@ -98,8 +98,8 @@ def init():
     e.info('├─ Loading Scripts...')
     scripts_loaded = 0
 
-    def on_script_loaded(e):
-        e.info('│  ├─ Script [{}] Loaded.'.format(e.value))
+    def on_script_loaded(event):
+        e.info('│  ├─ Script [{}] Loaded.'.format(event['value']))
         scripts_loaded += 1
     e.on('script_loaded', on_script_loaded)
     e.load_scripts()
@@ -108,8 +108,8 @@ def init():
     e.info('├─ Scanning DLCs...')
     dlcs_found = 0
 
-    def on_dlc_found(e):
-        e.info('│  ├─ DLC [{}] Found.'.format(e.value))
+    def on_dlc_found(event):
+        e.info('│  ├─ DLC [{}] Found.'.format(event['value']))
         dlcs_found += 1
     e.on('dlc_found', on_dlc_found)
     e.scan_dlcs()
@@ -118,8 +118,8 @@ def init():
     e.info('├─ Loading DLCs...')
     dlcs_loaded = 0
 
-    def on_dlc_loaded(e):
-        e.info('│  ├─ DLC [{}] Loaded.'.format(e.value))
+    def on_dlc_loaded(event):
+        e.info('│  ├─ DLC [{}] Loaded.'.format(event['value']))
         dlcs_loaded += 1
     e.on('dlc_loaded', on_dlc_loaded)
     e.load_dlcs()
@@ -128,8 +128,8 @@ def init():
     e.info('├─ Scanning MODs...')
     mods_found = 0
 
-    def on_mod_found(e):
-        e.info('│  ├─ MOD [{}] Found.'.format(e.value))
+    def on_mod_found(event):
+        e.info('│  ├─ MOD [{}] Found.'.format(event['value']))
         mods_found += 1
     e.on('mod_found', on_mod_found)
     e.scan_mods()
@@ -138,8 +138,8 @@ def init():
     e.info('├─ Loading MODs...')
     mods_loaded = 0
 
-    def on_mod_loaded(e):
-        e.info('│  ├─ MOD [{}] Loaded.'.format(e.value))
+    def on_mod_loaded(event):
+        e.info('│  ├─ MOD [{}] Loaded.'.format(event['value']))
         mods_loaded += 1
     e.on('mod_loaded', on_mod_loaded)
     e.load_mods()
@@ -171,8 +171,8 @@ def title(text):
     e.title(text)
 
 
-def goto(func, *arg, **kw):
-    e.goto(func, *arg, **kw)
+def page(color='default'):
+    e.page(color)
 
 
 def text(
@@ -185,21 +185,42 @@ def text(
     """
     # 文字控件
     """
-    # 组装数据
-    data = {
-        'text': text,
-        'wait': wait,
-        'style': style
-    }
-    if color != 'default':
-        data['style']['color'] = color
-    if bcolor != 'default':
-        data['style']['background-color'] = bcolor
-    # 发射数据
-    # el = e.push(Widgets.Text(data))
-    # print(Widgets.Text(data))
-    # 操作ADOM
-    if wait and not e.lock.lock_passed():
-        e.lock.lock()
-        e.lock.wait_for_unlock()
-    # return el
+    e.t(text, wait, color, bcolor, style)
+
+
+t = text
+
+
+def button(text: str, func: callable, *arg, **kw):
+    e.b(text, func, *arg, **kw)
+
+
+def goto(func, *arg, **kw):
+    e.goto(func, *arg, **kw)
+
+
+# def text(
+#     text: str = '',
+#     wait: bool = False,
+#     color: str = 'default',
+#     bcolor: str = 'default',
+#     style: dict = None
+# ):
+#     # 组装数据
+#     data = {
+#         'text': text,
+#         'wait': wait,
+#         'style': style
+#     }
+#     if color != 'default':
+#         data['style']['color'] = color
+#     if bcolor != 'default':
+#         data['style']['background-color'] = bcolor
+#     # 发射数据
+#     # el = e.push(Widgets.Text(data))
+#     # print(Widgets.Text(data))
+#     # 操作ADOM
+#     if wait and not e.lock.lock_passed():
+#         e.lock.lock()
+#         e.lock.wait_for_unlock()
+#     # return el

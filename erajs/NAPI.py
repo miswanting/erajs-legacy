@@ -185,7 +185,7 @@ def toggle_menu():
 
 # 页面级控件
 def page():
-    pass
+    m.page()
 
 
 # 块级控件
@@ -263,7 +263,7 @@ l = link
 
 
 def button(text: Any, callback: Callable = None, *arg, **kw) -> object:
-    return object
+    return m.button(text, callback, *arg, **kw)
 
 
 b = button

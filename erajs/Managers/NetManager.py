@@ -27,7 +27,7 @@ class NetManager(EventManager.EventManager):
             target = bag['hash']
         if 'value' in bag:
             value = bag['value']
-        self.dispatch_event(bag['type'], target, value)
+        self.emit(bag['type'], bag)
 
     def connect(self):
         def core():
@@ -89,12 +89,12 @@ class NetManager(EventManager.EventManager):
         # dispatcher.dispatch(event_type.ENGINE_INIT_FINISHED_SIGNAL_SENT)
 
     def send(self, bag):
-        # self.debug("发送：{}".format(bag))
+        self.debug("发送：{}".format(bag))
         self._conn.send(json.dumps(bag, ensure_ascii=False).encode())
 
     def recv(self):
         data = self._conn.recv(4096000)
-        # self.debug("接收：{}".format(data))
+        self.debug("接收：{}".format(data))
         if not data:
             return
         data = data.decode().split('}{')
