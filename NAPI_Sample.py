@@ -4,6 +4,7 @@ import erajs.NAPI as a
 
 def cover():
     a.title('EraLife')
+    a.page()
     a.h('EraLife')
     a.t()
     a.t()

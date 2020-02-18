@@ -198,8 +198,13 @@ def divider():
 
 
 # 行内控件
-def header(text: Any, callback: Callable = None) -> object:
-    return object
+def header(
+    text: str,
+    rank=1,
+    color='default',
+    bcolor='default'
+) -> object:
+    return m.header(text, rank, color, bcolor)
 
 
 h = header

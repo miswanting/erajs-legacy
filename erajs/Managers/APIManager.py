@@ -41,7 +41,7 @@ class APIManager(DataManager.DataManager, LockManager.LockManager, ProtocolManag
         self.remove_all_listeners()
         self.mode()
 
-    def t(self, text: str = '', wait: bool = False, color: str = 'default', bcolor: str = 'default', style=None) -> None:  # 控件：文字
+    def text(self, text: str = '', wait: bool = False, color: str = 'default', bcolor: str = 'default', style=None) -> None:  # 控件：文字
         bag = self.get_bag('t')
         bag['value'] = {
             'text': str(text),
@@ -56,7 +56,7 @@ class APIManager(DataManager.DataManager, LockManager.LockManager, ProtocolManag
     # def l(self, text: str, func: callable, *arg, **kw) -> None:  # 控件：链接
     #     pass
 
-    def b(self, text: str, func: callable, *arg, **kw) -> None:  # 控件：按钮
+    def button(self, text: str, func: callable, *arg, **kw) -> None:  # 控件：按钮
         hash = Tools.random_hash()
         bag = self.get_bag('b')
         bag['value'] = {
@@ -93,7 +93,7 @@ class APIManager(DataManager.DataManager, LockManager.LockManager, ProtocolManag
         self.send(bag)
         self.unlock()
 
-    def h(self, text: str, rank: int = 1, color: str = 'default', bcolor: str = 'default') -> None:  # 控件：标题
+    def header(self, text: str, rank: int = 1, color: str = 'default', bcolor: str = 'default') -> None:  # 控件：标题
         bag = self.get_bag('h')
         bag['value'] = {
             'text': str(text),

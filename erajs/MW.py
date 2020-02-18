@@ -175,6 +175,16 @@ def page(color='default'):
     e.page(color)
 
 
+def header(
+    text,
+    rank=1,
+    color='default',
+    bcolor='default'
+):
+    # print(123)
+    return e.header(text, rank, color, bcolor)
+
+
 def text(
     text: str = '',
     wait: bool = False,
@@ -185,14 +195,11 @@ def text(
     """
     # 文字控件
     """
-    e.t(text, wait, color, bcolor, style)
-
-
-t = text
+    e.text(text, wait, color, bcolor, style)
 
 
 def button(text: str, func: callable, *arg, **kw):
-    e.b(text, func, *arg, **kw)
+    e.button(text, func, *arg, **kw)
 
 
 def goto(func, *arg, **kw):
