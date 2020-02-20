@@ -260,8 +260,8 @@ def text(
 t = text
 
 
-def link(text: Any, callback: Callable = None) -> object:
-    return object
+def link(text: Any, callback: Callable = None, *arg, **kw) -> object:
+    return m.link(text, callback, *arg, **kw)
 
 
 l = link
@@ -274,29 +274,37 @@ def button(text: Any, callback: Callable = None, *arg, **kw) -> object:
 b = button
 
 
-def rate(now: int = 0, callback: Callable = None) -> object:
-    print('警告：该API有变动！')
-    return object
+def rate(now: int = 0, max: int = 5, callback: Callable = None, disabled: bool = True) -> object:
+    print('警告：API: rate有变动！')
+    return m.rate(now, max, callback, disabled)
 
 
-def progress() -> object:
-    return object
+def progress(now: int, max: int = 100, length: int = 100) -> object:
+    return m.progress(now, max, length)
 
 
-def check() -> object:
-    return object
+def check(text: any = '', callback: Callable = None, *arg, **kw) -> object:
+    return m.check(text, callback, *arg, **kw)
 
 
-def radio() -> object:
-    return object
+def radio(options: list, callback: Callable = None, default_index: int = 0) -> object:
+    return m.radio(options, callback, default_index)
 
 
-def input() -> object:
-    return object
+def input(callback: Callable = None, default: any = '', is_area: bool = False, placeholder: any = '') -> object:
+    return m.input(callable, default, is_area, placeholder)
 
 
-def dropdown() -> object:
-    return object
+def dropdown(
+    options: list,
+    callback: Callable = None,
+    default: any = None,
+    search: bool = False,
+    multiple: bool = False,
+    placeholder: any = None,
+    allow_additions: bool = False
+) -> object:
+    return m.input(options, callback, default, search, multiple, placeholder, allow_additions)
 
 
 # 整体构筑
@@ -314,23 +322,23 @@ def goto(func, *arg, **kw) -> object:
 
 
 def back(func, *arg, **kw) -> object:
-    pass
+    m.back(func, *arg, **kw)
 
 
 def repeat(func, *arg, **kw) -> object:
-    pass
+    m.repeat(func, *arg, **kw)
 
 
 def clear_gui(func, *arg, **kw) -> object:
-    pass
+    m.clear_gui(func, *arg, **kw)
 
 
 def append_gui(func, *arg, **kw) -> object:
-    pass
+    m.append_gui(func, *arg, **kw)
 
 
 def get_gui_list(func, *arg, **kw) -> object:
-    pass
+    m.get_gui_list(func, *arg, **kw)
 
 
 # 样式控制

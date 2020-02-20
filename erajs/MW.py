@@ -198,13 +198,77 @@ def text(
     e.text(text, wait, color, bcolor, style)
 
 
-def button(text: str, func: callable, *arg, **kw):
-    e.button(text, func, *arg, **kw)
+def link(
+    text: any,
+    callback:
+    callable = None,
+    *arg, **kw
+):
+    e.link(text, callback, *arg, **kw)
+
+
+def button(
+    text: str,
+    callback: callable,
+    *arg, **kw
+):
+    e.button(text, callback, *arg, **kw)
+
+
+def progress(now: int, max: int = 100, length: int = 100) -> object:
+    return e.progress(now, max, length)
+
+
+def rate(now: int = 0, max: int = 5, callback: callable = None, disabled: bool = True) -> object:
+    return e.rate(now, max, callback, disabled)
+
+
+def check(text: any = '', callback: callable = None, *arg, **kw) -> object:
+    return e.check(text, callback, *arg, **kw)
+
+
+def radio(options: list, callback: callable = None, default_index: int = 0) -> object:
+    return e.radio(options, callback, default_index)
+
+
+def input(callback: callable = None, default: any = '', is_area: bool = False, placeholder: any = '') -> object:
+    return e.input(callable, default, is_area, placeholder)
+
+
+def dropdown(
+    options: list,
+    callback: callable = None,
+    default: any = None,
+    search: bool = False,
+    multiple: bool = False,
+    placeholder: any = None,
+    allow_additions: bool = False
+) -> object:
+    return e.input(options, callback, default, search, multiple, placeholder, allow_additions)
 
 
 def goto(func, *arg, **kw):
     e.goto(func, *arg, **kw)
 
+
+def back(func, *arg, **kw) -> object:
+    e.back(func, *arg, **kw)
+
+
+def repeat(func, *arg, **kw) -> object:
+    e.repeat(func, *arg, **kw)
+
+
+def clear_gui(func, *arg, **kw) -> object:
+    e.clear_gui(func, *arg, **kw)
+
+
+def append_gui(func, *arg, **kw) -> object:
+    e.append_gui(func, *arg, **kw)
+
+
+def get_gui_list(func, *arg, **kw) -> object:
+    e.get_gui_list(func, *arg, **kw)
 
 # def text(
 #     text: str = '',

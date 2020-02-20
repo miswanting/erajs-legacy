@@ -41,6 +41,16 @@ class APIManager(DataManager.DataManager, LockManager.LockManager, ProtocolManag
         self.remove_all_listeners()
         self.mode()
 
+    def header(self, text: str, rank: int = 1, color: str = 'default', bcolor: str = 'default') -> None:  # 控件：标题
+        bag = self.get_bag('h')
+        bag['value'] = {
+            'text': str(text),
+            'rank': rank,
+            'color': color,
+            'bcolor': bcolor
+        }
+        self.send(bag)
+
     def text(self, text: str = '', wait: bool = False, color: str = 'default', bcolor: str = 'default', style=None) -> None:  # 控件：文字
         bag = self.get_bag('t')
         bag['value'] = {
@@ -53,10 +63,11 @@ class APIManager(DataManager.DataManager, LockManager.LockManager, ProtocolManag
             self.lock()
             self.wait_for_unlock()
 
-    # def l(self, text: str, func: callable, *arg, **kw) -> None:  # 控件：链接
-    #     pass
+    def link(self, text: str, callback: callable, *arg, **kw) -> None:  # 控件：链接
+        self.button(text, callback, *arg, isLink=True, **kw)
+    l = link
 
-    def button(self, text: str, func: callable, *arg, **kw) -> None:  # 控件：按钮
+    def button(self, text: str, callback: callable, *arg, **kw) -> None:  # 控件：按钮
         hash = Tools.random_hash()
         bag = self.get_bag('b')
         bag['value'] = {
@@ -68,7 +79,7 @@ class APIManager(DataManager.DataManager, LockManager.LockManager, ProtocolManag
             if kw['disabled']:
                 bag['value']['disabled'] = True
             kw.pop('disabled')
-        if func == None:
+        if callback == None:
             bag['value']['disabled'] = True
         if 'isLink' in kw.keys():
             if kw['isLink']:
@@ -87,27 +98,35 @@ class APIManager(DataManager.DataManager, LockManager.LockManager, ProtocolManag
 
         def handle_callback(e):
             if e['hash'] == hash:
-                func(*arg, **kw)
+                callback(*arg, **kw)
         self.add_listener('BUTTON_CLICK', handle_callback)
         # self._cmd_list.append((hash, func, arg, kw))
         self.send(bag)
         self.unlock()
 
-    def header(self, text: str, rank: int = 1, color: str = 'default', bcolor: str = 'default') -> None:  # 控件：标题
-        bag = self.get_bag('h')
+    def progress(self, now: int,  max: int = 100, length: int = 100) -> object:  # 控件：进度条
+        bag = self.get_bag('progress')
         bag['value'] = {
-            'text': str(text),
-            'rank': rank,
-            'color': color,
-            'bcolor': bcolor
+            'now': now,
+            'max': max,
+            'length': length
         }
         self.send(bag)
 
-    # def progress(self, now: int,  max: int = 100, length: int = 100) -> None:  # 控件：进度条
-    #     pass
+    def rate(self, now: int = 0,  max: int = 5, callback: callable = None, disabled: bool = True) -> object:  # 控件：评分
+        hash = Tools.random_hash()
 
-    # def rate(self, now: int = 0,  max: int = 5, func: callable = None, disabled: bool = True) -> None:  # 控件：评分
-    #     pass
+        def handle_callback(e):
+            if e['target'] == hash:
+                callback(e['value'])
+        bag = self.get_bag('rate')
+        bag['value'] = {
+            'now': now,
+            'max': max,
+            'hash': hash,
+            'disabled': disabled
+        }
+        self.send(bag)
 
     # def radio(self, choice_list: list, default_index: int = 0, func: callable = None) -> None:  # 控件：单选
     #     pass
@@ -128,6 +147,7 @@ class APIManager(DataManager.DataManager, LockManager.LockManager, ProtocolManag
     #     pass
 
     # 显示功能
+
     def shake(self, duration: int = 500) -> None:  # 功能：页面震动（原窗口震动）
         pass
 
