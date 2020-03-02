@@ -74,7 +74,38 @@ class APIManager(DataManager.DataManager, LockManager.LockManager, ProtocolManag
             self.wait_for_unlock()
 
     def link(self, text: str, callback: callable, *arg, **kw) -> None:  # 控件：链接
-        self.button(text, callback, *arg, isLink=True, **kw)
+        hash = Tools.random_hash()
+        bag = self.get_bag('l')
+        bag['value'] = {
+            'text': str(text),
+            'hash': hash
+        }
+        bag['value']['disabled'] = False
+        if 'disabled' in kw.keys():
+            if kw['disabled']:
+                bag['value']['disabled'] = True
+            kw.pop('disabled')
+        if callback == None:
+            bag['value']['disabled'] = True
+        if 'popup' in kw.keys():
+            bag['value']['popup'] = str(kw['popup'])
+            kw.pop('popup')
+        else:
+            bag['value']['popup'] = ''
+        if 'color' in kw.keys():
+            bag['value']['color'] = kw['color']
+            kw.pop('color')
+        else:
+            bag['value']['color'] = ''
+
+        def handle_callback(e):
+            if e['hash'] == hash:
+                callback(*arg, **kw)
+        self.add_listener('LINK_CLICK', handle_callback)
+        # self._cmd_list.append((hash, func, arg, kw))
+        self.send(bag)
+        self.unlock()
+
     l = link
 
     def button(self, text: str, callback: callable, *arg, **kw) -> None:  # 控件：按钮
