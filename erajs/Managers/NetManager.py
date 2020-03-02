@@ -12,36 +12,32 @@ from . import EventManager
 class NetManager(EventManager.EventManager):
     HOST = 'localhost'
     PORT = 11994
-    _conn = None
-    _cmd_list = []
+    # _conn = None
+    # _cmd_list = []
     _gui_list = []
-    isConnected = False
+    # isConnected = False
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
-
-    def _parse_bag(self, bag):
-        target = ''
-        value = {}
-        if 'hash' in bag:
-            target = bag['hash']
-        if 'value' in bag:
-            value = bag['value']
-        self.emit(bag['type'], bag)
+        self.__connection = None
+        self.__isConnected = False
 
     def connect(self):
         def core():
             while True:
+                print()
                 data = self.recv()
                 for each in data:
+                    # t = threading.Thread(target=self._parse_bag, args=(each,))
                     self._parse_bag(each)
+                    # t.start()
 
         def func_connect():
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as c:
-                self._conn = c
+                self.__connection = c
                 try:
-                    self._conn.connect((self.HOST, self.PORT))
-                    self.isConnected = True
+                    self.__connection.connect((self.HOST, self.PORT))
+                    self.__isConnected = True
                     self.info('│  └─ Connected!')
                     core()
                 except OSError as err:
@@ -50,14 +46,43 @@ class NetManager(EventManager.EventManager):
                         os._exit(1)
                     else:
                         self.error(err)
+                        os._exit(1)
 
         t = threading.Thread(name='func_connect', target=func_connect)
         t.start()
         while True:
-            if self.isConnected:
+            if self.__isConnected:
                 break
             time.sleep(0.1)
         # dispatcher.dispatch(event_type.SERVER_CONNECTED)
+
+    def recv(self):
+        data = self.__connection.recv(4096000)
+        self.debug("接收：{}".format(data))
+        if not data:
+            return
+        rawBags = data.decode().split('}{')
+        for i in range(len(rawBags)):
+            if not i == 0:
+                rawBags[i] = '{' + rawBags[i]
+            if not i == len(rawBags) - 1:
+                rawBags[i] = rawBags[i] + '}'
+        for i, each in enumerate(rawBags):
+            rawBags[i] = json.loads(each)
+        return rawBags
+
+    def send(self, bag):
+        self.debug("发送：{}".format(bag))
+        self.__connection.send(json.dumps(bag, ensure_ascii=False).encode())
+
+    def _parse_bag(self, bag: dict) -> None:
+        target = ''
+        value = {}
+        if 'hash' in bag:
+            target = bag['hash']
+        if 'value' in bag:
+            value = bag['value']
+        self.emit(bag['type'], bag)
 
     def send_config(self):
         bag = {
@@ -87,22 +112,3 @@ class NetManager(EventManager.EventManager):
         }
         self.send(bag)
         # dispatcher.dispatch(event_type.ENGINE_INIT_FINISHED_SIGNAL_SENT)
-
-    def send(self, bag):
-        self.debug("发送：{}".format(bag))
-        self._conn.send(json.dumps(bag, ensure_ascii=False).encode())
-
-    def recv(self):
-        data = self._conn.recv(4096000)
-        self.debug("接收：{}".format(data))
-        if not data:
-            return
-        data = data.decode().split('}{')
-        for i in range(len(data)):
-            if not i == 0:
-                data[i] = '}' + data[i]
-            if not i == len(data) - 1:
-                data[i] = data[i] + '}'
-        for i, each in enumerate(data):
-            data[i] = json.loads(each)
-        return data
