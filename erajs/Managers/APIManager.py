@@ -1,7 +1,7 @@
-import configparser
-import os
-import sys
-from pathlib import Path
+# import configparser
+# import os
+# import sys
+# from pathlib import Path
 
 # from .. import LogManager
 from . import DataManager, LockManager, ProtocolManager
@@ -59,7 +59,17 @@ class APIManager(DataManager.DataManager, LockManager.LockManager, ProtocolManag
             'bcolor': bcolor
         }
         self.send(bag)
+
         if wait and not self.lock_passed():
+            def handle_lock(e):
+                print(e)
+                if e['value'] == 1:  # 左键
+                    if self.is_locked:
+                        self.unlock()
+                elif e['value'] == 3:  # 右键
+                    if self.is_locked:
+                        self.unlock_forever()
+            self.on('MOUSE_CLICK', handle_lock)
             self.lock()
             self.wait_for_unlock()
 
@@ -104,6 +114,11 @@ class APIManager(DataManager.DataManager, LockManager.LockManager, ProtocolManag
         self.send(bag)
         self.unlock()
 
+    def divider(self, text: str = ''):
+        bag = self.get_bag('divider')
+        bag['value'] = str(text)
+        self.send(bag)
+
     def progress(self, now: int,  max: int = 100, length: int = 100) -> object:  # 控件：进度条
         bag = self.get_bag('progress')
         bag['value'] = {
@@ -128,6 +143,96 @@ class APIManager(DataManager.DataManager, LockManager.LockManager, ProtocolManag
         }
         self.send(bag)
 
+    def check(self, *arg, **kw):
+        print('Deprecated API: check is not used anymore. Please use checkbox instead.')
+        self.checkbox(*arg, **kw)
+
+    def checkbox(self, text='', callback: callable = None, *arg, **kw):
+        hash = Tools.random_hash()
+
+        def handle_callback(e):
+            if e['target'] == hash:
+                callback(e['value'])
+        self.on('CHECK_CHANGE', handle_callback, hash)
+        bag = self.get_bag('checkbox')
+        bag['value'] = {
+            'text': str(text),
+            'hash': hash
+        }
+        if 'disabled' in kw.keys():
+            if kw['disabled']:
+                bag['value']['disabled'] = True
+            kw.pop('disabled')
+        if func == None:
+            bag['value']['disabled'] = True
+
+        bag['value']['default'] = False
+        if 'default' in kw.keys():
+            bag['value']['default'] = kw['default']
+            kw.pop('default')
+        if 'read_only' in kw.keys():
+            bag['value']['read_only'] = kw['read_only']
+            kw.pop('read_only')
+        self.send(bag)
+
+    def radio(self, options, callback: callable = None, default: int = 0):
+        hash = Tools.random_hash()
+
+        def handle_callback(e):
+            if e['target'] == hash:
+                callback(e['value'])
+        self.on('RADIO_CLICK', handle_callback, hash)
+        bag = self.get_bag('radio')
+        bag['value'] = {
+            'list': options,
+            'default': default,
+            'hash': hash
+        }
+        self.send(bag)
+
+    def input(self, callback: callable = None, default: any = None, is_area=False, placeholder: str = ''):
+        hash = Tools.random_hash()
+
+        def handle_callback(e):
+            if e['target'] == hash:
+                callback(e['value'])
+        self.on('INPUT_CHANGE', handle_callback, hash)
+        bag = self.get_bag('input')
+        bag['value'] = {
+            'hash': hash,
+            'default': str(default),
+            'is_area': is_area,
+            'placehoder': str(placeholder)
+        }
+        self.send(bag)
+
+    def dropdown(
+        self,
+        options,
+        callback: callable = None,
+        default: any = None,
+        search: bool = False,
+        multiple: bool = False,
+        placeholder: str = '',
+        allowAdditions: bool = False
+    ):
+        hash = Tools.random_hash()
+
+        def handle_callback(e):
+            if e['target'] == hash:
+                callback(e['value'])
+        self.on('DROPDOWN_CHANGE', handle_callback, hash)
+        bag = self.get_bag('dropdown')
+        bag['value'] = {
+            'hash': hash,
+            'options': new_options,
+            'default': default,
+            'search': search,
+            'multiple': multiple,
+            'placeholder': str(placeholder),
+            'allowAdditions': allowAdditions
+        }
+        self.send(bag)
     # def radio(self, choice_list: list, default_index: int = 0, func: callable = None) -> None:  # 控件：单选
     #     pass
 
