@@ -39,6 +39,15 @@ class Engine(ScriptManager.ScriptManager):
         self.info('Copyright © 2018-2019 Miswanting')
 
     def init(self):
+        # def handle_lock(e):
+        #     print(e)
+        #     if e['value'] == 1:  # 左键
+        #         if self.is_locked:
+        #             self.unlock()
+        #     elif e['value'] == 3:  # 右键
+        #         if self.is_locked:
+        #             self.unlock_forever()
+        # self.on('MOUSE_CLICK', handle_lock)
         pass
 
 
