@@ -184,7 +184,7 @@ class APIManager(DataManager.DataManager, LockManager.LockManager, ProtocolManag
         def handle_callback(e):
             if e['target'] == hash:
                 callback(e['value'])
-        self.on('CHECK_CHANGE', handle_callback, hash)
+        self.on('CHECK_CHANGE', handle_callback)
         bag = self.get_bag('checkbox')
         bag['value'] = {
             'text': str(text),
@@ -194,7 +194,7 @@ class APIManager(DataManager.DataManager, LockManager.LockManager, ProtocolManag
             if kw['disabled']:
                 bag['value']['disabled'] = True
             kw.pop('disabled')
-        if func == None:
+        if callback == None:
             bag['value']['disabled'] = True
 
         bag['value']['default'] = False
@@ -212,7 +212,7 @@ class APIManager(DataManager.DataManager, LockManager.LockManager, ProtocolManag
         def handle_callback(e):
             if e['target'] == hash:
                 callback(e['value'])
-        self.on('RADIO_CLICK', handle_callback, hash)
+        self.on('RADIO_CLICK', handle_callback)
         bag = self.get_bag('radio')
         bag['value'] = {
             'list': options,
@@ -225,9 +225,9 @@ class APIManager(DataManager.DataManager, LockManager.LockManager, ProtocolManag
         hash = Tools.random_hash()
 
         def handle_callback(e):
-            if e['target'] == hash:
+            if e['hash'] == hash:
                 callback(e['value'])
-        self.on('INPUT_CHANGE', handle_callback, hash)
+        self.on('INPUT_CHANGE', handle_callback)
         bag = self.get_bag('input')
         bag['value'] = {
             'hash': hash,
@@ -252,11 +252,11 @@ class APIManager(DataManager.DataManager, LockManager.LockManager, ProtocolManag
         def handle_callback(e):
             if e['target'] == hash:
                 callback(e['value'])
-        self.on('DROPDOWN_CHANGE', handle_callback, hash)
+        self.on('DROPDOWN_CHANGE', handle_callback)
         bag = self.get_bag('dropdown')
         bag['value'] = {
             'hash': hash,
-            'options': new_options,
+            'options': options,
             'default': default,
             'search': search,
             'multiple': multiple,

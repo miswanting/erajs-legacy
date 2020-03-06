@@ -26,9 +26,7 @@ def test_text():
     a.t('测试文本', bcolor='red')
     a.t()
     a.t('4.文本显示暂停：')
-    a.t()
     a.t('暂停文本1', wait=True)
-    a.t()
     a.t('暂停文本2', wait=True)
     a.t()
     a.t()
@@ -66,6 +64,66 @@ def test_link():
     a.t()
     a.t('1.显示链接：')
     a.l('测试链接')
+    a.t()
+    a.t()
+    a.b('下一项', a.goto, test_rate)
+
+
+def test_rate():
+    a.page()
+    a.h('测试5：评级')
+    a.t()
+    a.t()
+    a.t('1.显示评级：')
+    a.rate()
+    a.t()
+    a.t()
+    a.b('下一项', a.goto, test_progress)
+
+
+def test_progress():
+    a.page()
+    a.h('测试5：进度')
+    a.t()
+    a.t()
+    a.t('1.显示进度：')
+    a.progress(50)
+    a.t()
+    a.t()
+    a.b('下一项', a.goto, test_check)
+
+
+def test_check():
+    a.page()
+    a.h('测试5：多选')
+    a.t()
+    a.t()
+    a.t('1.显示多选：')
+    a.check('test')
+    a.t()
+    a.t()
+    a.b('下一项', a.goto, test_radio)
+
+
+def test_radio():
+    a.page()
+    a.h('测试5：单选')
+    a.t()
+    a.t()
+    a.t('1.显示单选：')
+    a.radio(['A', 'B', 'C'])
+    a.t()
+    a.t()
+    a.b('下一项', a.goto, test_input)
+
+
+def test_input():
+    a.page()
+    a.h('测试5：输入')
+    a.t()
+    a.t()
+    a.t('1.显示输入：')
+    a.input()
     a.t()
     a.t()
     a.b('下一项', a.goto, test_link)
